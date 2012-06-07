@@ -49,7 +49,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}
 ############################################################
 # general compiler flags
 ############################################################
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wstrict-aliasing=2" )
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wstrict-aliasing=2 -ftemplate-depth-100" )
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -Wstrict-aliasing=2"  )
 
 ############################################################
@@ -116,6 +116,30 @@ SET(CPACK_PACKAGE_FILE_NAME ${CPACK_PACKAGE_NAME}-${ISIS_CORE_REV_STRING}-${CMAK
 SET(CPACK_NSIS_MODIFY_PATH ON)
 SET(CPACK_NSIS_URL_INFO_ABOUT "http:\\\\\\\\isis-group.github.com/isis-glance")
 INCLUDE(CPack)
+
+###########################################################
+# isis stuff
+###########################################################
+SET(ISIS_DIR /usr/share/isis/cmake CACHE PATH
+    "The directory where the isis cmake configuration script is located.")
+find_package(ISIS REQUIRED)
+
+###########################################################
+# Boost stuff
+###########################################################
+# since ISIS-Glance stongly depends on the boost libraries we will configure them
+# globally.
+find_package(Boost REQUIRED)
+
+include_directories(${ISIS_INCLUDE_DIRS} ${Boost_INCLUDE_DIR})
+
+###########################################################
+# qt4 stuff
+###########################################################
+FIND_PACKAGE(Qt4 COMPONENTS QtCore QtGui REQUIRED)
+
+set(QT_USE_QTUITOOLS TRUE)
+INCLUDE(${QT_USE_FILE})
 
 # build the ISIS-Glance libraries
 add_subdirectory(lib)

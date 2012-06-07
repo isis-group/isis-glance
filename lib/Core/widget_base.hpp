@@ -30,7 +30,9 @@
 
 namespace isis {
 namespace glance {
-
+/**
+ * Abstract base class for widget that defines the interface for each widget.
+ */
 class WidgetBase {
 	
 };
