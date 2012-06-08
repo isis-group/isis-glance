@@ -1,5 +1,3 @@
-
-
 file(GLOB GLANCE_CORE_SRC_FILES "*.cpp")
 file(GLOB GLANCE_CORE_HDR_FILES "*.hpp")
 

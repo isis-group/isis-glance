@@ -73,6 +73,27 @@ if("${PROCESSOR}" STREQUAL "x86_64")
 endif("${PROCESSOR}" STREQUAL "x86_64" )
 
 ############################################################
+# Logging options are global for all components in the tree
+############################################################
+option(ISIS_RUNTIME_LOG "Enable runtime logging" ON)
+option(ISIS_DEBUG_LOG "Enable debug logging" ON)
+
+# enable RUNTIME_LOG
+if(ISIS_RUNTIME_LOG)
+  add_definitions(-D_ENABLE_LOG=1)
+else(ISIS_RUNTIME_LOG)
+  add_definitions(-D_ENABLE_LOG=0)
+endif(ISIS_RUNTIME_LOG)
+
+# enable DEBUG_LOG
+if(ISIS_DEBUG_LOG)
+  add_definitions(-D_ENABLE_DEBUG=1)
+  message(STATUS "Debug code enabled, this will will have a big impact on the performance")
+else(ISIS_DEBUG_LOG)
+  add_definitions(-D_ENABLE_DEBUG=0)
+endif(ISIS_DEBUG_LOG)
+
+############################################################
 # RCS revision number
 ############################################################
 # The revision number is based on GIT commit informations.
