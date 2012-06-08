@@ -1,0 +1,22 @@
+# -*- mode: cmake -*-
+# ISIS-Glance cmake configuration file
+#
+# This file declares the following variables:
+#
+SET(ISIS_GLANCE_INSTALL_PREFIX @CMAKE_INSTALL_PREFIX@)
+SET(ISIS_GLANCE_LIB_DEPENDS  @ISIS_GLANCE_LIB_DEPENDS@)
+SET(ISIS_GLANCE_INCLUDE_DIRS @CMAKE_INSTALL_PREFIX@/include/isis-glance @Boost_INCLUDE_DIR@ )
+SET(ISIS_GLANCE_RUNTIME_LOG  @ISIS_GLANCE_RUNTIME_LOG@)
+SET(ISIS_GLANCE_DEBUG_LOG    @ISIS_GLANCE_DEBUG_LOG@)
+SET(ISIS_GLANCE_REV_STRING @ISIS_GLANCE_REV_STRING@)
+
+# only needed for widget plugins
+SET(ISIS_WIDGET_INFIX @ISIS_WIDGET_INFIX@)
+
+# search isis glance library
+SET(CMAKE_PREFIX_PATH @CMAKE_INSTALL_PREFIX@ ${CMAKE_PREFIX_PATH}) #make cmake first search where we installed the core
+FIND_LIBRARY(ISIS_GLANCE_LIB "isis_glance")
+
+MESSAGE(STATUS "isis-glance library: ${ISIS_GLANCE_LIB}")
+MESSAGE(STATUS "isis-glance library dependencies: ${ISIS_GLANCE_LIB_DEPENDS}")
+MESSAGE(STATUS "isis-glance include dirs: ${ISIS_GLANCE_INCLUDE_DIRS}")

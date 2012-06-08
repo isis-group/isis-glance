@@ -18,34 +18,29 @@
  *
  * Author: Erik Tuerke, etuerke@googlemail.com
  *
- * widget_base.hpp
+ * image_container.hpp
  *
  * Description:
  *
- *  Created on: Jun 7, 2012
+ *  Created on: Jun 8, 2012
  *      Author: tuerke
  ******************************************************************/
-#ifndef _ISIS_GLANCE_WIDGET_BASE_HPP
-#define _ISIS_GLANCE_WIDGET_BASE_HPP
+
+#ifndef _ISIS_GLANCE_IMAGE_HPP
+#define _ISIS_GLANCE_IMAGE_HPP
+
+#include <DataStorage/image.hpp>
 
 namespace isis {
 namespace glance {
-/**
- * Abstract base class for widget that defines the interface for each widget.
- */
-class WidgetBase {
-public:
-	
-	/**
-	 * Add 
-	 */
-	virtual bool add
-	
-};
 
+class ImageContainer : public isis::data::Image
+{
+};
+	
 
 } // end namespace glance
 } // end namespace isis
 
 
-#endif //_ISIS_GLANCE_WIDGET_BASE_HPP
+#endif
