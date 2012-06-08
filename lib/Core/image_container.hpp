@@ -32,8 +32,10 @@
 #include "image.hpp"
 #include "common.hpp"
 
-namespace isis {
-namespace glance {
+namespace isis
+{
+namespace glance
+{
 
 class ImageContainer : protected ImageVector
 {
@@ -49,7 +51,7 @@ class ImageContainer : protected ImageVector
 	 */
 	virtual bool addImages( const ImageVector &images );
 };
-	
+
 
 } // end namespace glance
 } // end namespace isis

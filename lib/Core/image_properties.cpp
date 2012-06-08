@@ -30,19 +30,22 @@
 
 #include <boost/filesystem.hpp>
 
-namespace isis {
-namespace glance {
+namespace isis
+{
+namespace glance
+{
 
 ImageProperties::ImageProperties()
 {}
-	
-ImageProperties::ImageProperties ( const data::Image& image )
+
+ImageProperties::ImageProperties ( const data::Image &image )
 {
 	//setting all the needed properties from the image
 	const std::pair<util::ValueReference, util::ValueReference> _min_max;
 	major_type_id = getMajorTypeID( _min_max );
 	//check if we have a rgb image. if so we have to omit all the stuff that converts to double
 	is_rgb = data::ValueArray<util::color24>::staticID == major_type_id || data::ValueArray<util::color48>::staticID == major_type_id;
+
 	if( !is_rgb ) {
 		min_max = std::make_pair<double, double>( _min_max.first->as<double>(), _min_max.second->as<double>() );
 		extent = min_max.second - min_max.first;
@@ -57,15 +60,15 @@ ImageProperties::ImageProperties ( const data::Image& image )
 	orientation_matrix_latched = geometrical::getLatchedOrienation( orientation_matrix );
 
 	if( image.hasProperty( "file_path" ) ) {
-		boost::filesystem::path p( image.getPropertyAs<std::string>("file_path") );
+		boost::filesystem::path p( image.getPropertyAs<std::string>( "file_path" ) );
 		file_name = p.filename();
 		file_path = p.relative_path().string();
 	}
-	
+
 }
 
 
-short unsigned int ImageProperties::getMajorTypeID(const std::pair<util::ValueReference, util::ValueReference> &_min_max) const
+short unsigned int ImageProperties::getMajorTypeID( const std::pair<util::ValueReference, util::ValueReference> &_min_max ) const
 {
 	if( _min_max.first->getTypeID() == _min_max.second->getTypeID() ) { // ok min and max are the same type - trivial case
 		return _min_max.first->getTypeID() << 8; // btw: we do the shift, because min and max are Value - but we want the ID's ValuePtr
@@ -75,13 +78,13 @@ short unsigned int ImageProperties::getMajorTypeID(const std::pair<util::ValueRe
 		return _min_max.first->getTypeID() << 8;
 	} else {
 		LOG( isis::util::Runtime, error ) << "Sorry I dont know which datatype I should use. (" << _min_max.first->getTypeName()
-							  << " or " << _min_max.second->getTypeName() << ")";
+										  << " or " << _min_max.second->getTypeName() << ")";
 	}
 
 	return 0;
 
 }
 
-	
+
 } // end namespace glance
 } // end namespace isis

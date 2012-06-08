@@ -31,15 +31,17 @@
 #include <DataStorage/common.hpp>
 #include "image.hpp"
 
-namespace isis {
-namespace glance {
+namespace isis
+{
+namespace glance
+{
 
 typedef uint8_t InternalDataRepresentation;
 typedef util::color24 InternalDataRepresentationColor;
 
 typedef boost::shared_ptr<Image> ImagePointer;
 typedef std::vector< ImagePointer > ImageVector;
-	
+
 } // end namespace glance
 } // end namespace isis
 

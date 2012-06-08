@@ -34,15 +34,18 @@
 #include <CoreUtils/matrix.hpp>
 #include <DataStorage/image.hpp>
 
-namespace isis {
-namespace glance {
+namespace isis
+{
+namespace glance
+{
 
-	/**
-	 * ImageProperties combines all the properties of an
-	 * image that need to have fast access to read and write.
-	 */
-	
-class ImageProperties {
+/**
+ * ImageProperties combines all the properties of an
+ * image that need to have fast access to read and write.
+ */
+
+class ImageProperties
+{
 public:
 	ImageProperties();
 
@@ -54,10 +57,10 @@ public:
 	 * * "file_path"
 	 *
 	 * If ImageProperties could not find one of these properties it throws a warning
-	 * and "isValid" will return false. 
-	 * 
+	 * and "isValid" will return false.
+	 *
 	 */
-	
+
 	ImageProperties( const isis::data::Image &image );
 
 	///The images filename
@@ -92,14 +95,14 @@ public:
 
 protected:
 	const bool &isValid() const { return is_valid_; }
-	
+
 private:
-	short unsigned int getMajorTypeID(const std::pair<util::ValueReference, util::ValueReference> &_min_max) const;
+	short unsigned int getMajorTypeID( const std::pair<util::ValueReference, util::ValueReference> &_min_max ) const;
 	bool is_valid_;
-	
-	
+
+
 };
-	
+
 } // end namespace glance
 } // end namespace isis
 

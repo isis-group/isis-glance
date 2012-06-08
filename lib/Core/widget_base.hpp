@@ -30,21 +30,24 @@
 
 #include "image_container.hpp"
 
-namespace isis {
-namespace glance {
+namespace isis
+{
+namespace glance
+{
 
- /**
- * Abstract base class for widget that defines the interface for each widget.
- */
+/**
+* Abstract base class for widget that defines the interface for each widget.
+*/
 
 template<typename BASE>
 class WidgetBase
- :	public ImageContainer,
-	public BASE {
+	:  public ImageContainer,
+   public BASE
+{
 public:
-	
 
-	
+
+
 };
 
 

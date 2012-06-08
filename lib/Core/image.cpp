@@ -28,14 +28,16 @@
 #include "image.hpp"
 #include "common.hpp"
 
-namespace isis {
-namespace glance {
+namespace isis
+{
+namespace glance
+{
 
-Image::Image ( const isis::data::Image& image )
+Image::Image ( const isis::data::Image &image )
 	: ImageProperties( image )
 {
-	
-	
+
+
 }
 
 

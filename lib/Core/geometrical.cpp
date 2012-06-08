@@ -27,13 +27,17 @@
  ******************************************************************/
 #include "geometrical.hpp"
 
-namespace isis {
-namespace glance {
-namespace geometrical {
+namespace isis
+{
+namespace glance
+{
+namespace geometrical
+{
 
-util::ivector4 get32BitAlignedSize ( const util::ivector4& orig_size )
+util::ivector4 get32BitAlignedSize ( const util::ivector4 &orig_size )
 {
 	util::ivector4 ret_size;
+
 	for ( util::ivector4::value_type i = 0; i < 4; i++ ) {
 		const int m = orig_size[i] % 4;
 
@@ -43,14 +47,15 @@ util::ivector4 get32BitAlignedSize ( const util::ivector4& orig_size )
 			ret_size[i] = orig_size[i];
 		}
 	}
+
 	return ret_size;
 }
 
-isis::util::Matrix4x4< float > getOrientationMatrixFromPropMap ( const util::PropertyMap& propmap )
+isis::util::Matrix4x4< float > getOrientationMatrixFromPropMap ( const util::PropertyMap &propmap )
 {
 	const util::Matrix4x4<float> retMatrix (  propmap.getPropertyAs<util::fvector4>( "rowVec" ),
-										propmap.getPropertyAs<util::fvector4>( "columnVec" ),
-										propmap.getPropertyAs<util::fvector4>( "sliceVec" ) );
+			propmap.getPropertyAs<util::fvector4>( "columnVec" ),
+			propmap.getPropertyAs<util::fvector4>( "sliceVec" ) );
 	return retMatrix.transpose(); // has to be transposed!!!!!!!!!!
 }
 
@@ -58,9 +63,9 @@ isis::util::Matrix4x4< float > getLatchedOrienation ( const isis::util::Matrix4x
 {
 	util::Matrix4x4<float> retMatrix;
 	retMatrix.fill( 0 );
-	const util::fvector4 &rowVec = orientation_matrix.getRow(0);
-	const util::fvector4 &columnVec = orientation_matrix.getRow(1);
-	const util::fvector4 &sliceVec = orientation_matrix.getRow(2);
+	const util::fvector4 &rowVec = orientation_matrix.getRow( 0 );
+	const util::fvector4 &columnVec = orientation_matrix.getRow( 1 );
+	const util::fvector4 &sliceVec = orientation_matrix.getRow( 2 );
 
 	size_t rB = rowVec.getBiggestVecElemAbs();
 	size_t cB = columnVec.getBiggestVecElemAbs();
@@ -113,7 +118,7 @@ isis::util::Matrix4x4< float > getLatchedOrienation ( const isis::util::Matrix4x
 }
 
 
-	
+
 } // end namespace geometrical
 } // end namespace glance
 } // end namespace isis

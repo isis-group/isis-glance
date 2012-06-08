@@ -32,9 +32,12 @@
 #include <CoreUtils/matrix.hpp>
 #include <CoreUtils/propmap.hpp>
 
-namespace isis {
-namespace glance {
-namespace geometrical {
+namespace isis
+{
+namespace glance
+{
+namespace geometrical
+{
 
 util::ivector4 get32BitAlignedSize( const util::ivector4 &orig_size );
 

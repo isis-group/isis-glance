@@ -37,15 +37,18 @@
 #include "image_state.hpp"
 #include "image_properties.hpp"
 
-namespace isis {
-namespace glance {
+namespace isis
+{
+namespace glance
+{
 
 class Image
 	: public ImageState,
-	  public ImageProperties,
-	  protected std::vector<isis::data::Chunk> {
+  public ImageProperties,
+  protected std::vector<isis::data::Chunk>
+{
 public:
-    Image( const isis::data::Image &image );
+	Image( const isis::data::Image &image );
 
 
 };

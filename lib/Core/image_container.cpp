@@ -27,15 +27,17 @@
  ******************************************************************/
 #include "image_container.hpp"
 
-namespace isis {
-namespace glance {
+namespace isis
+{
+namespace glance
+{
 
 bool ImageContainer::addImage ( const ImagePointer &image )
 {
 
 }
 
-bool ImageContainer::addImages ( const ImageVector& images )
+bool ImageContainer::addImages ( const ImageVector &images )
 {
 
 }

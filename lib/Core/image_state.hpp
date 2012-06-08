@@ -30,13 +30,15 @@
 
 #include <CoreUtils/vector.hpp>
 
-namespace isis {
-namespace glance {
-	
-	/**
-	 * ImageState combines all the properties of an
-	 * image that need to have fast access to read and write.
-	 */
+namespace isis
+{
+namespace glance
+{
+
+/**
+ * ImageState combines all the properties of an
+ * image that need to have fast access to read and write.
+ */
 
 struct ImageState {
 	///The current coordinates we are looking at in image space
@@ -46,9 +48,9 @@ struct ImageState {
 	util::ivector4 physical_coords;
 
 	///Is this image visible?
-	bool is_visible;	
+	bool is_visible;
 };
-	
+
 } // end namespace glance
 } // end namespace isis
 
