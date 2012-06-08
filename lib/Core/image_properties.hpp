@@ -18,38 +18,60 @@
  *
  * Author: Erik Tuerke, etuerke@googlemail.com
  *
- * widget_base.hpp
+ * image_properties.hpp
  *
  * Description:
  *
- *  Created on: Jun 7, 2012
+ *  Created on: Jun 8, 2012
  *      Author: tuerke
  ******************************************************************/
-#ifndef _ISIS_GLANCE_WIDGET_BASE_HPP
-#define _ISIS_GLANCE_WIDGET_BASE_HPP
 
-#include "image_container.hpp"
+#ifndef _ISIS_GLANCE_IMAGE_PROPERTIES_HPP
+#define _ISIS_GLANCE_IMAGE_PROPERTIES_HPP
+
+#include <string>
+#include <CoreUtils/vector.hpp>
+#include <DataStorage/image.hpp>
 
 namespace isis {
 namespace glance {
 
- /**
- * Abstract base class for widget that defines the interface for each widget.
- */
-
-template<typename BASE>
-class WidgetBase
- :	public ImageContainer,
-	public BASE {
-public:
+	/**
+	 * ImageProperties combines all the properties of an
+	 * image that need to have fast access to read and write.
+	 */
 	
+class ImageProperties {
+public:
+	ImageProperties();
+	ImageProperties( const isis::data::Image &image );
 
+	///The images filename
+	std::string file_name;
+
+	///The images filepath
+	std::string file_path;
+
+	///The minimum/maximum as double
+	std::pair<double, double> min_max;
+
+	///The major type ID of the image
+	unsigned int major_type_id;
+
+	///The images size
+	util::ivector4 size;
+
+	///The images size aligned to 32bit
+	util::ivector4 size_aligned32;
+
+private:
+	short unsigned int getMajorTypeID(const std::pair<util::ValueReference, util::ValueReference> &_min_max) const;
+	
 	
 };
-
-
+	
 } // end namespace glance
 } // end namespace isis
 
 
-#endif //_ISIS_GLANCE_WIDGET_BASE_HPP
+#endif // _ISIS_GLANCE_IMAGE_PROPERTIES_HPP

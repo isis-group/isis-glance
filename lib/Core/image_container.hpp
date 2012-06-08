@@ -26,16 +26,27 @@
  *      Author: tuerke
  ******************************************************************/
 
-#ifndef _ISIS_GLANCE_IMAGE_HPP
-#define _ISIS_GLANCE_IMAGE_HPP
+#ifndef _ISIS_GLANCE_IMAGE_CONTAINER_HPP
+#define _ISIS_GLANCE_IMAGE_CONTAINER_HPP
 
-#include <DataStorage/image.hpp>
+#include "image.hpp"
 
 namespace isis {
 namespace glance {
 
-class ImageContainer : public isis::data::Image
+class ImageContainer
 {
+	/**
+	 * Add an isis::glance::Image to the widget
+	 * \return True if adding was successsful.
+	 */
+	virtual bool addImage( const Image::Pointer image );
+
+	/**
+	 * Add a list of isis::glance::Image to the widget
+	 * \return True if adding was successsful.
+	 */
+	virtual bool addImages( const Image::Vector &images );
 };
 	
 

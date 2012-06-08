@@ -26,3 +26,21 @@
  *      Author: tuerke
  ******************************************************************/
 #include "image_container.hpp"
+
+namespace isis {
+namespace glance {
+
+bool ImageContainer::addImage ( const Image::Pointer image )
+{
+
+}
+
+bool ImageContainer::addImages ( const Image::Vector& images )
+{
+
+}
+
+
+
+} // end namespace glance
+} // end namespace isis

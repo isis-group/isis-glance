@@ -18,38 +18,40 @@
  *
  * Author: Erik Tuerke, etuerke@googlemail.com
  *
- * widget_base.hpp
+ * image.hpp
  *
  * Description:
  *
- *  Created on: Jun 7, 2012
+ *  Created on: Jun 8, 2012
  *      Author: tuerke
  ******************************************************************/
-#ifndef _ISIS_GLANCE_WIDGET_BASE_HPP
-#define _ISIS_GLANCE_WIDGET_BASE_HPP
+#ifndef _ISIS_GLANCE_IMAGE_HPP
+#define _ISIS_GLANCE_IMAGE_HPP
 
-#include "image_container.hpp"
+#include <DataStorage/chunk.hpp>
+#include <DataStorage/image.hpp>
+
+#include <boost/shared_ptr.hpp>
+#include <vector>
+
+#include "image_state.hpp"
+#include "image_properties.hpp"
 
 namespace isis {
 namespace glance {
 
- /**
- * Abstract base class for widget that defines the interface for each widget.
- */
-
-template<typename BASE>
-class WidgetBase
- :	public ImageContainer,
-	public BASE {
+class Image
+	: public ImageState,
+	  public ImageProperties,
+	  protected std::vector<isis::data::Chunk> {
 public:
+    Image( const isis::data::Image &image );
 	
+	typedef boost::shared_ptr<Image> Pointer;
+	typedef std::vector< Pointer > Vector;
 
-	
 };
-
-
 } // end namespace glance
 } // end namespace isis
 
-
-#endif //_ISIS_GLANCE_WIDGET_BASE_HPP
+#endif // _ISIS_GLANCE_IMAGE_HPP

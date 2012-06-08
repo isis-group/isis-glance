@@ -18,38 +18,22 @@
  *
  * Author: Erik Tuerke, etuerke@googlemail.com
  *
- * widget_base.hpp
+ * common.hpp
  *
  * Description:
  *
- *  Created on: Jun 7, 2012
+ *  Created on: Jun 8, 2012
  *      Author: tuerke
  ******************************************************************/
-#ifndef _ISIS_GLANCE_WIDGET_BASE_HPP
-#define _ISIS_GLANCE_WIDGET_BASE_HPP
-
-#include "image_container.hpp"
+#ifndef _ISIS_GLANCE_COMMON_HPP
+#define _ISIS_GLANCE_COMMON_HPP
 
 namespace isis {
 namespace glance {
 
- /**
- * Abstract base class for widget that defines the interface for each widget.
- */
-
-template<typename BASE>
-class WidgetBase
- :	public ImageContainer,
-	public BASE {
-public:
+typedef uint8_t InternalDataRepresentation;
 	
-
-	
-};
-
-
 } // end namespace glance
 } // end namespace isis
 
-
-#endif //_ISIS_GLANCE_WIDGET_BASE_HPP
+#endif // _ISIS_GLANCE_COMMON_HPP

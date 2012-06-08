@@ -18,38 +18,39 @@
  *
  * Author: Erik Tuerke, etuerke@googlemail.com
  *
- * widget_base.hpp
+ * image_state.hpp
  *
  * Description:
  *
- *  Created on: Jun 7, 2012
+ *  Created on: Jun 8, 2012
  *      Author: tuerke
  ******************************************************************/
-#ifndef _ISIS_GLANCE_WIDGET_BASE_HPP
-#define _ISIS_GLANCE_WIDGET_BASE_HPP
+#ifndef _ISIS_GLANCE_IMAGE_STATE_HPP
+#define _ISIS_GLANCE_IMAGE_STATE_HPP
 
-#include "image_container.hpp"
+#include <CoreUtils/vector.hpp>
 
 namespace isis {
 namespace glance {
-
- /**
- * Abstract base class for widget that defines the interface for each widget.
- */
-
-template<typename BASE>
-class WidgetBase
- :	public ImageContainer,
-	public BASE {
-public:
 	
+	/**
+	 * ImageState combines all the properties of an
+	 * image that need to have fast access to read and write.
+	 */
 
-	
+struct ImageState {
+	///The current coordinates we are looking at in image space
+	util::ivector4 voxel_coords;
+
+	///The current coordinates we are looking at in physical space
+	util::ivector4 physical_coords;
+
+	///Is this image visible?
+	bool is_visible;	
 };
-
-
+	
 } // end namespace glance
 } // end namespace isis
 
 
-#endif //_ISIS_GLANCE_WIDGET_BASE_HPP
+#endif // _ISIS_GLANCE_IMAGE_STATE_HPP

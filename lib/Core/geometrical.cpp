@@ -18,38 +18,35 @@
  *
  * Author: Erik Tuerke, etuerke@googlemail.com
  *
- * widget_base.hpp
+ * geometrical.cpp
  *
  * Description:
  *
- *  Created on: Jun 7, 2012
+ *  Created on: Jun 8, 2012
  *      Author: tuerke
  ******************************************************************/
-#ifndef _ISIS_GLANCE_WIDGET_BASE_HPP
-#define _ISIS_GLANCE_WIDGET_BASE_HPP
-
-#include "image_container.hpp"
+#include "geometrical.hpp"
 
 namespace isis {
 namespace glance {
+namespace geometrical {
 
- /**
- * Abstract base class for widget that defines the interface for each widget.
- */
+util::ivector4 get32BitAlignedSize ( const util::ivector4& orig_size )
+{
+	util::ivector4 ret_size;
+	for ( util::ivector4::value_type i = 0; i < 4; i++ ) {
+		const int m = orig_size[i] % 4;
 
-template<typename BASE>
-class WidgetBase
- :	public ImageContainer,
-	public BASE {
-public:
+		if( m > 0 ) {
+			ret_size[i] = orig_size[i] + 4 - m;
+		} else {
+			ret_size[i] = orig_size[i];
+		}
+	}
+	return ret_size;
+}
+
 	
-
-	
-};
-
-
+} // end namespace geometrical
 } // end namespace glance
 } // end namespace isis
-
-
-#endif //_ISIS_GLANCE_WIDGET_BASE_HPP
