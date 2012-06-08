@@ -93,6 +93,9 @@ public:
 	///The latched orientation_matrix
 	util::Matrix4x4<float> orientation_matrix_latched;
 
+	///The sum of voxelSize and voxelGap
+	util::fvector4 voxel_size;
+
 protected:
 	const bool &isValid() const { return is_valid_; }
 

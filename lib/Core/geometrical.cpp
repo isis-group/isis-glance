@@ -56,7 +56,7 @@ isis::util::Matrix4x4< float > getOrientationMatrixFromPropMap ( const util::Pro
 	const util::Matrix4x4<float> retMatrix (  propmap.getPropertyAs<util::fvector4>( "rowVec" ),
 			propmap.getPropertyAs<util::fvector4>( "columnVec" ),
 			propmap.getPropertyAs<util::fvector4>( "sliceVec" ) );
-	return retMatrix.transpose(); // has to be transposed!!!!!!!!!!
+	return retMatrix;
 }
 
 isis::util::Matrix4x4< float > getLatchedOrienation ( const isis::util::Matrix4x4< float > &orientation_matrix )
@@ -110,9 +110,9 @@ isis::util::Matrix4x4< float > getLatchedOrienation ( const isis::util::Matrix4x
 		}
 	}
 
-	retMatrix.elem( 0, rB ) = rowVec[rB] < 0 ? -1 : 1;
-	retMatrix.elem( 1, cB ) =  columnVec[cB] < 0 ? -1 : 1;
-	retMatrix.elem( 2, sB ) = sliceVec[sB] < 0 ? -1 : 1;
+	retMatrix.elem( rB, 0 ) = rowVec[rB] < 0 ? -1 : 1;
+	retMatrix.elem( cB, 1 ) =  columnVec[cB] < 0 ? -1 : 1;
+	retMatrix.elem( sB, 2 ) = sliceVec[sB] < 0 ? -1 : 1;
 	retMatrix.elem( 3, 3 ) = 1;
 	return retMatrix;
 }

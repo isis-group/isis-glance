@@ -138,6 +138,11 @@ SET(CPACK_NSIS_MODIFY_PATH ON)
 SET(CPACK_NSIS_URL_INFO_ABOUT "http:\\\\\\\\isis-group.github.com/isis-glance")
 INCLUDE(CPack)
 
+############################################################
+# optional components
+############################################################
+option(ISIS_GLANCE_BUILD_TESTS "Build the ISIS-Glance test cases. They depend on Boost-Test" OFF)
+
 ###########################################################
 # isis stuff
 ###########################################################
@@ -164,6 +169,14 @@ INCLUDE(${QT_USE_FILE})
 
 # build the ISIS-Glance libraries
 add_subdirectory(lib)
+
+# yeah, we have tests ;-)
+# build the ISIS tests.
+if(ISIS_GLANCE_BUILD_TESTS)
+  message(STATUS "Building unit tests")
+  enable_testing()
+  add_subdirectory(tests)
+endif(ISIS_GLANCE_BUILD_TESTS)
 
 # uninstall target
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/cmake//cmake_uninstall.cmake.in" "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake" IMMEDIATE @ONLY)

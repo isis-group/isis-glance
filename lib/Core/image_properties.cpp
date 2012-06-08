@@ -41,7 +41,7 @@ ImageProperties::ImageProperties()
 ImageProperties::ImageProperties ( const data::Image &image )
 {
 	//setting all the needed properties from the image
-	const std::pair<util::ValueReference, util::ValueReference> _min_max;
+	const std::pair<util::ValueReference, util::ValueReference> _min_max = image.getMinMax();
 	major_type_id = getMajorTypeID( _min_max );
 	//check if we have a rgb image. if so we have to omit all the stuff that converts to double
 	is_rgb = data::ValueArray<util::color24>::staticID == major_type_id || data::ValueArray<util::color48>::staticID == major_type_id;
@@ -58,13 +58,15 @@ ImageProperties::ImageProperties ( const data::Image &image )
 	size_aligned32 = geometrical::get32BitAlignedSize( size );
 	orientation_matrix = geometrical::getOrientationMatrixFromPropMap( image );
 	orientation_matrix_latched = geometrical::getLatchedOrienation( orientation_matrix );
-
+	voxel_size = image.getPropertyAs<util::fvector4>( "voxelSize" );
+	if( image.hasProperty( "voxelGap" ) ) {
+		voxel_size += image.getPropertyAs<util::fvector4>("voxelGap" ) ;
+	}
 	if( image.hasProperty( "file_path" ) ) {
 		boost::filesystem::path p( image.getPropertyAs<std::string>( "file_path" ) );
 		file_name = p.filename();
-		file_path = p.relative_path().string();
+		file_path = p.directory_string();
 	}
-
 }
 
 

@@ -31,15 +31,30 @@ namespace isis
 {
 namespace glance
 {
-
+ImageContainer::ImageContainer()
+	: allow_multiple_(false)
+{}
+	
 bool ImageContainer::addImage ( const ImagePointer &image )
 {
-
+	if ( std::find( begin(), end(), image ) == end() || allow_multiple_ ) {
+		push_back( image );
+		signal_image_added_to_container( image );
+		return true;
+	} else {
+		LOG( data::Runtime, warning ) << "Trying to add already existing image with file_path: "
+			<< image->file_path << " ! Will not do that.";
+		return false;
+	}
 }
 
 bool ImageContainer::addImages ( const ImageVector &images )
 {
-
+	bool ok = true;
+	BOOST_FOREACH( const ImageVector::const_reference image, images ) {
+		ok = ok && addImage( image );
+	}
+	return ok;
 }
 
 

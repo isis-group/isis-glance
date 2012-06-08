@@ -32,6 +32,8 @@
 #include "image.hpp"
 #include "common.hpp"
 
+#include <boost/signals2.hpp>
+
 namespace isis
 {
 namespace glance
@@ -39,6 +41,8 @@ namespace glance
 
 class ImageContainer : protected ImageVector
 {
+public:
+	ImageContainer();
 	/**
 	 * Add an isis::glance::Image to the widget
 	 * \return True if adding was successsful.
@@ -50,6 +54,15 @@ class ImageContainer : protected ImageVector
 	 * \return True if adding was successsful.
 	 */
 	virtual bool addImages( const ImageVector &images );
+
+	void setAllowMultiple( bool allow ) { allow_multiple_ = allow; }
+	const bool &getAllowMultiple() const { return allow_multiple_; }
+
+	//signals
+	boost::signals2::signal<void ( const ImagePointer &)> signal_image_added_to_container;
+	
+private:
+	bool allow_multiple_;
 };
 
 
