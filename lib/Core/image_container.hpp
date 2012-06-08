@@ -30,23 +30,24 @@
 #define _ISIS_GLANCE_IMAGE_CONTAINER_HPP
 
 #include "image.hpp"
+#include "common.hpp"
 
 namespace isis {
 namespace glance {
 
-class ImageContainer
+class ImageContainer : protected ImageVector
 {
 	/**
 	 * Add an isis::glance::Image to the widget
 	 * \return True if adding was successsful.
 	 */
-	virtual bool addImage( const Image::Pointer image );
+	virtual bool addImage( const ImagePointer &image );
 
 	/**
 	 * Add a list of isis::glance::Image to the widget
 	 * \return True if adding was successsful.
 	 */
-	virtual bool addImages( const Image::Vector &images );
+	virtual bool addImages( const ImageVector &images );
 };
 	
 

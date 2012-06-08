@@ -46,9 +46,7 @@ class Image
 	  protected std::vector<isis::data::Chunk> {
 public:
     Image( const isis::data::Image &image );
-	
-	typedef boost::shared_ptr<Image> Pointer;
-	typedef std::vector< Pointer > Vector;
+
 
 };
 } // end namespace glance

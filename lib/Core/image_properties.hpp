@@ -31,6 +31,7 @@
 
 #include <string>
 #include <CoreUtils/vector.hpp>
+#include <CoreUtils/matrix.hpp>
 #include <DataStorage/image.hpp>
 
 namespace isis {
@@ -44,6 +45,19 @@ namespace glance {
 class ImageProperties {
 public:
 	ImageProperties();
+
+	/**
+	 * Constructs an ImageProperties object with an isis::data::Image object
+	 *
+	 * ImageProperties expects the \param image to have the following properties set:
+	 *
+	 * * "file_path"
+	 *
+	 * If ImageProperties could not find one of these properties it throws a warning
+	 * and "isValid" will return false. 
+	 * 
+	 */
+	
 	ImageProperties( const isis::data::Image &image );
 
 	///The images filename
@@ -55,6 +69,9 @@ public:
 	///The minimum/maximum as double
 	std::pair<double, double> min_max;
 
+	///The extent of the images min <> max
+	double extent;
+
 	///The major type ID of the image
 	unsigned int major_type_id;
 
@@ -64,8 +81,21 @@ public:
 	///The images size aligned to 32bit
 	util::ivector4 size_aligned32;
 
+	///Do we have a RGB image?
+	bool is_rgb;
+
+	///The image orientation matrix
+	util::Matrix4x4<float> orientation_matrix;
+
+	///The latched orientation_matrix
+	util::Matrix4x4<float> orientation_matrix_latched;
+
+protected:
+	const bool &isValid() const { return is_valid_; }
+	
 private:
 	short unsigned int getMajorTypeID(const std::pair<util::ValueReference, util::ValueReference> &_min_max) const;
+	bool is_valid_;
 	
 	
 };

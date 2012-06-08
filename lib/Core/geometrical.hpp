@@ -29,12 +29,19 @@
 #define _ISIS_GLANCE_GEOMETRICAL_HPP
 
 #include <CoreUtils/vector.hpp>
+#include <CoreUtils/matrix.hpp>
+#include <CoreUtils/propmap.hpp>
 
 namespace isis {
 namespace glance {
 namespace geometrical {
 
 util::ivector4 get32BitAlignedSize( const util::ivector4 &orig_size );
+
+util::Matrix4x4<float> getOrientationMatrixFromPropMap( const util::PropertyMap &propmap );
+
+util::Matrix4x4<float> getLatchedOrienation( const util::Matrix4x4<float> &orientation_matrix );
+
 
 } // end namespace geometrical
 } // end namespace glance

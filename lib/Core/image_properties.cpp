@@ -26,8 +26,9 @@
  *      Author: tuerke
  ******************************************************************/
 #include "image_properties.hpp"
-
 #include "geometrical.hpp"
+
+#include <boost/filesystem.hpp>
 
 namespace isis {
 namespace glance {
@@ -40,9 +41,27 @@ ImageProperties::ImageProperties ( const data::Image& image )
 	//setting all the needed properties from the image
 	const std::pair<util::ValueReference, util::ValueReference> _min_max;
 	major_type_id = getMajorTypeID( _min_max );
-	min_max = std::make_pair<double, double>( _min_max.first->as<double>(), _min_max.second->as<double>() );
+	//check if we have a rgb image. if so we have to omit all the stuff that converts to double
+	is_rgb = data::ValueArray<util::color24>::staticID == major_type_id || data::ValueArray<util::color48>::staticID == major_type_id;
+	if( !is_rgb ) {
+		min_max = std::make_pair<double, double>( _min_max.first->as<double>(), _min_max.second->as<double>() );
+		extent = min_max.second - min_max.first;
+	} else {
+		LOG( data::Runtime, info ) << "ImageProperties received a rgb image. Omitting min_max and extent!";
+	}
+
+	//geometrical stuff
 	size = image.getSizeAsVector();
 	size_aligned32 = geometrical::get32BitAlignedSize( size );
+	orientation_matrix = geometrical::getOrientationMatrixFromPropMap( image );
+	orientation_matrix_latched = geometrical::getLatchedOrienation( orientation_matrix );
+
+	if( image.hasProperty( "file_path" ) ) {
+		boost::filesystem::path p( image.getPropertyAs<std::string>("file_path") );
+		file_name = p.filename();
+		file_path = p.relative_path().string();
+	}
+	
 }
 
 

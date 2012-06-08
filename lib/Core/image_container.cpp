@@ -30,12 +30,12 @@
 namespace isis {
 namespace glance {
 
-bool ImageContainer::addImage ( const Image::Pointer image )
+bool ImageContainer::addImage ( const ImagePointer &image )
 {
 
 }
 
-bool ImageContainer::addImages ( const Image::Vector& images )
+bool ImageContainer::addImages ( const ImageVector& images )
 {
 
 }
