@@ -44,15 +44,19 @@ ImageProperties::ImageProperties ( const data::Image &image )
 	const std::pair<util::ValueReference, util::ValueReference> _min_max = image.getMinMax();
 	major_type_id = getMajorTypeID( _min_max );
 	//check if we have a rgb image. if so we have to omit all the stuff that converts to double
-	is_rgb = data::ValueArray<util::color24>::staticID == major_type_id || data::ValueArray<util::color48>::staticID == major_type_id;
-
-	if( !is_rgb ) {
+	if( data::ValueArray<util::color24>::staticID == major_type_id || data::ValueArray<util::color48>::staticID == major_type_id ) {
+		type_group_ = COLOR;
+	} else if ( data::ValueArray<std::vector< float > >::staticID == major_type_id || data::ValueArray<std::vector< double > >::staticID == major_type_id ) {
+		type_group_ = COMPLEX;
+	} else if (  	data::ValueArray<util::ivector4>::staticID == major_type_id ||
+					data::ValueArray<util::fvector4>::staticID == major_type_id ||
+					data::ValueArray<util::dvector4>::staticID == major_type_id	) {
+		type_group_ = VECTOR;
+	} else {
+		type_group_ = SCALAR;
 		min_max = std::make_pair<double, double>( _min_max.first->as<double>(), _min_max.second->as<double>() );
 		extent = min_max.second - min_max.first;
-	} else {
-		LOG( data::Runtime, info ) << "ImageProperties received a rgb image. Omitting min_max and extent!";
 	}
-
 	//geometrical stuff
 	size = image.getSizeAsVector();
 	size_aligned32 = geometrical::get32BitAlignedSize( size );

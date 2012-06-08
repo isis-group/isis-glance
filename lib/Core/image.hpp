@@ -48,6 +48,8 @@ class Image
   protected std::vector<isis::data::Chunk>
 {
 public:
+	
+	
 	Image( const isis::data::Image &image );
 
 

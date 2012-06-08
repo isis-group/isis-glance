@@ -30,7 +30,7 @@ BOOST_AUTO_TEST_CASE( image_properties_test )
 	BOOST_CHECK_EQUAL( image_props.min_max.first, -32 );
 	BOOST_CHECK_EQUAL( image_props.min_max.second, 1331 );
 	BOOST_CHECK_EQUAL( image_props.extent, 1363 );
-	BOOST_CHECK( !image_props.is_rgb );
+	BOOST_CHECK_EQUAL( image_props.getImageTypeGroup(), ImageProperties::SCALAR );
 	BOOST_CHECK_EQUAL( image_props.orientation_matrix_latched.getRow(0), util::fvector4( 1,0,0 ) );
 	BOOST_CHECK_EQUAL( image_props.orientation_matrix_latched.getRow(1), util::fvector4( 0,0,-1 ) );
 	BOOST_CHECK_EQUAL( image_props.orientation_matrix_latched.getRow(2), util::fvector4( 0,1,0 ) );
