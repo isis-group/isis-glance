@@ -26,7 +26,7 @@
  *      Author: tuerke
  ******************************************************************/
 #include "image_properties.hpp"
-#include "geometrical.hpp"
+#include "../geometrical.hpp"
 
 #include <boost/filesystem.hpp>
 
@@ -43,23 +43,24 @@ ImageProperties::ImageProperties ( const data::Image &image )
 	//setting all the needed properties from the image
 	const std::pair<util::ValueReference, util::ValueReference> _min_max = image.getMinMax();
 	major_type_id = getMajorTypeID( _min_max );
-	//check if we have a rgb image. if so we have to omit all the stuff that converts to double
+	has_one_typeid = getHasOneType( image );
 	if( data::ValueArray<util::color24>::staticID == major_type_id || data::ValueArray<util::color48>::staticID == major_type_id ) {
-		type_group_ = COLOR;
+		type_group = COLOR;
 	} else if ( data::ValueArray<std::vector< float > >::staticID == major_type_id || data::ValueArray<std::vector< double > >::staticID == major_type_id ) {
-		type_group_ = COMPLEX;
+		type_group = COMPLEX;
 	} else if (  	data::ValueArray<util::ivector4>::staticID == major_type_id ||
 					data::ValueArray<util::fvector4>::staticID == major_type_id ||
 					data::ValueArray<util::dvector4>::staticID == major_type_id	) {
-		type_group_ = VECTOR;
+		type_group = VECTOR;
 	} else {
-		type_group_ = SCALAR;
+		type_group = SCALAR;
 		min_max = std::make_pair<double, double>( _min_max.first->as<double>(), _min_max.second->as<double>() );
 		extent = min_max.second - min_max.first;
 	}
+
 	//geometrical stuff
-	size = image.getSizeAsVector();
-	size_aligned32 = geometrical::get32BitAlignedSize( size );
+	image_size = image.getSizeAsVector();
+	image_size_aligned32 = geometrical::get32BitAlignedSize( image_size );
 	orientation_matrix = geometrical::getOrientationMatrixFromPropMap( image );
 	orientation_matrix_latched = geometrical::getLatchedOrienation( orientation_matrix );
 	voxel_size = image.getPropertyAs<util::fvector4>( "voxelSize" );
@@ -89,6 +90,17 @@ short unsigned int ImageProperties::getMajorTypeID( const std::pair<util::ValueR
 
 	return 0;
 
+}
+
+bool ImageProperties::getHasOneType( const data::Image &image ) const
+{
+	//iterate through all the chunks and check if there is one chunk whose image type is different from the major_type_id
+	BOOST_FOREACH( std::list<data::Chunk>::const_reference chunk, image.copyChunksToVector( false ) ) {
+		if( chunk.getTypeID() != major_type_id ) {
+			return false;
+		}
+	}
+	return true;
 }
 
 

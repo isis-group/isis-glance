@@ -41,14 +41,22 @@ namespace glance
 
 /**
  * ImageProperties combines all the properties of an
- * image that need to have fast access to read and write.
+ * image that need to provide fast access for read and write accress.
  */
 
 class ImageProperties
 {
 public:
-	ImageProperties();
+	/**
+	 * Groups of types an image can have
+	 */
 	enum ImageTypeGroup { SCALAR, COMPLEX, COLOR, VECTOR };
+
+	/**
+	 * Empty constructur for ImageProperties
+	 */
+	ImageProperties();
+	
 	/**
 	 * Constructs an ImageProperties object with an isis::data::Image object
 	 *
@@ -60,8 +68,7 @@ public:
 	 * and "isValid" will return false.
 	 *
 	 */
-
-	ImageProperties( const isis::data::Image &image );
+	ImageProperties( const data::Image &image );
 
 	///The images filename
 	std::string file_name;
@@ -79,10 +86,10 @@ public:
 	unsigned int major_type_id;
 
 	///The images size
-	util::ivector4 size;
+	util::ivector4 image_size;
 
 	///The images size aligned to 32bit
-	util::ivector4 size_aligned32;
+	util::ivector4 image_size_aligned32;
 
 	///The image orientation matrix
 	util::Matrix4x4<float> orientation_matrix;
@@ -93,17 +100,19 @@ public:
 	///The sum of voxelSize and voxelGap
 	util::fvector4 voxel_size;
 
-	ImageTypeGroup getImageTypeGroup() const { return type_group_; }
+	///The images type group
+	ImageTypeGroup type_group;
 
-	
+	///Does the underlying isis image contains of chunks with only one image type?
+	bool has_one_typeid;
 
 protected:
 	const bool &isValid() const { return is_valid_; }
 
 private:
 	short unsigned int getMajorTypeID( const std::pair<util::ValueReference, util::ValueReference> &_min_max ) const;
+	bool getHasOneType( const data::Image &image ) const;
 	bool is_valid_;
-	ImageTypeGroup type_group_;
 
 
 };

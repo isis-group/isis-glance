@@ -29,14 +29,14 @@
 #define _ISIS_GLANCE_COMMON_HPP
 
 #include <DataStorage/common.hpp>
-#include "image.hpp"
+#include "Data/image.hpp"
 
 namespace isis
 {
 namespace glance
 {
 
-typedef uint8_t InternalDataRepresentation;
+typedef uint8_t InternalDataRepresentationScalar;
 typedef util::color24 InternalDataRepresentationColor;
 
 typedef boost::shared_ptr<Image> ImagePointer;

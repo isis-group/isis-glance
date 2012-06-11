@@ -26,7 +26,7 @@
  *      Author: tuerke
  ******************************************************************/
 #include "image.hpp"
-#include "common.hpp"
+#include "../common.hpp"
 
 namespace isis
 {
@@ -34,11 +34,23 @@ namespace glance
 {
 
 Image::Image ( const isis::data::Image &image )
-	: ImageProperties( image )
+	: ImageState( image ),
+	ImageProperties( image ),
+	isis_image_(image)
 {
-
+	synchronizeFrom( image );
 
 }
+
+void Image::synchronizeFrom( const data::Image &image )
+{
+	if( type_group == SCALAR ) {
+		_synchronizeFrom<InternalDataRepresentationScalar>( image );
+	} else if ( type_group == COLOR ) {
+		_synchronizeFrom<InternalDataRepresentationColor>( image );
+	}
+}
+
 
 
 } // end namespace glance

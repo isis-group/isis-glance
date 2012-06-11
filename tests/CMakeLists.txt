@@ -19,3 +19,11 @@ else(DOT_LIB OR DOT_A)
 endif(DOT_LIB OR DOT_A)
 
 add_subdirectory(Core)
+
+# addition option: build benchmarks
+option(ISIS_GLANCE_BUILD_BENCHMARKS "Build the ISIS-Glance stress tests. For internal use only" OFF)
+
+if(ISIS_GLANCE_BUILD_BENCHMARKS)
+  message(STATUS "Building stress tests")
+  add_subdirectory(benchmarks)
+endif(ISIS_GLANCE_BUILD_BENCHMARKS)

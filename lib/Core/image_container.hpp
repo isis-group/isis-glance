@@ -29,7 +29,7 @@
 #ifndef _ISIS_GLANCE_IMAGE_CONTAINER_HPP
 #define _ISIS_GLANCE_IMAGE_CONTAINER_HPP
 
-#include "image.hpp"
+#include "Data/image.hpp"
 #include "common.hpp"
 
 #include <boost/signals2.hpp>

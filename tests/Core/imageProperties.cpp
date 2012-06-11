@@ -3,7 +3,7 @@
 #include <boost/test/unit_test.hpp>
 #include <DataStorage/chunk.hpp>
 
-#include "image_properties.hpp"
+#include "Data/image_properties.hpp"
 
 namespace isis {
 namespace glance {
@@ -24,17 +24,18 @@ BOOST_AUTO_TEST_CASE( image_properties_test )
 	mChunk.setPropertyAs<uint16_t>("sequenceNumber", 1 );
 	mChunk.setPropertyAs<uint32_t>("acquisitionNumber", 0 );
 	ImageProperties image_props = data::Image( mChunk ) ;
+	BOOST_CHECK( image_props.has_one_typeid );
 	BOOST_CHECK_EQUAL( image_props.major_type_id, (int)data::ValueArray<int16_t>::staticID );
 	BOOST_CHECK_EQUAL( image_props.file_name, std::string( "file.gna" ) );
 	BOOST_CHECK_EQUAL( image_props.file_path, std::string( "/this/is/a/path/or/file.gna" ) );
 	BOOST_CHECK_EQUAL( image_props.min_max.first, -32 );
 	BOOST_CHECK_EQUAL( image_props.min_max.second, 1331 );
 	BOOST_CHECK_EQUAL( image_props.extent, 1363 );
-	BOOST_CHECK_EQUAL( image_props.getImageTypeGroup(), ImageProperties::SCALAR );
+	BOOST_CHECK_EQUAL( image_props.type_group, ImageProperties::SCALAR );
 	BOOST_CHECK_EQUAL( image_props.orientation_matrix_latched.getRow(0), util::fvector4( 1,0,0 ) );
 	BOOST_CHECK_EQUAL( image_props.orientation_matrix_latched.getRow(1), util::fvector4( 0,0,-1 ) );
 	BOOST_CHECK_EQUAL( image_props.orientation_matrix_latched.getRow(2), util::fvector4( 0,1,0 ) );
-	BOOST_CHECK_EQUAL( image_props.size_aligned32, util::ivector4( 100, 12, 36, 12 ) );
+	BOOST_CHECK_EQUAL( image_props.image_size_aligned32, util::ivector4( 100, 12, 36, 12 ) );
 	BOOST_CHECK_EQUAL( image_props.voxel_size, util::fvector4( 1.7, 1.3, 2.5, 1.1 ) );
 }
 

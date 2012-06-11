@@ -18,23 +18,17 @@
  *
  * Author: Erik Tuerke, etuerke@googlemail.com
  *
- * image.hpp
+ * image_state.hpp
  *
  * Description:
  *
  *  Created on: Jun 8, 2012
  *      Author: tuerke
  ******************************************************************/
-#ifndef _ISIS_GLANCE_IMAGE_HPP
-#define _ISIS_GLANCE_IMAGE_HPP
+#ifndef _ISIS_GLANCE_IMAGE_STATE_HPP
+#define _ISIS_GLANCE_IMAGE_STATE_HPP
 
-#include <DataStorage/chunk.hpp>
-#include <DataStorage/image.hpp>
-
-#include <boost/shared_ptr.hpp>
-#include <vector>
-
-#include "image_state.hpp"
+#include <CoreUtils/vector.hpp>
 #include "image_properties.hpp"
 
 namespace isis
@@ -42,19 +36,27 @@ namespace isis
 namespace glance
 {
 
-class Image
-	: public ImageState,
-  public ImageProperties,
-  protected std::vector<isis::data::Chunk>
-{
+/**
+ * ImageState combines all the properties of an
+ * image that need to have fast access to read and write.
+ */
+
+class ImageState {
 public:
+	ImageState( const data::Image &image );
 	
-	
-	Image( const isis::data::Image &image );
+	///The current coordinates we are looking at in image space
+	util::ivector4 voxel_coords;
 
+	///The current coordinates we are looking at in physical space
+	util::ivector4 physical_coords;
 
+	///Is this image visible?
+	bool is_visible;
 };
+
 } // end namespace glance
 } // end namespace isis
 
-#endif // _ISIS_GLANCE_IMAGE_HPP
+
+#endif // _ISIS_GLANCE_IMAGE_STATE_HPP
