@@ -35,8 +35,8 @@ namespace glance
 
 Image::Image ( const isis::data::Image &image )
 	: ImageState( image ),
-	ImageProperties( image ),
-	isis_image_(image)
+	  ImageProperties( image ),
+	  isis_image_( image )
 {
 	synchronizeFrom( image );
 

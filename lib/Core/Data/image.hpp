@@ -67,7 +67,7 @@ private:
 		}
 		assert( size() == static_cast<uint32_t>( image_size[isis::data::timeDim] ) );
 	}
-	
+
 
 
 };

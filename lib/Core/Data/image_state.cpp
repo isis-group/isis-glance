@@ -27,15 +27,17 @@
  ******************************************************************/
 #include "image_state.hpp"
 
-namespace isis {
-namespace glance {
+namespace isis
+{
+namespace glance
+{
 
 ImageState::ImageState ( const data::Image &image )
 	: is_visible( true )
 {
 	voxel_coords = image.getSizeAsVector() / 2;
 	voxel_coords[data::timeDim] = 0;
-	physical_coords = image.getPhysicalCoordsFromIndex( voxel_coords );	
+	physical_coords = image.getPhysicalCoordsFromIndex( voxel_coords );
 }
 
 

@@ -56,7 +56,7 @@ public:
 	 * Empty constructur for ImageProperties
 	 */
 	ImageProperties();
-	
+
 	/**
 	 * Constructs an ImageProperties object with an isis::data::Image object
 	 *

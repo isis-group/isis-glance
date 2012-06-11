@@ -44,13 +44,14 @@ ImageProperties::ImageProperties ( const data::Image &image )
 	const std::pair<util::ValueReference, util::ValueReference> _min_max = image.getMinMax();
 	major_type_id = getMajorTypeID( _min_max );
 	has_one_typeid = getHasOneType( image );
+
 	if( data::ValueArray<util::color24>::staticID == major_type_id || data::ValueArray<util::color48>::staticID == major_type_id ) {
 		type_group = COLOR;
 	} else if ( data::ValueArray<std::vector< float > >::staticID == major_type_id || data::ValueArray<std::vector< double > >::staticID == major_type_id ) {
 		type_group = COMPLEX;
-	} else if (  	data::ValueArray<util::ivector4>::staticID == major_type_id ||
+	} else if (     data::ValueArray<util::ivector4>::staticID == major_type_id ||
 					data::ValueArray<util::fvector4>::staticID == major_type_id ||
-					data::ValueArray<util::dvector4>::staticID == major_type_id	) {
+					data::ValueArray<util::dvector4>::staticID == major_type_id ) {
 		type_group = VECTOR;
 	} else {
 		type_group = SCALAR;
@@ -64,9 +65,11 @@ ImageProperties::ImageProperties ( const data::Image &image )
 	orientation_matrix = geometrical::getOrientationMatrixFromPropMap( image );
 	orientation_matrix_latched = geometrical::getLatchedOrienation( orientation_matrix );
 	voxel_size = image.getPropertyAs<util::fvector4>( "voxelSize" );
+
 	if( image.hasProperty( "voxelGap" ) ) {
-		voxel_size += image.getPropertyAs<util::fvector4>("voxelGap" ) ;
+		voxel_size += image.getPropertyAs<util::fvector4>( "voxelGap" ) ;
 	}
+
 	if( image.hasProperty( "file_path" ) ) {
 		boost::filesystem::path p( image.getPropertyAs<std::string>( "file_path" ) );
 		file_name = p.filename();

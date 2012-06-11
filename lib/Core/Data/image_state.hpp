@@ -41,10 +41,11 @@ namespace glance
  * image that need to have fast access to read and write.
  */
 
-class ImageState {
+class ImageState
+{
 public:
 	ImageState( const data::Image &image );
-	
+
 	///The current coordinates we are looking at in image space
 	util::ivector4 voxel_coords;
 
