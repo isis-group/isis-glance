@@ -31,15 +31,17 @@ namespace isis
 {
 namespace glance
 {
-
-ImageState::ImageState ( const data::Image &image )
-	: is_visible( true )
+namespace data
+{
+ImageState::ImageState ( const isis::data::Image &image )
+	: is_visible( true ),
+	is_valid( false )
 {
 	voxel_coords = image.getSizeAsVector() / 2;
-	voxel_coords[data::timeDim] = 0;
+	voxel_coords[isis::data::timeDim] = 0;
 	physical_coords = image.getPhysicalCoordsFromIndex( voxel_coords );
 }
 
-
+} // end namespace data
 } // end namespace glance
 } // end namespace isis

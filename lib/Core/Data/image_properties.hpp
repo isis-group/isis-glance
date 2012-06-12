@@ -38,7 +38,8 @@ namespace isis
 {
 namespace glance
 {
-
+namespace data
+{
 /**
  * ImageProperties combines all the properties of an
  * image that need to provide fast access for read and write accress.
@@ -68,7 +69,7 @@ public:
 	 * and "isValid" will return false.
 	 *
 	 */
-	ImageProperties( const data::Image &image );
+	ImageProperties( const isis::data::Image &image );
 
 	///The images filename
 	std::string file_name;
@@ -111,12 +112,13 @@ protected:
 
 private:
 	short unsigned int getMajorTypeID( const std::pair<util::ValueReference, util::ValueReference> &_min_max ) const;
-	bool getHasOneType( const data::Image &image ) const;
+	bool getHasOneType( const isis::data::Image &image ) const;
 	bool is_valid_;
 
 
 };
 
+} // end namespace data
 } // end namespace glance
 } // end namespace isis
 

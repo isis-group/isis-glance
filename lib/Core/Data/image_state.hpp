@@ -35,7 +35,9 @@ namespace isis
 {
 namespace glance
 {
-
+namespace data
+{
+	
 /**
  * ImageState combines all the properties of an
  * image that need to have fast access to read and write.
@@ -44,7 +46,7 @@ namespace glance
 class ImageState
 {
 public:
-	ImageState( const data::Image &image );
+	ImageState( const isis::data::Image &image );
 
 	///The current coordinates we are looking at in image space
 	util::ivector4 voxel_coords;
@@ -54,8 +56,12 @@ public:
 
 	///Is this image visible?
 	bool is_visible;
+
+	///Is this image valid?
+	bool is_valid;
 };
 
+} // end namespace data
 } // end namespace glance
 } // end namespace isis
 

@@ -20,7 +20,7 @@ int main()
 	mChunk.setPropertyAs<uint32_t>( "acquisitionNumber", 0 );
 
 	timer.restart();
-	glance::ImageProperties image_props = data::Image( mChunk ) ;
+	isis::glance::data::ImageProperties image_props = data::Image( mChunk ) ;
 	std::cout << "Created image_properties from an image with size " << image_props.image_size << " in "
 			  << timer.elapsed() << " seconds." << std::endl;
 	return 0;

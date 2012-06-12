@@ -26,32 +26,48 @@
  *      Author: tuerke
  ******************************************************************/
 #include "image.hpp"
-#include "../common.hpp"
+#include "common.hpp"
 
 namespace isis
 {
 namespace glance
 {
-
+namespace data {
+	
 Image::Image ( const isis::data::Image &image )
 	: ImageState( image ),
 	  ImageProperties( image ),
 	  isis_image_( image )
 {
-	synchronizeFrom( image );
-
-}
-
-void Image::synchronizeFrom( const data::Image &image )
-{
-	if( type_group == SCALAR ) {
-		_synchronizeFrom<InternalDataRepresentationScalar>( image );
-	} else if ( type_group == COLOR ) {
-		_synchronizeFrom<InternalDataRepresentationColor>( image );
+	is_valid =  synchronizeFrom( image );
+	if (!is_valid) {
+		LOG( isis::data::Runtime, error ) << "Creating of isis::glance::Image from "
+			<< file_path << " failed!";
 	}
 }
 
+bool Image::synchronizeFrom( const isis::data::Image &image )
+{
+	clear();
+
+	switch( type_group ) {
+	case SCALAR:
+		return _synchronizeFrom<ScalarRepn>( image );
+		break;
+	case COLOR:
+		return _synchronizeFrom<ColorRepn>( image );
+		break;
+	case VECTOR:
+		return _synchronizeFrom<VectorRepn>( image );
+		break;
+	case COMPLEX:
+		return _synchronizeFrom<ComplexRepn>( image );
+		break;
+	}
+
+}
 
 
+} // end namespace data
 } // end namespace glance
 } // end namespace isis

@@ -1,4 +1,5 @@
 #include <Data/image.hpp>
+#include <DataStorage/image.hpp>
 #include <boost/timer.hpp>
 
 using namespace isis;
@@ -6,7 +7,7 @@ using namespace isis;
 int main()
 {
 	boost::timer timer;
-	data::MemChunk<int16_t> mChunk( 200, 200, 200, 100 );
+	isis::data::MemChunk<int16_t> mChunk( 200, 200, 200, 100 );
 	mChunk.voxel<int16_t>( 12, 2, 30, 2 ) = -32;
 	mChunk.voxel<int16_t>( 12, 2, 33, 2 ) = 1331;
 	mChunk.setPropertyAs<std::string>( "file_path", std::string( "/this/is/a/path/or/file.gna" ) );
@@ -19,9 +20,12 @@ int main()
 	mChunk.setPropertyAs<uint16_t>( "sequenceNumber", 1 );
 	mChunk.setPropertyAs<uint32_t>( "acquisitionNumber", 0 );
 
+	isis::data::Image isisImage = isis::data::Image( mChunk );
 	timer.restart();
-	glance::Image gImage = data::Image( mChunk );
-	std::cout << "Created glance::image from an isis::image with size " << gImage.image_size << " in "
-			  << timer.elapsed() << " seconds." << std::endl;
+	isis::glance::data::Image gImage = isisImage;
+	std::cout << "Created glance::image with " << gImage.size()
+		<< " volumes from an isis::image with size "
+		<< gImage.image_size << " in "
+		<< timer.elapsed() << " seconds." << std::endl;
 
 };

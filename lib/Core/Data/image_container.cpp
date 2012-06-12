@@ -18,56 +18,49 @@
  *
  * Author: Erik Tuerke, etuerke@googlemail.com
  *
- * image_container.hpp
+ * image_container.cpp
  *
  * Description:
  *
  *  Created on: Jun 8, 2012
  *      Author: tuerke
  ******************************************************************/
-
-#ifndef _ISIS_GLANCE_IMAGE_CONTAINER_HPP
-#define _ISIS_GLANCE_IMAGE_CONTAINER_HPP
-
-#include "Data/image.hpp"
-#include "common.hpp"
-
-#include <boost/signals2.hpp>
+#include "image_container.hpp"
 
 namespace isis
 {
 namespace glance
 {
-
-class ImageContainer : protected ImageVector
+namespace data
 {
-public:
-	ImageContainer();
-	/**
-	 * Add an isis::glance::Image to the widget
-	 * \return True if adding was successsful.
-	 */
-	virtual bool addImage( const ImagePointer &image );
+		
+ImageContainer::ImageContainer()
+	: allow_multiple_( false )
+{}
 
-	/**
-	 * Add a list of isis::glance::Image to the widget
-	 * \return True if adding was successsful.
-	 */
-	virtual bool addImages( const ImageVector &images );
+bool ImageContainer::addImage ( const ImagePointer &image )
+{
+	if ( std::find( begin(), end(), image ) == end() || allow_multiple_ ) {
+		push_back( image );
+		signal_image_added_to_container( image );
+		return true;
+	} else {
+		LOG( isis::data::Runtime, warning ) << "Trying to add already existing image with file_path: "
+									  << image->file_path << " ! Will not do that.";
+		return false;
+	}
+}
 
-	void setAllowMultiple( bool allow ) { allow_multiple_ = allow; }
-	const bool &getAllowMultiple() const { return allow_multiple_; }
+bool ImageContainer::addImages ( const ImageVector &images )
+{
+	bool ok = true;
+	BOOST_FOREACH( const ImageVector::const_reference image, images ) {
+		ok = ok && addImage( image );
+	}
+	return ok;
+}
 
-	//signals
-	boost::signals2::signal<void ( const ImagePointer & )> signal_image_added_to_container;
 
-private:
-	bool allow_multiple_;
-};
-
-
+} // end namespace data
 } // end namespace glance
 } // end namespace isis
-
-
-#endif

@@ -34,24 +34,25 @@ namespace isis
 {
 namespace glance
 {
-
+namespace data {
+	
 ImageProperties::ImageProperties()
 {}
 
-ImageProperties::ImageProperties ( const data::Image &image )
+ImageProperties::ImageProperties ( const isis::data::Image &image )
 {
 	//setting all the needed properties from the image
 	const std::pair<util::ValueReference, util::ValueReference> _min_max = image.getMinMax();
 	major_type_id = getMajorTypeID( _min_max );
 	has_one_typeid = getHasOneType( image );
 
-	if( data::ValueArray<util::color24>::staticID == major_type_id || data::ValueArray<util::color48>::staticID == major_type_id ) {
+	if( isis::data::ValueArray<util::color24>::staticID == major_type_id || isis::data::ValueArray<util::color48>::staticID == major_type_id ) {
 		type_group = COLOR;
-	} else if ( data::ValueArray<std::vector< float > >::staticID == major_type_id || data::ValueArray<std::vector< double > >::staticID == major_type_id ) {
+	} else if ( isis::data::ValueArray<std::vector< float > >::staticID == major_type_id || isis::data::ValueArray<std::vector< double > >::staticID == major_type_id ) {
 		type_group = COMPLEX;
-	} else if (     data::ValueArray<util::ivector4>::staticID == major_type_id ||
-					data::ValueArray<util::fvector4>::staticID == major_type_id ||
-					data::ValueArray<util::dvector4>::staticID == major_type_id ) {
+	} else if (     isis::data::ValueArray<util::ivector4>::staticID == major_type_id ||
+					isis::data::ValueArray<util::fvector4>::staticID == major_type_id ||
+					isis::data::ValueArray<util::dvector4>::staticID == major_type_id ) {
 		type_group = VECTOR;
 	} else {
 		type_group = SCALAR;
@@ -95,10 +96,10 @@ short unsigned int ImageProperties::getMajorTypeID( const std::pair<util::ValueR
 
 }
 
-bool ImageProperties::getHasOneType( const data::Image &image ) const
+bool ImageProperties::getHasOneType( const isis::data::Image &image ) const
 {
 	//iterate through all the chunks and check if there is one chunk whose image type is different from the major_type_id
-	BOOST_FOREACH( std::list<data::Chunk>::const_reference chunk, image.copyChunksToVector( false ) ) {
+	BOOST_FOREACH( std::list<isis::data::Chunk>::const_reference chunk, image.copyChunksToVector( false ) ) {
 		if( chunk.getTypeID() != major_type_id ) {
 			return false;
 		}
@@ -106,6 +107,6 @@ bool ImageProperties::getHasOneType( const data::Image &image ) const
 	return true;
 }
 
-
+} // end namespace data
 } // end namespace glance
 } // end namespace isis
