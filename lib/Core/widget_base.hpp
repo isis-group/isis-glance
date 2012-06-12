@@ -28,7 +28,7 @@
 #ifndef _ISIS_GLANCE_WIDGET_BASE_HPP
 #define _ISIS_GLANCE_WIDGET_BASE_HPP
 
-#include "image_container.hpp"
+#include "Data/image_container.hpp"
 
 namespace isis
 {
@@ -41,7 +41,7 @@ namespace glance
 
 template<typename BASE>
 class WidgetBase
-	:  public ImageContainer,
+	:  public data::ImageContainer,
    public BASE
 {
 public:

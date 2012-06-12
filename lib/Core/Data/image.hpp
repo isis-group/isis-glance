@@ -68,6 +68,7 @@ public:
 	 */
 	bool synchronizeFrom( const isis::data::Image &image );
 
+
 	isis::data::Chunk &operator[]( size_type const &index ) {
 		return std::vector<isis::data::Chunk>::operator[]( index );
 	}
@@ -82,6 +83,8 @@ public:
 private:
 	const isis::data::Image &isis_image_;
 
+/// @cond _internal
+API_EXCLUDE_BEGIN
 	template<typename T>
 	bool _synchronizeFrom( const isis::data::Image &image ) {
 		isis::data::ValueArray<T> imagePtr( ( T * ) calloc( image.getVolume(), sizeof( T ) ), image.getVolume() );
@@ -103,7 +106,8 @@ private:
 
 		return true;
 	}
-
+API_EXCLUDE_END
+/// @endcond _internal
 
 
 };
