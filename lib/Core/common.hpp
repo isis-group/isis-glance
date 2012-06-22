@@ -28,12 +28,13 @@
 #ifndef _ISIS_GLANCE_COMMON_HPP
 #define _ISIS_GLANCE_COMMON_HPP
 
+#include <boost/shared_ptr.hpp>
+#include <boost/signals2.hpp>
 
 namespace isis
 {
 namespace glance
 {
-
 
 
 } // end namespace glance

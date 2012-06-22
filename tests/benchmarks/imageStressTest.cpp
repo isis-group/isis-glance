@@ -22,7 +22,7 @@ int main()
 
 	isis::data::Image isisImage = isis::data::Image( mChunk );
 	timer.restart();
-	isis::glance::data::Image gImage = isisImage;
+	isis::glance::data::Image gImage( isisImage );
 	std::cout << "Created glance::image with " << gImage.size()
 		<< " volumes from an isis::image with size "
 		<< gImage.image_size << " in "

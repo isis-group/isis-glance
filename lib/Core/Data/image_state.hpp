@@ -59,6 +59,8 @@ public:
 
 	///Is this image valid?
 	bool is_valid;
+protected:
+	ImageState() {}
 };
 
 } // end namespace data

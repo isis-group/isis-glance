@@ -37,7 +37,7 @@ namespace data {
 Image::Image ( const isis::data::Image &image )
 	: ImageState( image ),
 	  ImageProperties( image ),
-	  isis_image_( image )
+	  isis_image_(  new isis::data::Image( image ) )
 {
 	is_valid =  synchronizeFrom( image );
 	if (!is_valid) {
@@ -45,6 +45,13 @@ Image::Image ( const isis::data::Image &image )
 			<< file_path << " failed!";
 	}
 }
+
+Image::Image ( const glance::data::Image& )
+	: ImageState(),
+	ImageProperties(),
+	std::vector<isis::data::Chunk>()
+{}
+
 
 bool Image::synchronizeFrom( const isis::data::Image &image )
 {

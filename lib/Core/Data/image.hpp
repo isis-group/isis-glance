@@ -33,10 +33,12 @@
 #include <DataStorage/valuearray.hpp>
 
 #include <boost/shared_ptr.hpp>
+#include <boost/signals2.hpp>
 #include <vector>
 
 #include "image_state.hpp"
 #include "image_properties.hpp"
+#include "common.hpp"
 
 namespace isis
 {
@@ -47,13 +49,15 @@ namespace data {
 class Image
 	: public ImageState,
   public ImageProperties,
-  protected std::vector<isis::data::Chunk>
+  private std::vector<isis::data::Chunk>
 {
 public:
+	enum ImageContentType { VOXEL_CONTENT, PROPERTY_CONTENT, STATE_CONTENT };
+	
 	Image( const isis::data::Image &image );
 
 	///Returns the underlying isis image.
-	const isis::data::Image &get() const { return isis_image_; }
+	const isis::data::Image &get() const { return *isis_image_; }
 
 	/**
 	 * Copies the data from the isis::data::Image into
@@ -80,8 +84,13 @@ public:
 		return std::vector<isis::data::Chunk>::size();
 	}
 
+	//signals
+	boost::signals2::signal<void ( const ImagePointer &, const ImageContentType & )> signal_image_changed_content;
 private:
-	const isis::data::Image &isis_image_;
+	const IsisImagePointer isis_image_;
+
+	//do not allow to copy a glance::data::Image
+	Image( const Image &);
 
 /// @cond _internal
 API_EXCLUDE_BEGIN
@@ -103,7 +112,7 @@ API_EXCLUDE_BEGIN
 											  << file_path << " (" << image_size[isis::data::timeDim] << ").";
 			return false;
 		}
-
+		signal_image_changed_content( ImagePointer( this ) , VOXEL_CONTENT );
 		return true;
 	}
 API_EXCLUDE_END
