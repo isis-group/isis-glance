@@ -53,7 +53,7 @@ class Image
   private std::vector<isis::data::Chunk>
 {
 public:
-	enum ImageContentType { VOXEL_CONTENT, PROPERTY_CONTENT, STATE_CONTENT };
+	enum ImageContentType { CONTENT_VOXEL, CONTENT_PROPERTIES, CONTENT_STATE, CONTENT_ALL };
 
 	Image( const isis::data::Image &image );
 
@@ -114,7 +114,7 @@ private:
 			return false;
 		}
 
-		signal_image_changed_content( ImagePointer( this ) , VOXEL_CONTENT );
+		signal_image_changed_content( ImagePointer( this ) , CONTENT_VOXEL );
 		return true;
 	}
 	API_EXCLUDE_END
