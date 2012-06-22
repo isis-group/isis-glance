@@ -18,26 +18,32 @@
  *
  * Author: Erik Tuerke, etuerke@googlemail.com
  *
- * common.hpp
+ * signals.hpp
  *
  * Description:
  *
- *  Created on: Jun 8, 2012
+ *  Created on: Jun 22, 2012
  *      Author: tuerke
  ******************************************************************/
-#ifndef _ISIS_GLANCE_COMMON_HPP
-#define _ISIS_GLANCE_COMMON_HPP
+#ifndef _ISIS_GLANCE_SIGNALS_HPP
+#define _ISIS_GLANCE_SIGNALS_HPP
 
-#include <boost/shared_ptr.hpp>
 #include <boost/signals2.hpp>
 
-namespace isis
-{
-namespace glance
-{
+#include "Data/image.hpp"
+
+namespace isis {
+namespace glance {
+
+using namespace boost::signals2;
+
+
+static signal<void ( const data::Image*, const data::Image::ImageContentType & )> signal_image_content_changed;
+
+
 
 
 } // end namespace glance
 } // end namespace isis
 
-#endif // _ISIS_GLANCE_COMMON_HPP
+#endif // _ISIS_GLANCE_SIGNALS_HPP

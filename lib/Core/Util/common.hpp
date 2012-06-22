@@ -18,49 +18,38 @@
  *
  * Author: Erik Tuerke, etuerke@googlemail.com
  *
- * image_container.cpp
+ * common.hpp
  *
  * Description:
  *
  *  Created on: Jun 8, 2012
  *      Author: tuerke
  ******************************************************************/
-#include "image_container.hpp"
+#ifndef _ISIS_GLANCE_COMMON_HPP
+#define _ISIS_GLANCE_COMMON_HPP
+
+#include <boost/shared_ptr.hpp>
 
 namespace isis
 {
 namespace glance
 {
-namespace data
-{
 
-ImageContainer::ImageContainer()
-	: allow_multiple_( false )
-{}
-
-bool ImageContainer::addImage ( const ImageSharedPointer &image )
+template<typename C>
+struct SharredPointer : public boost::shared_ptr<C>
 {
-	if ( std::find( begin(), end(), image ) == end() || allow_multiple_ ) {
-		push_back( image );
-		signal_image_added_to_container( image );
-		return true;
-	} else {
-		LOG( isis::data::Runtime, warning ) << "Trying to add already existing image with file_path: "
-											<< image->file_path << " ! Will not do that.";
-		return false;
+	SharredPointer( const C &c ) {
+		static_cast< boost::shared_ptr<C> &>( *this ) = boost::shared_ptr<C>( new C(c) );
 	}
-}
-
-bool ImageContainer::addImages ( const ImageVector &images )
-{
-	bool ok = true;
-	BOOST_FOREACH( const ImageVector::const_reference image, images ) {
-		ok = ok && addImage( image );
+	SharredPointer( C *c ) {
+		static_cast< boost::shared_ptr<C> &>( *this ) = boost::shared_ptr<C>( c );
 	}
-	return ok;
-}
+	
+	SharredPointer(){}
+};
 
 
-} // end namespace data
 } // end namespace glance
 } // end namespace isis
+
+#endif // _ISIS_GLANCE_COMMON_HPP

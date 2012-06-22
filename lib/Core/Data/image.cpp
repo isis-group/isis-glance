@@ -27,6 +27,7 @@
  ******************************************************************/
 #include "image.hpp"
 #include "common.hpp"
+#include "Util/signals.hpp"
 
 namespace isis
 {
@@ -38,9 +39,9 @@ namespace data
 Image::Image ( const isis::data::Image &image )
 	: ImageState( image ),
 	  ImageProperties( image ),
-	  isis_image_(  new isis::data::Image( image ) )
+	  isis_image_(  image )
 {
-	is_valid =  synchronizeFrom( image );
+	is_valid =  synchronizeFrom( image, Image::CONTENT_VOXEL );
 
 	if ( !is_valid ) {
 		LOG( isis::data::Runtime, error ) << "Creating of isis::glance::Image from "
@@ -55,10 +56,33 @@ Image::Image ( const glance::data::Image & )
 {}
 
 
-bool Image::synchronizeFrom( const isis::data::Image &image )
+bool Image::synchronizeFrom( const isis::data::Image &image, const Image::ImageContentType &image_content )
+{
+	bool return_value = true;
+	switch( image_content ) {
+		case CONTENT_PROPERTIES:
+			static_cast<ImageProperties&>( *this ) = image;
+			break;
+		case CONTENT_STATE:
+			static_cast<ImageState&>( *this ) = image;
+			break;
+		case CONTENT_VOXEL:
+			return_value = _synchronizeVoxelContentFrom( image );
+			break;
+		case CONTENT_ALL: {
+			static_cast<ImageProperties&>( *this ) = image;
+			static_cast<ImageState&>( *this ) = image;
+			return_value = return_value && _synchronizeVoxelContentFrom( image );
+			break;
+		}
+	}
+	signal_image_content_changed( this, image_content );
+	return return_value;
+}
+
+bool Image::_synchronizeVoxelContentFrom ( const isis::data::Image& image )
 {
 	clear();
-
 	switch( type_group ) {
 	case SCALAR:
 		return _synchronizeFrom<ScalarRepn>( image );
@@ -73,7 +97,6 @@ bool Image::synchronizeFrom( const isis::data::Image &image )
 		return _synchronizeFrom<ComplexRepn>( image );
 		break;
 	}
-
 }
 
 

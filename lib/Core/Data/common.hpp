@@ -29,6 +29,7 @@
 #define _ISIS_GLANCE_DATA_COMMON_HPP
 
 #include <DataStorage/common.hpp>
+#include "Util/common.hpp"
 
 namespace isis
 {
@@ -44,10 +45,10 @@ typedef util::fvector4 VectorRepn;
 typedef std::complex< float > ComplexRepn;
 
 
-typedef boost::shared_ptr<Image> ImagePointer;
-typedef std::vector< ImagePointer > ImageVector;
+typedef SharredPointer<Image> ImageSharedPointer;
+typedef std::vector< ImageSharedPointer > ImageVector;
 
-typedef boost::shared_ptr<isis::data::Image> IsisImagePointer;
+typedef SharredPointer<isis::data::Image> IsisImageSharredPointer;
 
 } // end namespace data
 } // end namespace glance

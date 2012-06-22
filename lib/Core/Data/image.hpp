@@ -71,7 +71,7 @@ public:
 	 * \return True if synchronizing was successful.
 	 * Otherwise returns false.
 	 */
-	bool synchronizeFrom( const isis::data::Image &image );
+	bool synchronizeFrom( const isis::data::Image &image, const ImageContentType &image_content = CONTENT_ALL );
 
 
 	isis::data::Chunk &operator[]( size_type const &index ) {
@@ -85,10 +85,8 @@ public:
 		return std::vector<isis::data::Chunk>::size();
 	}
 
-	//signals
-	boost::signals2::signal<void ( const ImagePointer &, const ImageContentType & )> signal_image_changed_content;
 private:
-	const IsisImagePointer isis_image_;
+	const IsisImageSharredPointer isis_image_;
 
 	//do not allow to copy a glance::data::Image
 	Image( const Image & );
@@ -113,10 +111,10 @@ private:
 											  << file_path << " (" << image_size[isis::data::timeDim] << ").";
 			return false;
 		}
-
-		signal_image_changed_content( ImagePointer( this ) , CONTENT_VOXEL );
 		return true;
 	}
+
+	bool _synchronizeVoxelContentFrom( const isis::data::Image &image );
 	API_EXCLUDE_END
 	/// @endcond _internal
 

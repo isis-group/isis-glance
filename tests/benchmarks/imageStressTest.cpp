@@ -7,7 +7,7 @@ using namespace isis;
 int main()
 {
 	boost::timer timer;
-	isis::data::MemChunk<int16_t> mChunk( 200, 200, 200, 100 );
+	isis::data::MemChunk<int16_t> mChunk( 100, 101, 102, 103 );
 	mChunk.voxel<int16_t>( 12, 2, 30, 2 ) = -32;
 	mChunk.voxel<int16_t>( 12, 2, 33, 2 ) = 1331;
 	mChunk.setPropertyAs<std::string>( "file_path", std::string( "/this/is/a/path/or/file.gna" ) );

@@ -26,7 +26,7 @@
  *      Author: tuerke
  ******************************************************************/
 #include "image_properties.hpp"
-#include "../geometrical.hpp"
+#include "Util/geometrical.hpp"
 
 #include <boost/filesystem.hpp>
 
