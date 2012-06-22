@@ -40,7 +40,7 @@ namespace glance
 {
 namespace data
 {
-	
+
 class ImageContainer : protected ImageVector
 {
 public:

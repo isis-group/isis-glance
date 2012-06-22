@@ -37,7 +37,7 @@ namespace glance
 {
 namespace data
 {
-	
+
 /**
  * ImageState combines all the properties of an
  * image that need to have fast access to read and write.

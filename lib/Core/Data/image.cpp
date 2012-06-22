@@ -32,24 +32,26 @@ namespace isis
 {
 namespace glance
 {
-namespace data {
-	
+namespace data
+{
+
 Image::Image ( const isis::data::Image &image )
 	: ImageState( image ),
 	  ImageProperties( image ),
 	  isis_image_(  new isis::data::Image( image ) )
 {
 	is_valid =  synchronizeFrom( image );
-	if (!is_valid) {
+
+	if ( !is_valid ) {
 		LOG( isis::data::Runtime, error ) << "Creating of isis::glance::Image from "
-			<< file_path << " failed!";
+										  << file_path << " failed!";
 	}
 }
 
-Image::Image ( const glance::data::Image& )
+Image::Image ( const glance::data::Image & )
 	: ImageState(),
-	ImageProperties(),
-	std::vector<isis::data::Chunk>()
+	  ImageProperties(),
+	  std::vector<isis::data::Chunk>()
 {}
 
 

@@ -33,7 +33,7 @@ namespace glance
 {
 namespace data
 {
-		
+
 ImageContainer::ImageContainer()
 	: allow_multiple_( false )
 {}
@@ -46,7 +46,7 @@ bool ImageContainer::addImage ( const ImagePointer &image )
 		return true;
 	} else {
 		LOG( isis::data::Runtime, warning ) << "Trying to add already existing image with file_path: "
-									  << image->file_path << " ! Will not do that.";
+											<< image->file_path << " ! Will not do that.";
 		return false;
 	}
 }

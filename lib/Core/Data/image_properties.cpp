@@ -34,8 +34,9 @@ namespace isis
 {
 namespace glance
 {
-namespace data {
-	
+namespace data
+{
+
 ImageProperties::ImageProperties()
 {}
 

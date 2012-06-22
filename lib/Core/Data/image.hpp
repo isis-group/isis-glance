@@ -44,7 +44,8 @@ namespace isis
 {
 namespace glance
 {
-namespace data {
+namespace data
+{
 
 class Image
 	: public ImageState,
@@ -53,7 +54,7 @@ class Image
 {
 public:
 	enum ImageContentType { VOXEL_CONTENT, PROPERTY_CONTENT, STATE_CONTENT };
-	
+
 	Image( const isis::data::Image &image );
 
 	///Returns the underlying isis image.
@@ -76,7 +77,7 @@ public:
 	isis::data::Chunk &operator[]( size_type const &index ) {
 		return std::vector<isis::data::Chunk>::operator[]( index );
 	}
-	const isis::data::Chunk &operator[]( size_type const &index ) const{
+	const isis::data::Chunk &operator[]( size_type const &index ) const {
 		return std::vector<isis::data::Chunk>::operator[]( index );
 	}
 
@@ -90,10 +91,10 @@ private:
 	const IsisImagePointer isis_image_;
 
 	//do not allow to copy a glance::data::Image
-	Image( const Image &);
+	Image( const Image & );
 
-/// @cond _internal
-API_EXCLUDE_BEGIN
+	/// @cond _internal
+	API_EXCLUDE_BEGIN
 	template<typename T>
 	bool _synchronizeFrom( const isis::data::Image &image ) {
 		isis::data::ValueArray<T> imagePtr( ( T * ) calloc( image.getVolume(), sizeof( T ) ), image.getVolume() );
@@ -112,11 +113,12 @@ API_EXCLUDE_BEGIN
 											  << file_path << " (" << image_size[isis::data::timeDim] << ").";
 			return false;
 		}
+
 		signal_image_changed_content( ImagePointer( this ) , VOXEL_CONTENT );
 		return true;
 	}
-API_EXCLUDE_END
-/// @endcond _internal
+	API_EXCLUDE_END
+	/// @endcond _internal
 
 
 };

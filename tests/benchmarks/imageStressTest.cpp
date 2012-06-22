@@ -24,8 +24,8 @@ int main()
 	timer.restart();
 	isis::glance::data::Image gImage( isisImage );
 	std::cout << "Created glance::image with " << gImage.size()
-		<< " volumes from an isis::image with size "
-		<< gImage.image_size << " in "
-		<< timer.elapsed() << " seconds." << std::endl;
+			  << " volumes from an isis::image with size "
+			  << gImage.image_size << " in "
+			  << timer.elapsed() << " seconds." << std::endl;
 
 };
