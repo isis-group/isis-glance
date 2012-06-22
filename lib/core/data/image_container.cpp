@@ -18,18 +18,15 @@
  *
  * Author: Erik Tuerke, etuerke@googlemail.com
  *
- * common.hpp
+ * image_container.cpp
  *
  * Description:
  *
- *  Created on: Jun 12, 2012
+ *  Created on: Jun 8, 2012
  *      Author: tuerke
  ******************************************************************/
-#ifndef _ISIS_GLANCE_DATA_COMMON_HPP
-#define _ISIS_GLANCE_DATA_COMMON_HPP
-
-#include <DataStorage/common.hpp>
-#include "Util/common.hpp"
+#include "image_container.hpp"
+#include "util/signals.hpp"
 
 namespace isis
 {
@@ -37,23 +34,34 @@ namespace glance
 {
 namespace data
 {
-class Image;
 
-typedef uint8_t ScalarRepn;
-typedef util::color24 ColorRepn;
-typedef util::fvector4 VectorRepn;
-typedef std::complex< float > ComplexRepn;
+ImageContainer::ImageContainer()
+	: allow_multiple_( false )
+{}
 
+bool ImageContainer::addImage ( const ImageSharedPointer &image )
+{
+	if ( std::find( begin(), end(), image ) == end() || allow_multiple_ ) {
+		push_back( image );
+		signal::image_added_to_container( this, image );
+		return true;
+	} else {
+		LOG( isis::data::Runtime, warning ) << "Trying to add already existing image with file_path: "
+											<< image->file_path << " ! Will not do that.";
+		return false;
+	}
+}
 
-typedef SharredPointer<Image> ImageSharedPointer;
-typedef std::vector< ImageSharedPointer > ImageVector;
+bool ImageContainer::addImages ( const ImageVector &images )
+{
+	bool ok = true;
+	BOOST_FOREACH( const ImageVector::const_reference image, images ) {
+		ok = ok && addImage( image );
+	}
+	return ok;
+}
 
-typedef SharredPointer<isis::data::Image> IsisImageSharredPointer;
 
 } // end namespace data
 } // end namespace glance
 } // end namespace isis
-
-#include "image.hpp"
-
-#endif // _ISIS_GLANCE_COMMON_HPP

@@ -27,7 +27,7 @@
  ******************************************************************/
 #include "image.hpp"
 #include "common.hpp"
-#include "Util/signals.hpp"
+#include "util/signals.hpp"
 
 namespace isis
 {

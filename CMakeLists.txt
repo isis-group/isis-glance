@@ -12,7 +12,7 @@ cmake_minimum_required(VERSION 2.6)
 
 project(isis-glance)
 
-include_directories("${CMAKE_CURRENT_SOURCE_DIR}/lib/Core")
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/lib/core")
 ############################################################
 # set isis version number
 ############################################################

@@ -30,8 +30,8 @@
 
 #include <boost/signals2.hpp>
 
-#include "Data/image.hpp"
-#include "Data/image_container.hpp"
+#include "data/image.hpp"
+#include "data/image_container.hpp"
 
 namespace isis
 {

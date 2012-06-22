@@ -3,7 +3,7 @@
 #include <boost/test/unit_test.hpp>
 #include <DataStorage/chunk.hpp>
 
-#include "Data/image_properties.hpp"
+#include "data/image_properties.hpp"
 
 namespace isis
 {

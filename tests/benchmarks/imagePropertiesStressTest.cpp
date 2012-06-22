@@ -1,4 +1,4 @@
-#include <Data/image_properties.hpp>
+#include <data/image_properties.hpp>
 #include <boost/timer.hpp>
 
 using namespace isis;

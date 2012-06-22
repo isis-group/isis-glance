@@ -1,4 +1,4 @@
-#include <Data/image.hpp>
+#include <data/image.hpp>
 #include <DataStorage/image.hpp>
 #include <boost/timer.hpp>
 

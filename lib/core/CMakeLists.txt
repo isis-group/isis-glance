@@ -1,5 +1,5 @@
-file(GLOB GLANCE_CORE_SRC_FILES "Util/*.cpp" "Data/*.cpp")
-file(GLOB GLANCE_CORE_HDR_FILES "Util/*.hpp" "Data/*.hpp")
+file(GLOB GLANCE_CORE_SRC_FILES "util/*.cpp" "data/*.cpp")
+file(GLOB GLANCE_CORE_HDR_FILES "util/*.hpp" "data/*.hpp")
 
 ############################################################
 # Build config
