@@ -36,16 +36,15 @@ namespace glance
 {
 
 template<typename C>
-struct SharredPointer : public boost::shared_ptr<C>
-{
+struct SharredPointer : public boost::shared_ptr<C> {
 	SharredPointer( const C &c ) {
-		static_cast< boost::shared_ptr<C> &>( *this ) = boost::shared_ptr<C>( new C(c) );
+		static_cast< boost::shared_ptr<C> &>( *this ) = boost::shared_ptr<C>( new C( c ) );
 	}
 	SharredPointer( C *c ) {
 		static_cast< boost::shared_ptr<C> &>( *this ) = boost::shared_ptr<C>( c );
 	}
-	
-	SharredPointer(){}
+
+	SharredPointer() {}
 };
 
 

@@ -111,6 +111,7 @@ private:
 											  << file_path << " (" << image_size[isis::data::timeDim] << ").";
 			return false;
 		}
+
 		return true;
 	}
 

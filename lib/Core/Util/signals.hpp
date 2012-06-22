@@ -33,14 +33,17 @@
 #include "Data/image.hpp"
 #include "Data/image_container.hpp"
 
-namespace isis {
-namespace glance {
-namespace signal {
-	
+namespace isis
+{
+namespace glance
+{
+namespace signal
+{
 
-static boost::signals2::signal<void ( const data::Image*, const data::Image::ImageContentType & )> image_content_changed;
 
-static boost::signals2::signal<void ( const data::ImageContainer* ,const data::ImageSharedPointer & )> image_added_to_container;
+static boost::signals2::signal<void ( const data::Image *, const data::Image::ImageContentType & )> image_content_changed;
+
+static boost::signals2::signal<void ( const data::ImageContainer * , const data::ImageSharedPointer & )> image_added_to_container;
 
 
 
