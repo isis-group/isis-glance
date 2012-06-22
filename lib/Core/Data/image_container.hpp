@@ -60,8 +60,6 @@ public:
 	void setAllowMultiple( bool allow ) { allow_multiple_ = allow; }
 	const bool &getAllowMultiple() const { return allow_multiple_; }
 
-	//signals
-	boost::signals2::signal<void ( const ImageSharedPointer & )> signal_image_added_to_container;
 
 private:
 	bool allow_multiple_;

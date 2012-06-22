@@ -76,7 +76,7 @@ bool Image::synchronizeFrom( const isis::data::Image &image, const Image::ImageC
 			break;
 		}
 	}
-	signal_image_content_changed( this, image_content );
+	signal::image_content_changed( this, image_content );
 	return return_value;
 }
 
