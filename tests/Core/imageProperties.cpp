@@ -14,7 +14,7 @@ namespace test
 
 BOOST_AUTO_TEST_CASE( image_properties_test )
 {
-	isis::data::MemChunk<int16_t> mChunk( 100, 12, 33, 10 );
+	isis::data::MemChunk<int16_t> mChunk( 100, 12, 43, 10 );
 	mChunk.voxel<int16_t>( 12, 2, 30, 2 ) = -32;
 	mChunk.voxel<int16_t>( 12, 2, 33, 2 ) = 1331;
 	mChunk.setPropertyAs<std::string>( "file_path", std::string( "/this/is/a/path/or/file.gna" ) );
@@ -38,7 +38,7 @@ BOOST_AUTO_TEST_CASE( image_properties_test )
 	BOOST_CHECK_EQUAL( image_props.orientation_matrix_latched.getRow( 0 ), util::fvector4( 1, 0, 0 ) );
 	BOOST_CHECK_EQUAL( image_props.orientation_matrix_latched.getRow( 1 ), util::fvector4( 0, 0, -1 ) );
 	BOOST_CHECK_EQUAL( image_props.orientation_matrix_latched.getRow( 2 ), util::fvector4( 0, 1, 0 ) );
-	BOOST_CHECK_EQUAL( image_props.image_size_aligned32, util::ivector4( 100, 12, 36, 12 ) );
+	BOOST_CHECK_EQUAL( image_props.image_size_aligned32, util::ivector4( 100, 12, 44, 12 ) );
 	BOOST_CHECK_EQUAL( image_props.voxel_size, util::fvector4( 1.7, 1.3, 2.5, 1.1 ) );
 }
 

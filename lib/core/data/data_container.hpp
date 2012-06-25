@@ -18,38 +18,38 @@
  *
  * Author: Erik Tuerke, etuerke@googlemail.com
  *
- * signals.hpp
+ * container.hpp
  *
  * Description:
  *
- *  Created on: Jun 22, 2012
+ *  Created on: Jun 25, 2012
  *      Author: tuerke
  ******************************************************************/
-#ifndef _ISIS_GLANCE_SIGNALS_HPP
-#define _ISIS_GLANCE_SIGNALS_HPP
+#ifndef _ISIS_GLANCE_DATA_CONTAINER_HPP
+#define _ISIS_GLANCE_DATA_CONTAINER_HPP
 
-#include <boost/signals2.hpp>
+#include <DataStorage/ndimensional.hpp>
+#include <DataStorage/valuearray.hpp>
 
-#include "data/image.hpp"
-#include "data/image_container.hpp"
+namespace isis {
+namespace glance {
+namespace data {
 
-namespace isis
+template<unsigned short DIMS>
+class DataContainer
+	: public isis::data::_internal::NDimensional<DIMS> ,
+	public isis::data::ValueArrayReference
 {
-namespace glance
-{
-namespace signal
-{
+public:
+    DataContainer( const isis::data::ValueArrayReference &src, const size_t dims[DIMS] )
+		: isis::data::ValueArrayReference( src )
+	{
+		isis::data::_internal::NDimensional<DIMS>::init( dims );
+	}
+};
 
-//image signals
-static boost::signals2::signal<void ( const data::Image *, const data::Image::ImageContentType & )> image_content_changed;
-
-//imagecontainer signals
-static boost::signals2::signal<void ( const data::ImageContainer * , const data::ImageSharedPointer & )> image_added_to_container;
-
-
-
-} // end namespace signal
+} // end namespace data
 } // end namespace glance
 } // end namespace isis
 
-#endif // _ISIS_GLANCE_SIGNALS_HPP
+#endif // _ISIS_GLANCE_DATA_CONTAINER_HPP

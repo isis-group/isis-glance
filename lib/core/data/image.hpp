@@ -38,6 +38,7 @@
 
 #include "image_state.hpp"
 #include "image_properties.hpp"
+#include "data_container.hpp"
 #include "common.hpp"
 
 namespace isis
@@ -49,10 +50,12 @@ namespace data
 
 class Image
 	: public ImageState,
-  public ImageProperties,
-  private std::vector<isis::data::Chunk>
+  public ImageProperties
 {
 public:
+	typedef DataContainer<3> VolumeType;
+	typedef std::vector<VolumeType> VolumesType;
+	
 	enum ImageContentType { CONTENT_VOXEL, CONTENT_PROPERTIES, CONTENT_STATE, CONTENT_ALL };
 
 	Image( const isis::data::Image &image );
@@ -68,26 +71,28 @@ public:
 	 * a vector representing the number of volumes/timesteps
 	 * of the isis::data::Image .
 	 * \param image The isis::data::Image
+	 * \param content Specifies which type of content should be synchronized
 	 * \return True if synchronizing was successful.
 	 * Otherwise returns false.
 	 */
-	bool synchronizeFrom( const isis::data::Image &image, const ImageContentType &image_content = CONTENT_ALL );
+	bool synchronizeFrom( const isis::data::Image &image, const ImageContentType &content = CONTENT_ALL );
 
-
-	isis::data::Chunk &operator[]( size_type const &index ) {
-		return std::vector<isis::data::Chunk>::operator[]( index );
+	VolumeType &operator[]( VolumesType::size_type const &index ) {
+		return volumes_[index];
 	}
-	const isis::data::Chunk &operator[]( size_type const &index ) const {
-		return std::vector<isis::data::Chunk>::operator[]( index );
+	const VolumeType &operator[]( VolumesType::size_type const &index ) const {
+		return volumes_[index];
 	}
 
-	size_type size() const {
-		return std::vector<isis::data::Chunk>::size();
+	VolumesType::size_type size() const {
+		return volumes_.size();
 	}
 
 private:
 	const IsisImageSharredPointer isis_image_;
 
+	VolumesType volumes_;
+	
 	//do not allow to copy a glance::data::Image
 	Image( const Image & );
 
@@ -100,11 +105,12 @@ private:
 		image.copyToMem<T>( &imagePtr[0], image.getVolume() );
 		LOG( isis::data::Debug, info ) << "Created memcopy of size " << ( image.getVolume() * sizeof( T ) ) / ( 1024. * 1024. )
 									   << " mb for image " << file_path;
-
+		const size_t volume_size[] =  { image_size[0], image_size[1], image_size[2] };
+									   
 		BOOST_FOREACH( std::vector< isis::data::ValueArrayReference >::const_reference volume, imagePtr.splice( image_size[0] * image_size[1] * image_size[2] ) ) {
-			push_back( isis::data::Chunk( volume, image_size[0], image_size[1], image_size[2] ) );
+			volumes_.push_back( VolumeType( volume, volume_size ) );
 		}
-
+		
 		if( size() != static_cast<uint32_t>( image_size[isis::data::timeDim] ) ) {
 			LOG( isis::data::Runtime, error ) << "The number of chunks (" << size()
 											  << ") does not coincide with the number of volumes of the image "

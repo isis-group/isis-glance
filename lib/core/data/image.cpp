@@ -51,16 +51,15 @@ Image::Image ( const isis::data::Image &image )
 
 Image::Image ( const glance::data::Image & )
 	: ImageState(),
-	  ImageProperties(),
-	  std::vector<isis::data::Chunk>()
+	  ImageProperties()
 {}
 
 
-bool Image::synchronizeFrom( const isis::data::Image &image, const Image::ImageContentType &image_content )
+bool Image::synchronizeFrom( const isis::data::Image &image, const Image::ImageContentType &content )
 {
 	bool return_value = true;
 
-	switch( image_content ) {
+	switch( content ) {
 	case CONTENT_PROPERTIES:
 		static_cast<ImageProperties &>( *this ) = image;
 		break;
@@ -78,13 +77,13 @@ bool Image::synchronizeFrom( const isis::data::Image &image, const Image::ImageC
 	}
 	}
 
-	signal::image_content_changed( this, image_content );
+	signal::image_content_changed( this, content );
 	return return_value;
 }
 
 bool Image::_synchronizeVoxelContentFrom ( const isis::data::Image &image )
 {
-	clear();
+	volumes_.clear();
 
 	switch( type_group ) {
 	case SCALAR:
