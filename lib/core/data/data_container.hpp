@@ -31,19 +31,21 @@
 #include <DataStorage/ndimensional.hpp>
 #include <DataStorage/valuearray.hpp>
 
-namespace isis {
-namespace glance {
-namespace data {
+namespace isis
+{
+namespace glance
+{
+namespace data
+{
 
 template<unsigned short DIMS>
 class DataContainer
 	: public isis::data::_internal::NDimensional<DIMS> ,
-	public isis::data::ValueArrayReference
+  public isis::data::ValueArrayReference
 {
 public:
-    DataContainer( const isis::data::ValueArrayReference &src, const size_t dims[DIMS] )
-		: isis::data::ValueArrayReference( src )
-	{
+	DataContainer( const isis::data::ValueArrayReference &src, const size_t dims[DIMS] )
+		: isis::data::ValueArrayReference( src ) {
 		isis::data::_internal::NDimensional<DIMS>::init( dims );
 	}
 };

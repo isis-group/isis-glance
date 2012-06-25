@@ -55,7 +55,7 @@ class Image
 public:
 	typedef DataContainer<3> VolumeType;
 	typedef std::vector<VolumeType> VolumesType;
-	
+
 	enum ImageContentType { CONTENT_VOXEL, CONTENT_PROPERTIES, CONTENT_STATE, CONTENT_ALL };
 
 	Image( const isis::data::Image &image );
@@ -92,7 +92,7 @@ private:
 	const IsisImageSharredPointer isis_image_;
 
 	VolumesType volumes_;
-	
+
 	//do not allow to copy a glance::data::Image
 	Image( const Image & );
 
@@ -106,11 +106,11 @@ private:
 		LOG( isis::data::Debug, info ) << "Created memcopy of size " << ( image.getVolume() * sizeof( T ) ) / ( 1024. * 1024. )
 									   << " mb for image " << file_path;
 		const size_t volume_size[] =  { image_size[0], image_size[1], image_size[2] };
-									   
+
 		BOOST_FOREACH( std::vector< isis::data::ValueArrayReference >::const_reference volume, imagePtr.splice( image_size[0] * image_size[1] * image_size[2] ) ) {
 			volumes_.push_back( VolumeType( volume, volume_size ) );
 		}
-		
+
 		if( size() != static_cast<uint32_t>( image_size[isis::data::timeDim] ) ) {
 			LOG( isis::data::Runtime, error ) << "The number of chunks (" << size()
 											  << ") does not coincide with the number of volumes of the image "
