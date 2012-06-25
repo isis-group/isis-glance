@@ -27,5 +27,4 @@ int main()
 			  << " volumes from an isis::image with size "
 			  << gImage.image_size << " in "
 			  << timer.elapsed() << " seconds." << std::endl;
-
 };

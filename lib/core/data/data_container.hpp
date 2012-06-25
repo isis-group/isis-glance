@@ -40,14 +40,32 @@ namespace data
 
 template<unsigned short DIMS>
 class DataContainer
-	: public isis::data::_internal::NDimensional<DIMS> ,
-  public isis::data::ValueArrayReference
+	: public isis::data::_internal::NDimensional<DIMS>,
+  protected isis::data::ValueArrayReference
 {
 public:
-	DataContainer( const isis::data::ValueArrayReference &src, const size_t dims[DIMS] )
+	inline DataContainer( const isis::data::ValueArrayReference &src, const size_t dims[DIMS] )
 		: isis::data::ValueArrayReference( src ) {
 		isis::data::_internal::NDimensional<DIMS>::init( dims );
 	}
+
+	template<typename TYPE>
+	inline TYPE &voxel( const size_t dims[DIMS] ) {
+		assert( (*this)->getTypeID() == isis::data::ValueArray<TYPE>::staticID );
+		//hopefully the user knows what he is doing in release build
+		isis::data::ValueArray<TYPE> &ret = reinterpret_cast<isis::data::ValueArray<TYPE> & >(*this ); 
+		return ret[isis::data::_internal::NDimensional<DIMS>::getLinearIndex(dims)];
+	}
+
+	template<typename TYPE>
+	inline const TYPE &voxel( const size_t dims[DIMS] ) {
+		assert( (*this)->getTypeID() == isis::data::ValueArray<TYPE>::staticID );
+		//hopefully the user knows what he is doing in release build
+		const isis::data::ValueArray<TYPE> &ret = reinterpret_cast<isis::data::ValueArray<TYPE> & >(*this );
+		return ret[isis::data::_internal::NDimensional<DIMS>::getLinearIndex(dims)];
+	}
+
+	
 };
 
 } // end namespace data
