@@ -1,30 +1,32 @@
 #include <data/image.hpp>
 #include <DataStorage/image.hpp>
+#include <DataStorage/io_factory.hpp>
 #include <boost/timer.hpp>
 
 using namespace isis;
 
-int main()
+int main(int /*argc*/, const char **argv)
 {
 	boost::timer timer;
-	isis::data::MemChunk<int16_t> mChunk( 100, 101, 102, 103 );
-	mChunk.voxel<int16_t>( 12, 2, 30, 2 ) = -32;
-	mChunk.voxel<int16_t>( 12, 2, 33, 2 ) = 1331;
-	mChunk.setPropertyAs<std::string>( "file_path", std::string( "/this/is/a/path/or/file.gna" ) );
-	mChunk.setPropertyAs<util::fvector4>( "rowVec", util::fvector4( 0.995058, -0.0465222, 0.087724 ) );
-	mChunk.setPropertyAs<util::fvector4>( "columnVec", util::fvector4( 0.0784591, -0.173113, -0.981772 ) );
-	mChunk.setPropertyAs<util::fvector4>( "sliceVec", util::fvector4( 0.0608603, 0.983803, -0.168607 ) );
-	mChunk.setPropertyAs<util::fvector4>( "indexOrigin", util::fvector4( -87.9776, -28.3009, 100.674 ) );
-	mChunk.setPropertyAs<util::fvector4>( "voxelSize", util::fvector4( 1, 1, 1, 1 ) );
-	mChunk.setPropertyAs<util::fvector4>( "voxelGap", util::fvector4( .7, .3, 1.5, .1 ) );
-	mChunk.setPropertyAs<uint16_t>( "sequenceNumber", 1 );
-	mChunk.setPropertyAs<uint32_t>( "acquisitionNumber", 0 );
 
-	isis::data::Image isisImage = isis::data::Image( mChunk );
-	timer.restart();
-	isis::glance::data::Image gImage( isisImage );
-	std::cout << "Created glance::image with " << gImage.size()
-			  << " volumes from an isis::image with size "
-			  << gImage.image_size << " in "
-			  << timer.elapsed() << " seconds." << std::endl;
+	std::string file_name = argv[1];
+	data::Image isisImages = data::TypedImage<uint16_t>( data::IOFactory::load( file_name ).front() );
+
+
+	isis::glance::data::Image gImage( isisImages, glance::data::FLOAT );
+
+	std::cout << "typeID float: " << glance::data::FLOAT << std::endl;
+	std::cout << gImage.operator[](10)->getTypeID() << std::endl;
+
+	std::cout << isisImages.voxel<uint16_t>(10,10,10,10) << std::endl;
+	const size_t dims[] = { 10,10,10 };
+	std::cout << gImage.operator[](10).voxel<float>(dims) << std::endl;
+
+	gImage.setDataType( glance::data::DOUBLE );
+	gImage.synchronize( isis::glance::data::ImageBase::VOXELS );
+	
+
+	
+	
+
 };

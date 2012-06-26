@@ -22,86 +22,125 @@
  *
  * Description:
  *
- *  Created on: Jun 8, 2012
+ *  Created on: Jun 26, 2012
  *      Author: tuerke
  ******************************************************************/
+
 #include "image.hpp"
-#include "common.hpp"
 #include "util/signals.hpp"
 
-namespace isis
-{
-namespace glance
-{
-namespace data
-{
+namespace isis {
+namespace glance {
+namespace data {
 
-Image::Image ( const isis::data::Image &image )
-	: ImageState( image ),
-	  ImageProperties( image ),
-	  isis_image_(  image )
+Image::Image ( const isis::data::Image& image, bool force_typed_image )
+	: ImageBase( image ),
+	force_typed_image_(force_typed_image),
+	type_(major_type)
 {
-	is_valid =  synchronizeFrom( image, Image::CONTENT_VOXEL );
-
-	if ( !is_valid ) {
+	is_valid = synchronizeFrom( image, ImageBase::VOXELS );
+	if( !is_valid) {
 		LOG( isis::data::Runtime, error ) << "Creating of isis::glance::Image from "
 										  << file_path << " failed!";
 	}
 }
 
-Image::Image ( const glance::data::Image & )
-	: ImageState(),
-	  ImageProperties()
-{}
-
-
-bool Image::synchronizeFrom( const isis::data::Image &image, const Image::ImageContentType &content )
+Image::Image ( const isis::data::Image& image, const ImageDataType &type )
+	: ImageBase ( image ),
+	force_typed_image_(true),
+	type_(type )
 {
-	bool return_value = true;
-
-	switch( content ) {
-	case CONTENT_PROPERTIES:
-		static_cast<ImageProperties &>( *this ) = image;
-		break;
-	case CONTENT_STATE:
-		static_cast<ImageState &>( *this ) = image;
-		break;
-	case CONTENT_VOXEL:
-		return_value = _synchronizeVoxelContentFrom( image );
-		break;
-	case CONTENT_ALL: {
-		static_cast<ImageProperties &>( *this ) = image;
-		static_cast<ImageState &>( *this ) = image;
-		return_value = return_value && _synchronizeVoxelContentFrom( image );
-		break;
+	is_valid = synchronizeFrom( image, ImageBase::VOXELS );
+	if( !is_valid ) {
+		LOG( isis::data::Runtime, error ) << "Creating of isis::glance::Image from "
+			<< file_path << " failed!";
 	}
-	}
-
-	signal::image_content_changed( this, content );
-	return return_value;
 }
 
-bool Image::_synchronizeVoxelContentFrom ( const isis::data::Image &image )
+void Image::convertVolumesByType ( const ImageDataType &type )
+{
+	VolumesType buffer;
+	const size_t volume_size[] = { image_size[0], image_size[1], image_size[2] };
+	BOOST_FOREACH( VolumesType::reference volume, volumes_ ) {
+		buffer.push_back( VolumeType( volume->convertByID( type ), volume_size ) );
+	}
+	assert( buffer.size() == volumes_.size() );
+	volumes_ = buffer;
+}
+
+
+bool Image::synchronizeFrom ( const isis::data::Image& image, const ImageBase::ImageContentType& content )
+{
+	bool ok = true;
+	switch( content ) {
+		case PROPERTIES_META:
+		case PROPERTIES_DATA:
+		case STATE:
+			ok = ok && synchronizeMetaContentFrom( image, content );
+			break;
+		case ALL:
+			ok = ok && synchronizeVoxelContentFrom( image );
+			ok = ok && synchronizeMetaContentFrom( image, content );
+			break;
+		case VOXELS:
+			ok = ok && synchronizeVoxelContentFrom( image );
+			ok = ok && synchronizeMetaContentFrom( image, PROPERTIES_DATA );
+			break;
+	}
+	
+	//send signal if synchronization was successful
+	if( ok ) {
+		signal::image_content_changed( this, content );
+	}
+	return ok;
+}
+
+bool Image::synchronizeVoxelContentFrom ( isis::data::Image image )
 {
 	volumes_.clear();
+	//since we want to have size[timeDim] volumes we have to splice the image
+	image.spliceDownTo(isis::data::timeDim);
 
-	switch( type_group ) {
-	case SCALAR:
-		return _synchronizeFrom<ScalarRepn>( image );
-		break;
-	case COLOR:
-		return _synchronizeFrom<ColorRepn>( image );
-		break;
-	case VECTOR:
-		return _synchronizeFrom<VectorRepn>( image );
-		break;
-	case COMPLEX:
-		return _synchronizeFrom<ComplexRepn>( image );
-		break;
+	const size_t volume[] = { image_size[0], image_size[1], image_size[2] };
+
+	std::vector<isis::data::Chunk> chunks = image.copyChunksToVector(false);
+
+	if( chunks.size() == image_size[isis::data::timeDim] ) {
+		BOOST_FOREACH( std::vector<isis::data::Chunk>::reference chunk, chunks ) {
+			volumes_.push_back( VolumeType( chunk.asValueArrayBase(), volume ) );
+		}
+	} else {
+		LOG( isis::data::Runtime, isis::info ) << "The number of chunks (" << chunks.size()
+			<< ") does not coincide with the number of timesteps (" << image_size[isis::data::timeDim]
+			<< ") of image " << file_path << ". Will copy data to contiguous memory.";
+
+		//the image is spliced at sliceDim
+		if( chunks.size() ==  image_size[isis::data::timeDim] * image_size[isis::data::sliceDim] ) {
+			for( size_t timestep = 0; timestep < image_size[isis::data::timeDim]; timestep++ ) {
+				isis::data::Chunk chunk = chunks.front().cloneToNew( image_size[isis::data::rowDim],
+																	image_size[isis::data::columnDim],
+																	image_size[isis::data::sliceDim] );
+
+				for( size_t slice = 0; slice < image_size[isis::data::sliceDim]; slice++ ) {
+					chunks[slice + timestep * image_size[isis::data::sliceDim]].copySlice( 0, 0, chunk, slice, 0 );
+				}
+				volumes_.push_back(VolumeType( chunk.asValueArrayBase(), volume ) );
+			}
+		} else {
+			LOG( isis::data::Runtime, isis::error ) << "Image " << file_path << " is spliced below sliceDim. "
+				<< "This is not supported yet!";
+			return false;
+		}
 	}
+	if( force_typed_image_ ) {
+		convertVolumesByType( type_ );
+	}
+	return volumes_.size() == image_size[isis::data::timeDim];
 }
 
 
+
+	
 } // end namespace data
 } // end namespace glance
 } // end namespace isis

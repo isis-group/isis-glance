@@ -34,6 +34,8 @@
 #include <CoreUtils/matrix.hpp>
 #include <DataStorage/image.hpp>
 
+#include "types.hpp"
+
 namespace isis
 {
 namespace glance
@@ -45,18 +47,16 @@ namespace data
  * image that need to provide fast access for read and write accress.
  */
 
-class ImageProperties
+class ImageMetaProperties
 {
 public:
-	/**
-	 * Groups of types an image can have
-	 */
-	enum ImageTypeGroup { SCALAR, COMPLEX, COLOR, VECTOR };
+	typedef isis::util::FixedVector<size_t, 4> SizeType;
+	typedef isis::util::Matrix4x4<float> OrientationMatrixType;
 
 	/**
 	 * Empty constructur for ImageProperties
 	 */
-	ImageProperties();
+	ImageMetaProperties(){};
 
 	/**
 	 * Constructs an ImageProperties object with an isis::data::Image object
@@ -69,7 +69,7 @@ public:
 	 * and "isValid" will return false.
 	 *
 	 */
-	ImageProperties( const isis::data::Image &image );
+	ImageMetaProperties( const isis::data::Image &image );
 
 	///The images filename
 	std::string file_name;
@@ -77,6 +77,45 @@ public:
 	///The images filepath
 	std::string file_path;
 
+	///The images size
+	SizeType image_size;
+
+	///The images size aligned to 32bit
+	SizeType image_size_aligned32;
+
+	///The image orientation matrix
+	OrientationMatrixType orientation_matrix;
+
+	///The latched orientation_matrix
+	OrientationMatrixType orientation_matrix_latched;
+
+	///The sum of voxelSize and voxelGap
+	util::fvector4 voxel_size;
+
+
+	util::PropertyMap getAdditionalProperties() const { return additional_properties_; }
+	
+protected:
+	const bool &isValid() const { return is_valid_; }
+
+private:
+	bool is_valid_;
+	isis::util::PropertyMap additional_properties_;
+
+
+};
+
+class ImageDataProperties {
+public:
+	/**
+	 * Groups of types an image can have
+	 */
+	enum ImageTypeGroup { SCALAR, COMPLEX, COLOR, VECTOR };
+
+	ImageDataProperties( const isis::data::Image &image );
+
+	ImageDataProperties() {}
+	
 	///The minimum/maximum as double
 	std::pair<double, double> min_max;
 
@@ -84,38 +123,16 @@ public:
 	double extent;
 
 	///The major type ID of the image
-	unsigned int major_type_id;
+	ImageDataType major_type;
 
-	///The images size
-	util::ivector4 image_size;
-
-	///The images size aligned to 32bit
-	util::ivector4 image_size_aligned32;
-
-	///The image orientation matrix
-	util::Matrix4x4<float> orientation_matrix;
-
-	///The latched orientation_matrix
-	util::Matrix4x4<float> orientation_matrix_latched;
-
-	///The sum of voxelSize and voxelGap
-	util::fvector4 voxel_size;
+	///Does the underlying isis image contains of chunks with only one image type?
+	bool has_one_type;
 
 	///The images type group
 	ImageTypeGroup type_group;
-
-	///Does the underlying isis image contains of chunks with only one image type?
-	bool has_one_typeid;
-
-protected:
-	const bool &isValid() const { return is_valid_; }
-
 private:
-	short unsigned int getMajorTypeID( const std::pair<util::ValueReference, util::ValueReference> &_min_max ) const;
+	ImageDataType getMajorType( const std::pair<util::ValueReference, util::ValueReference> &_min_max ) const;
 	bool getHasOneType( const isis::data::Image &image ) const;
-	bool is_valid_;
-
-
 };
 
 } // end namespace data

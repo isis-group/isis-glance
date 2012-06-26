@@ -18,19 +18,15 @@
  *
  * Author: Erik Tuerke, etuerke@googlemail.com
  *
- * common.hpp
+ * image_base.cpp
  *
  * Description:
  *
- *  Created on: Jun 12, 2012
+ *  Created on: Jun 8, 2012
  *      Author: tuerke
  ******************************************************************/
-#ifndef _ISIS_GLANCE_DATA_COMMON_HPP
-#define _ISIS_GLANCE_DATA_COMMON_HPP
-
-#include <DataStorage/common.hpp>
-#include <DataStorage/valuearray.hpp>
-#include "util/common.hpp"
+#include "image_base.hpp"
+#include "common.hpp"
 
 namespace isis
 {
@@ -38,19 +34,48 @@ namespace glance
 {
 namespace data
 {
-class ImageBase;
+
+ImageBase::ImageBase ( const isis::data::Image &image )
+	: ImageState( image ),
+	  ImageDataProperties( image ),
+	  ImageMetaProperties( image ),
+	  isis_image_(  image )
+{}
+
+//private constructor
+ImageBase::ImageBase ( const ImageBase & )
+	: ImageState(),
+	ImageDataProperties(),
+	ImageMetaProperties()
+{}
 
 
-typedef SharredPointer<ImageBase> ImageSharedPointer;
-typedef std::vector< ImageSharedPointer > ImageVector;
+bool ImageBase::synchronizeMetaContentFrom( const isis::data::Image &image, const ImageBase::ImageContentType &content )
+{
+	switch( content ) {
+	case PROPERTIES_META:
+		static_cast<ImageMetaProperties &>( *this ) = image;
+		break;
+	case PROPERTIES_DATA:
+		static_cast<ImageDataProperties &>( *this ) = image;
+		break;
+	case STATE:
+		static_cast<ImageState &>( *this ) = image;
+		break;
+	case ALL:
+		static_cast<ImageMetaProperties &>( *this ) = image;
+		static_cast<ImageDataProperties &>( *this ) = image;
+		static_cast<ImageState &>( *this ) = image;
+		break;
+	default:
+		break;
+	}
+	return true;
+}
 
-typedef SharredPointer<isis::data::Image> IsisImageSharredPointer;
+
 
 
 } // end namespace data
 } // end namespace glance
 } // end namespace isis
-
-#include "image_base.hpp"
-
-#endif // _ISIS_GLANCE_COMMON_HPP
