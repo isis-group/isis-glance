@@ -56,7 +56,7 @@ public:
 	/**
 	 * Empty constructur for ImageProperties
 	 */
-	ImageMetaProperties(){};
+	ImageMetaProperties() {};
 
 	/**
 	 * Constructs an ImageProperties object with an isis::data::Image object
@@ -94,7 +94,7 @@ public:
 
 
 	util::PropertyMap getAdditionalProperties() const { return additional_properties_; }
-	
+
 protected:
 	const bool &isValid() const { return is_valid_; }
 
@@ -105,7 +105,8 @@ private:
 
 };
 
-class ImageDataProperties {
+class ImageDataProperties
+{
 public:
 	/**
 	 * Groups of types an image can have
@@ -115,7 +116,7 @@ public:
 	ImageDataProperties( const isis::data::Image &image );
 
 	ImageDataProperties() {}
-	
+
 	///The minimum/maximum as double
 	std::pair<double, double> min_max;
 

@@ -76,12 +76,12 @@ public:
 protected:
 	ImageBase( const isis::data::Image &image );
 
-/// @cond _internal
-API_EXCLUDE_BEGIN
+	/// @cond _internal
+	API_EXCLUDE_BEGIN
 	bool synchronizeMetaContentFrom( const isis::data::Image &image, const ImageContentType &content );
-API_EXCLUDE_END
-/// @endcond _internal	
-	
+	API_EXCLUDE_END
+	/// @endcond _internal
+
 	const IsisImageSharredPointer isis_image_;
 
 	VolumesType volumes_;
@@ -89,7 +89,7 @@ private:
 	//do not allow to copy a glance::data::Image
 	ImageBase( const ImageBase & );
 
-	
+
 
 
 };

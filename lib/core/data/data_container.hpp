@@ -51,20 +51,20 @@ public:
 
 	template<typename TYPE>
 	inline TYPE &voxel( const size_t dims[DIMS] ) {
-		assert( (*this)->getTypeID() == isis::data::ValueArray<TYPE>::staticID );
+		assert( ( *this )->getTypeID() == isis::data::ValueArray<TYPE>::staticID );
 		//hopefully the user knows what he is doing in release build
-		isis::data::ValueArrayBase &me= **this;
+		isis::data::ValueArrayBase &me = **this;
 		isis::data::ValueArray<TYPE> &ret = me.castToValueArray<TYPE>();
-		return ret[isis::data::_internal::NDimensional<DIMS>::getLinearIndex(dims)];
+		return ret[isis::data::_internal::NDimensional<DIMS>::getLinearIndex( dims )];
 	}
 
 	template<typename TYPE>
 	inline const TYPE &voxel( const size_t dims[DIMS] )const {
-		assert( (*this)->getTypeID() == isis::data::ValueArray<TYPE>::staticID );
+		assert( ( *this )->getTypeID() == isis::data::ValueArray<TYPE>::staticID );
 		//hopefully the user knows what he is doing in release build
-		const isis::data::ValueArrayBase &me= **this;
+		const isis::data::ValueArrayBase &me = **this;
 		const isis::data::ValueArray<TYPE> &ret = me.castToValueArray<TYPE>();
-		return ret[isis::data::_internal::NDimensional<DIMS>::getLinearIndex(dims)];
+		return ret[isis::data::_internal::NDimensional<DIMS>::getLinearIndex( dims )];
 	}
 
 };

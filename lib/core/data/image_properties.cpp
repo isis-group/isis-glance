@@ -45,7 +45,7 @@ ImageDataProperties::ImageDataProperties ( const isis::data::Image &image )
 	major_type = getMajorType( _min_max );
 	has_one_type = getHasOneType( image );
 
-	if( COLOR_24 == major_type|| COLOR_48 == major_type ) {
+	if( COLOR_24 == major_type || COLOR_48 == major_type ) {
 		type_group = COLOR;
 	} else if ( COMPLEX_FLOAT == major_type || COMPLEX_DOUBLE == major_type ) {
 		type_group = COMPLEX;
@@ -64,11 +64,11 @@ ImageDataProperties::ImageDataProperties ( const isis::data::Image &image )
 ImageDataType ImageDataProperties::getMajorType( const std::pair<util::ValueReference, util::ValueReference> &_min_max ) const
 {
 	if( _min_max.first->getTypeID() == _min_max.second->getTypeID() ) { // ok min and max are the same type - trivial case
-		return static_cast<ImageDataType>(_min_max.first->getTypeID() << 8); // btw: we do the shift, because min and max are Value - but we want the ID's ValuePtr
+		return static_cast<ImageDataType>( _min_max.first->getTypeID() << 8 ); // btw: we do the shift, because min and max are Value - but we want the ID's ValuePtr
 	} else if( _min_max.first->fitsInto( _min_max.second->getTypeID() ) ) { // if min fits into the type of max, use that
-		return static_cast<ImageDataType>(_min_max.second->getTypeID() << 8); //@todo maybe use a global static function here instead of a obscure shit operation
+		return static_cast<ImageDataType>( _min_max.second->getTypeID() << 8 ); //@todo maybe use a global static function here instead of a obscure shit operation
 	} else if( _min_max.second->fitsInto( _min_max.first->getTypeID() ) ) { // if max fits into the type of min, use that
-		return static_cast<ImageDataType>(_min_max.first->getTypeID() << 8);
+		return static_cast<ImageDataType>( _min_max.first->getTypeID() << 8 );
 	} else {
 		LOG( isis::util::Runtime, error ) << "Sorry I dont know which datatype I should use. (" << _min_max.first->getTypeName()
 										  << " or " << _min_max.second->getTypeName() << ")";
@@ -82,14 +82,14 @@ bool ImageDataProperties::getHasOneType( const isis::data::Image &image ) const
 {
 	//iterate through all the chunks and check if there is one chunk whose image type is different from the major_type_id
 	BOOST_FOREACH( std::list<isis::data::Chunk>::const_reference chunk, image.copyChunksToVector( false ) ) {
-		if( static_cast<ImageDataType>(chunk.getTypeID()) != major_type ) {
+		if( static_cast<ImageDataType>( chunk.getTypeID() ) != major_type ) {
 			return false;
 		}
 	}
 	return true;
 }
 
-ImageMetaProperties::ImageMetaProperties ( const isis::data::Image& image )
+ImageMetaProperties::ImageMetaProperties ( const isis::data::Image &image )
 {
 	//geometrical stuff
 	image_size = image.getSizeAsVector();

@@ -45,8 +45,8 @@ ImageBase::ImageBase ( const isis::data::Image &image )
 //private constructor
 ImageBase::ImageBase ( const ImageBase & )
 	: ImageState(),
-	ImageDataProperties(),
-	ImageMetaProperties()
+	  ImageDataProperties(),
+	  ImageMetaProperties()
 {}
 
 
@@ -70,6 +70,7 @@ bool ImageBase::synchronizeMetaContentFrom( const isis::data::Image &image, cons
 	default:
 		break;
 	}
+
 	return true;
 }
 

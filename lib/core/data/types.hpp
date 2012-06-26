@@ -33,39 +33,42 @@
 #include <DataStorage/valuearray.hpp>
 #include <complex>
 
-namespace isis {
-namespace glance {
-namespace data {
-	
+namespace isis
+{
+namespace glance
+{
+namespace data
+{
+
 typedef uint8_t ScalarRepnProposed;
 typedef util::color24 ColorRepnProposed;
 typedef util::fvector4 VectorRepnProposed;
 typedef std::complex< float > ComplexRepnProposed;
 
 enum ImageDataType {UNDEFINED = 0,
-					FLOAT = (unsigned short)isis::data::ValueArray<float>::staticID,
-					DOUBLE = (unsigned short)isis::data::ValueArray<double>::staticID,
-					UINT8_T = (unsigned short)isis::data::ValueArray<uint8_t>::staticID,
-					INT8_T = (unsigned short)isis::data::ValueArray<int8_t>::staticID,
-					UINT16_T = (unsigned short)isis::data::ValueArray<uint16_t>::staticID,
-					INT16_T = (unsigned short)isis::data::ValueArray<int16_t>::staticID,
-					UINT32_T = (unsigned short)isis::data::ValueArray<uint32_t>::staticID,
-					INT32_T = (unsigned short)isis::data::ValueArray<int32_t>::staticID,
-					UINT64_T = (unsigned short)isis::data::ValueArray<uint64_t>::staticID,
-					INT64_T = (unsigned short)isis::data::ValueArray<int64_t>::staticID,
-					BOOL = (unsigned short)isis::data::ValueArray<bool>::staticID,
-					COLOR_24 = (unsigned short)isis::data::ValueArray<isis::util::color24>::staticID,
-					COLOR_48 = (unsigned short)isis::data::ValueArray<isis::util::color48>::staticID,
-					COMPLEX_FLOAT = (unsigned short)isis::data::ValueArray<std::complex<float> >::staticID,
-					COMPLEX_DOUBLE = (unsigned short)isis::data::ValueArray<std::complex<double> >::staticID,
-					VECTOR4_FLOAT = (unsigned short)isis::data::ValueArray< isis::util::fvector4 >::staticID,
-					VECTOR4_DOUBLE = (unsigned short)isis::data::ValueArray< isis::util::dvector4 >::staticID,
-					VECTOR4_INT = (unsigned short)isis::data::ValueArray< isis::util::ivector4 >::staticID,
-					SCALAR_PROPOSED = (unsigned short)isis::data::ValueArray< ScalarRepnProposed >::staticID,
-					COLOR_PROPOSED = (unsigned short)isis::data::ValueArray< ColorRepnProposed >::staticID,
-					VECTOR_PROPOSED = (unsigned short)isis::data::ValueArray< VectorRepnProposed >::staticID,
-					COMPLEX_PROPOSED = (unsigned short)isis::data::ValueArray< ComplexRepnProposed >::staticID,
-};
+					FLOAT = isis::data::ValueArray<float>::staticID,
+					DOUBLE = isis::data::ValueArray<double>::staticID,
+					UINT8_T = isis::data::ValueArray<uint8_t>::staticID,
+					INT8_T = isis::data::ValueArray<int8_t>::staticID,
+					UINT16_T = isis::data::ValueArray<uint16_t>::staticID,
+					INT16_T = isis::data::ValueArray<int16_t>::staticID,
+					UINT32_T = isis::data::ValueArray<uint32_t>::staticID,
+					INT32_T = isis::data::ValueArray<int32_t>::staticID,
+					UINT64_T = isis::data::ValueArray<uint64_t>::staticID,
+					INT64_T = isis::data::ValueArray<int64_t>::staticID,
+					BOOL = isis::data::ValueArray<bool>::staticID,
+					COLOR_24 = isis::data::ValueArray<isis::util::color24>::staticID,
+					COLOR_48 = isis::data::ValueArray<isis::util::color48>::staticID,
+					COMPLEX_FLOAT = isis::data::ValueArray<std::complex<float> >::staticID,
+					COMPLEX_DOUBLE = isis::data::ValueArray<std::complex<double> >::staticID,
+					VECTOR4_FLOAT = isis::data::ValueArray< isis::util::fvector4 >::staticID,
+					VECTOR4_DOUBLE = isis::data::ValueArray< isis::util::dvector4 >::staticID,
+					VECTOR4_INT = isis::data::ValueArray< isis::util::ivector4 >::staticID,
+					SCALAR_PROPOSED = isis::data::ValueArray< ScalarRepnProposed >::staticID,
+					COLOR_PROPOSED = isis::data::ValueArray< ColorRepnProposed >::staticID,
+					VECTOR_PROPOSED = isis::data::ValueArray< VectorRepnProposed >::staticID,
+					COMPLEX_PROPOSED = isis::data::ValueArray< ComplexRepnProposed >::staticID,
+				   };
 
 } // end namespace data
 } // end namespace glance

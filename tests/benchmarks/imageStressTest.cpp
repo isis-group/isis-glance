@@ -5,7 +5,7 @@
 
 using namespace isis;
 
-int main(int /*argc*/, const char **argv)
+int main( int /*argc*/, const char **argv )
 {
 	boost::timer timer;
 
@@ -16,17 +16,17 @@ int main(int /*argc*/, const char **argv)
 	isis::glance::data::Image gImage( isisImages, glance::data::FLOAT );
 
 	std::cout << "typeID float: " << glance::data::FLOAT << std::endl;
-	std::cout << gImage.operator[](10)->getTypeID() << std::endl;
+	std::cout << gImage.operator[]( 10 )->getTypeID() << std::endl;
 
-	std::cout << isisImages.voxel<uint16_t>(10,10,10,10) << std::endl;
-	const size_t dims[] = { 10,10,10 };
-	std::cout << gImage.operator[](10).voxel<float>(dims) << std::endl;
+	std::cout << isisImages.voxel<uint16_t>( 10, 10, 10, 10 ) << std::endl;
+	const size_t dims[] = { 10, 10, 10 };
+	std::cout << gImage.operator[]( 10 ).voxel<float>( dims ) << std::endl;
 
 	gImage.setDataType( glance::data::DOUBLE );
 	gImage.synchronize( isis::glance::data::ImageBase::VOXELS );
-	
 
-	
-	
+
+
+
 
 };

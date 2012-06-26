@@ -30,9 +30,12 @@
 
 #include "image_base.hpp"
 
-namespace isis {
-namespace glance {
-namespace data {
+namespace isis
+{
+namespace glance
+{
+namespace data
+{
 
 class Image : public ImageBase
 {
@@ -48,9 +51,9 @@ public:
 	 * Creates an isis::glance::data::Image from an existing isis::data::Image with specified type_id.
 	 * \param image The isis::data::Image
 	 * \param type_id The type ID that specifies the type of each volume.
-	 */	
+	 */
 	Image( const isis::data::Image &image, const ImageDataType &type_id );
-	
+
 	/**
 	 * Copies the data from the isis::data::Image into
 	 * the isis::glance::Image.
@@ -77,7 +80,7 @@ private:
 	bool force_typed_image_;
 	ImageDataType type_;
 };
-	
+
 } // end namespace data
 } // end namespace glance
 } // end namespace isis
