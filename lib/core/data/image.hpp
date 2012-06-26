@@ -48,26 +48,27 @@ public:
 	Image( const isis::data::Image &image, bool force_typed_image = false );
 
 	/**
-	 * Creates an isis::glance::data::Image from an existing isis::data::Image with specified type_id.
+	 * Creates an isis::glance::data::Image from an existing isis::data::Image with specified type.
 	 * \param image The isis::data::Image
-	 * \param type_id The type ID that specifies the type of each volume.
+	 * \param type The type that specifies the type of each volume.
 	 */
-	Image( const isis::data::Image &image, const ImageDataType &type_id );
+	Image( const isis::data::Image &image, const ImageDataType &type );
 
 	/**
-	 * Copies the data from the isis::data::Image into
-	 * the isis::glance::Image.
-	 * This is done by creating a memory copy of the images data
-	 * into contiguous space and then splicing it to get
-	 * a vector representing the number of volumes/timesteps
-	 * of the isis::data::Image .
-	 * \param image The isis::data::Image
-	 * \param content Specifies which type of content should be synchronized
-	 * \return True if synchronizing was successful.
-	 * Otherwise returns false.
+	 * Synchronizes the isis::glance::data::Image with the isis::data::Image
+	 * specified by image.
+	 * \param image The isis::data::Image that should be used for synchronizing.
+	 * \param content Type of content that should be synchronized.
+	 * \return True if synchronizing was successful. Otherwise returns false.
 	 */
 	bool synchronizeFrom( const isis::data::Image &image, const ImageContentType &content );
 
+	/**
+	 * Synchronizes the isis::glance::data::Image with the underlying isis::data::Image
+	 * that can be accessed by the get() method.
+	 * \param content Type of content that should be synchronized.
+	 * \return True if synchronizing was successful. Otherwise false.
+	 */
 	bool synchronize( const ImageContentType &content ) { return synchronizeFrom( *isis_image_, content ); }
 
 	void setDataType( const ImageDataType &type ) { type_ = type; force_typed_image_ = true; }
@@ -76,7 +77,7 @@ protected:
 	bool synchronizeVoxelContentFrom( isis::data::Image image );
 	void convertVolumesByType( const ImageDataType &type );
 private:
-	//we need to hold those properties for future calls of synchronizeVoxelContentFrom
+	//we need to hold these properties for future calls of synchronize and synchronizeFrom
 	bool force_typed_image_;
 	ImageDataType type_;
 };
