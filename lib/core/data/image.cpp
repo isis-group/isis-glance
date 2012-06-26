@@ -49,7 +49,7 @@ Image::Image ( const isis::data::Image &image, bool force_typed_image )
 	}
 }
 
-Image::Image ( const isis::data::Image &image, const ImageDataType &type )
+Image::Image ( const isis::data::Image &image, const types::ImageDataType &type )
 	: ImageBase ( image ),
 	  force_typed_image_( true ),
 	  type_( type )
@@ -62,7 +62,7 @@ Image::Image ( const isis::data::Image &image, const ImageDataType &type )
 	}
 }
 
-void Image::convertVolumesByType ( const ImageDataType &type )
+void Image::convertVolumesByType ( const types::ImageDataType &type )
 {
 	VolumesType buffer;
 	const size_t volume_size[] = { image_size[0], image_size[1], image_size[2] };

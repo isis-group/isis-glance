@@ -52,7 +52,7 @@ public:
 	 * \param image The isis::data::Image
 	 * \param type The type that specifies the type of each volume.
 	 */
-	Image( const isis::data::Image &image, const ImageDataType &type );
+	Image( const isis::data::Image &image, const types::ImageDataType &type );
 
 	/**
 	 * Synchronizes the isis::glance::data::Image with the isis::data::Image
@@ -71,15 +71,15 @@ public:
 	 */
 	bool synchronize( const ImageContentType &content ) { return synchronizeFrom( *isis_image_, content ); }
 
-	void setDataType( const ImageDataType &type ) { type_ = type; force_typed_image_ = true; }
+	void setDataType( const types::ImageDataType &type ) { type_ = type; force_typed_image_ = true; }
 
 protected:
 	bool synchronizeVoxelContentFrom( isis::data::Image image );
-	void convertVolumesByType( const ImageDataType &type );
+	void convertVolumesByType( const types::ImageDataType &type );
 private:
 	//we need to hold these properties for future calls of synchronize and synchronizeFrom
 	bool force_typed_image_;
-	ImageDataType type_;
+	types::ImageDataType type_;
 };
 
 } // end namespace data

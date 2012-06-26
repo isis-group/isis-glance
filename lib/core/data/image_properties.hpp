@@ -119,7 +119,7 @@ public:
 	double extent;
 
 	///The major type ID of the image
-	ImageDataType major_type;
+	types::ImageDataType major_type;
 
 	///Does the underlying isis image contains of chunks with only one image type?
 	bool has_one_type;
@@ -127,7 +127,7 @@ public:
 	///The images type group
 	ImageTypeGroup type_group;
 private:
-	ImageDataType getMajorType( const std::pair<util::ValueReference, util::ValueReference> &_min_max ) const;
+	types::ImageDataType getMajorType( const std::pair<util::ValueReference, util::ValueReference> &_min_max ) const;
 	bool getHasOneType( const isis::data::Image &image ) const;
 };
 

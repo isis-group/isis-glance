@@ -39,6 +39,7 @@ namespace glance
 {
 namespace data
 {
+namespace types {
 
 typedef uint8_t ScalarRepnProposed;
 typedef util::color24 ColorRepnProposed;
@@ -69,7 +70,7 @@ enum ImageDataType {UNDEFINED = 0,
 					VECTOR_PROPOSED = isis::data::ValueArray< VectorRepnProposed >::staticID,
 					COMPLEX_PROPOSED = isis::data::ValueArray< ComplexRepnProposed >::staticID,
 				   };
-
+} // end namespace types
 } // end namespace data
 } // end namespace glance
 } // end namespace isis
