@@ -32,6 +32,7 @@
 #include <string>
 #include <CoreUtils/vector.hpp>
 #include <CoreUtils/matrix.hpp>
+#include <CoreUtils/propmap.hpp>
 #include <DataStorage/image.hpp>
 
 #include "types.hpp"
@@ -47,7 +48,7 @@ namespace data
  * image that need to provide fast access for read and write accress.
  */
 
-class ImageMetaProperties
+class ImageMetaProperties : public isis::util::PropertyMap
 {
 public:
 	typedef isis::util::FixedVector<size_t, 4> SizeType;
@@ -92,17 +93,11 @@ public:
 	///The sum of voxelSize and voxelGap
 	util::fvector4 voxel_size;
 
-
-	util::PropertyMap getAdditionalProperties() const { return additional_properties_; }
-
 protected:
 	const bool &isValid() const { return is_valid_; }
 
 private:
 	bool is_valid_;
-	isis::util::PropertyMap additional_properties_;
-
-
 };
 
 class ImageDataProperties
