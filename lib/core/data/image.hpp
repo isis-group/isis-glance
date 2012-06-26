@@ -71,7 +71,23 @@ public:
 	 */
 	bool synchronize( const ImageContentType &content ) { return synchronizeFrom( *isis_image_, content ); }
 
+	/**
+	 * Sets the data type that should be used for synchronizing of voxel content.
+	 * \param type The data type used to synchronize.
+	 * \note This method also calls the setForceTypedImage( true ).
+	 */
 	void setDataType( const types::ImageDataType &type ) { type_ = type; force_typed_image_ = true; }
+	
+	types::ImageDataType getDataType() const { return type_; }
+	
+	/**
+	 * An isis::data::Image can consist of chunks with different data type.
+	 * If setForceTypedImage is set to true the isis::glance::data::Image will ensure
+	 * to all volumes to have one image type. This can either be the major_type if no
+	 * data type was specified or the data type specified by one of the respective functions.
+	 * \param force Specifies if the image should ensure consistent data type.
+	 */
+	void setForceTypedImage( bool force ) { force_typed_image_ = force; }
 
 protected:
 	bool synchronizeVoxelContentFrom( isis::data::Image image );
