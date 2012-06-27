@@ -26,7 +26,6 @@
  *      Author: tuerke
  ******************************************************************/
 #include "image_container.hpp"
-#include "util/signals.hpp"
 
 namespace isis
 {
@@ -41,9 +40,9 @@ ImageContainer::ImageContainer()
 
 bool ImageContainer::addImage ( const ImageSharedPointer &image )
 {
-	if ( std::find( begin(), end(), image ) == end() || allow_multiple_ ) {
+	if ( !hasImage( image ) || allow_multiple_ ) {
 		push_back( image );
-		signal::image_added_to_container( this, image );
+		signal_image_added( this, image );
 		return true;
 	} else {
 		LOG( isis::data::Runtime, warning ) << "Trying to add already existing image with file_path: "
@@ -59,6 +58,23 @@ bool ImageContainer::addImages ( const ImageVector &images )
 		ok = ok && addImage( image );
 	}
 	return ok;
+}
+
+bool ImageContainer::removeImage ( const ImageSharedPointer& image )
+{
+	iterator iter = std::find( begin(), end(), image );
+	if( iter == end() ) {
+		return false;
+	} else {
+		erase( iter );
+		signal_image_removed( this, image );
+		return true;
+	}
+}
+
+bool ImageContainer::hasImage ( const data::ImageSharedPointer& image ) const
+{
+	return std::find( begin(), end(), image ) != end();
 }
 
 

@@ -46,21 +46,40 @@ class ImageContainer : protected ImageVector
 public:
 	ImageContainer();
 	/**
-	 * Add an isis::glance::Image to the widget
+	 * Add an isis::glance::Image to the container.
+	 * \param image The image that should be added to the container.
 	 * \return True if adding was successsful.
 	 */
 	virtual bool addImage( const ImageSharedPointer &image );
 
 	/**
-	 * Add a list of isis::glance::Image to the widget
+	 * Add a list of isis::glance::Image to the container.
+	 * \param images A vector of images that should be added to the container.
 	 * \return True if adding was successsful.
 	 */
 	virtual bool addImages( const ImageVector &images );
 
+	/**
+	 * Removes an isis::glance::Image from the container.
+	 * \param image The image that should be removed from the container.
+	 * \return True if removing was successsful. False if the container has no such image.
+	 */
+	virtual bool removeImage( const ImageSharedPointer &image );
+
+	/**
+	 * Convenience function to check existance of an image in this container.
+	 * \param image Check if the container contains this image.
+	 * \return True if the image is exits in this container. Otherwise false.
+	 */
+	virtual bool hasImage( const ImageSharedPointer& image ) const;
+	
 	void setAllowMultiple( bool allow ) { allow_multiple_ = allow; }
 	const bool &getAllowMultiple() const { return allow_multiple_; }
 
-
+	//signals
+	boost::signals2::signal<void (const ImageContainer*, const ImageSharedPointer& )> signal_image_added;
+	boost::signals2::signal<void (const ImageContainer*, const ImageSharedPointer& )> signal_image_removed;
+	
 private:
 	bool allow_multiple_;
 };

@@ -141,6 +141,7 @@ INCLUDE(CPack)
 # optional components
 ############################################################
 option(ISIS_GLANCE_BUILD_TESTS "Build the ISIS-Glance test cases. They depend on Boost-Test" OFF)
+option(ISIS_GLANCE_BUILD_WIDGET_PLUGINS "Build the ISIS-Glance widget plugins" OFF)
 
 ###########################################################
 # isis stuff
@@ -158,13 +159,9 @@ find_package(Boost REQUIRED)
 
 include_directories(${ISIS_INCLUDE_DIRS} ${Boost_INCLUDE_DIR})
 
-###########################################################
-# qt4 stuff
-###########################################################
-FIND_PACKAGE(Qt4 COMPONENTS QtCore QtGui REQUIRED)
-
-set(QT_USE_QTUITOOLS TRUE)
-INCLUDE(${QT_USE_FILE})
+if( ISIS_GLANCE_BUILD_WIDGET_PLUGINS)
+add_subdirectory(lib/widgets)
+endif( ISIS_GLANCE_BUILD_WIDGET_PLUGINS)
 
 # build the ISIS-Glance libraries
 add_subdirectory(lib)

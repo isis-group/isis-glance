@@ -43,11 +43,6 @@ namespace signal
 //image signals
 static boost::signals2::signal<void ( const data::Image *, const data::Image::ImageContentType & )> image_content_changed;
 
-//imagecontainer signals
-static boost::signals2::signal<void ( const data::ImageContainer * , const data::ImageSharedPointer & )> image_added_to_container;
-
-
-
 } // end namespace signal
 } // end namespace glance
 } // end namespace isis

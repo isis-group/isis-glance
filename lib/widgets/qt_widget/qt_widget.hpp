@@ -18,46 +18,34 @@
  *
  * Author: Erik Tuerke, etuerke@googlemail.com
  *
- * widget_base.hpp
+ * qt_widget.hpp
  *
  * Description:
  *
- *  Created on: Jun 7, 2012
+ *  Created on: Jun 27, 2012
  *      Author: tuerke
  ******************************************************************/
-#ifndef _ISIS_GLANCE_WIDGET_BASE_HPP
-#define _ISIS_GLANCE_WIDGET_BASE_HPP
+#ifndef _ISIS_GLANCE_WIDGET_PLUGIN_QT_HPP
+#define _ISIS_GLANCE_WIDGET_PLUGIN_QT_HPP
 
-#include "data/image_container.hpp"
+#include <util/widget_base.hpp>
 
-namespace isis
-{
-namespace glance
-{
+#include <QWidget>
+
+namespace isis {
+namespace glance {
 namespace widget {
 
-struct NoBaseWidget{};
-	
-/**
-* Abstract base class for widgets.
-*/
 
-template<class BASE=NoBaseWidget>
-class WidgetBase
-	: public BASE,
-   public isis::glance::data::ImageContainer
+class QtWidget : public WidgetBase<QWidget>
 {
 public:
-
-protected:
-	WidgetBase( BASE *parent ) : BASE(parent) {}
-
-
+	QtWidget( QWidget* parent );
+	
 };
 
 } // end namespace widget
 } // end namespace glance
 } // end namespace isis
 
-
-#endif //_ISIS_GLANCE_WIDGET_BASE_HPP
+#endif // _ISIS_GLANCE_WIDGET_PLUGIN_QT_HPP
