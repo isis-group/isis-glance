@@ -77,9 +77,9 @@ public:
 	 * \note This method also calls the setForceTypedImage( true ).
 	 */
 	void setDataType( const types::ImageDataType &type ) { type_ = type; force_typed_image_ = true; }
-	
+
 	types::ImageDataType getDataType() const { return type_; }
-	
+
 	/**
 	 * An isis::data::Image can consist of chunks with different data type.
 	 * If setForceTypedImage is set to true the isis::glance::data::Image will ensure

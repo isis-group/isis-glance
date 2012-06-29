@@ -60,9 +60,10 @@ bool ImageContainer::addImages ( const ImageVector &images )
 	return ok;
 }
 
-bool ImageContainer::removeImage ( const ImageSharedPointer& image )
+bool ImageContainer::removeImage ( const ImageSharedPointer &image )
 {
 	iterator iter = std::find( begin(), end(), image );
+
 	if( iter == end() ) {
 		return false;
 	} else {
@@ -72,7 +73,7 @@ bool ImageContainer::removeImage ( const ImageSharedPointer& image )
 	}
 }
 
-bool ImageContainer::hasImage ( const data::ImageSharedPointer& image ) const
+bool ImageContainer::hasImage ( const data::ImageSharedPointer &image ) const
 {
 	return std::find( begin(), end(), image ) != end();
 }

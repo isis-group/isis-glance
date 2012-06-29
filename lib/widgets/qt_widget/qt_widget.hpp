@@ -32,16 +32,19 @@
 
 #include <QWidget>
 
-namespace isis {
-namespace glance {
-namespace widget {
+namespace isis
+{
+namespace glance
+{
+namespace widget
+{
 
 
 class QtWidget : public WidgetBase<QWidget>
 {
 public:
-	QtWidget( QWidget* parent );
-	
+	QtWidget( QWidget *parent );
+
 };
 
 } // end namespace widget

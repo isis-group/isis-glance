@@ -28,11 +28,13 @@
 #include "thread.hpp"
 #include "common.hpp"
 
-namespace isis {
-namespace glance {
+namespace isis
+{
+namespace glance
+{
 
 Thread::Thread()
-	: running_(false)
+	: running_( false )
 {}
 
 void Thread::start()
@@ -61,7 +63,7 @@ void Thread::join()
 	}
 }
 
-void Thread::sleep ( const size_t& milliseconds )
+void Thread::sleep ( const size_t &milliseconds )
 {
 	if( thread_ ) {
 		signal_sleep( milliseconds );

@@ -71,15 +71,15 @@ public:
 	 * \param image Check if the container contains this image.
 	 * \return True if the image is exits in this container. Otherwise false.
 	 */
-	virtual bool hasImage( const ImageSharedPointer& image ) const;
-	
+	virtual bool hasImage( const ImageSharedPointer &image ) const;
+
 	void setAllowMultiple( bool allow ) { allow_multiple_ = allow; }
 	const bool &getAllowMultiple() const { return allow_multiple_; }
 
 	//signals
-	boost::signals2::signal<void (const ImageContainer*, const ImageSharedPointer& )> signal_image_added;
-	boost::signals2::signal<void (const ImageContainer*, const ImageSharedPointer& )> signal_image_removed;
-	
+	boost::signals2::signal<void ( const ImageContainer *, const ImageSharedPointer & )> signal_image_added;
+	boost::signals2::signal<void ( const ImageContainer *, const ImageSharedPointer & )> signal_image_removed;
+
 private:
 	bool allow_multiple_;
 };

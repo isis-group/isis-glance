@@ -39,7 +39,8 @@ namespace glance
 {
 namespace data
 {
-namespace types {
+namespace types
+{
 
 typedef uint8_t ScalarRepnProposed;
 typedef util::color24 ColorRepnProposed;

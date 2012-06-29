@@ -27,15 +27,18 @@
  ******************************************************************/
 #include "qt_widget.hpp"
 
-namespace isis {
-namespace glance {
-namespace widget {
+namespace isis
+{
+namespace glance
+{
+namespace widget
+{
 
-QtWidget::QtWidget ( QWidget* parent )
+QtWidget::QtWidget ( QWidget *parent )
 	: WidgetBase ( parent )
 {}
 
-	
+
 } // end namespace widget
 } // end namespace glance
 } // end namespace isis

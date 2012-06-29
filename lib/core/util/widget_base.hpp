@@ -34,23 +34,24 @@ namespace isis
 {
 namespace glance
 {
-namespace widget {
+namespace widget
+{
 
-struct NoBaseWidget{};
-	
+struct NoBaseWidget {};
+
 /**
 * Abstract base class for widgets.
 */
 
-template<class BASE=NoBaseWidget>
+template < class BASE = NoBaseWidget >
 class WidgetBase
 	: public BASE,
-   public isis::glance::data::ImageContainer
+  public isis::glance::data::ImageContainer
 {
 public:
 
 protected:
-	WidgetBase( BASE *parent ) : BASE(parent) {}
+	WidgetBase( BASE *parent ) : BASE( parent ) {}
 
 
 };

@@ -34,9 +34,11 @@
 
 #include <iostream>
 
-namespace isis {
-namespace glance {
-	
+namespace isis
+{
+namespace glance
+{
+
 class Thread
 {
 protected:
@@ -57,7 +59,7 @@ public:
 	boost::signals2::signal<void()> signal_joined;
 	boost::signals2::signal<void()> signal_interrupted;
 	boost::signals2::signal<void( const size_t & ) > signal_sleep;
-	
+
 private:
 	boost::scoped_ptr< boost::thread > thread_;
 	bool running_;

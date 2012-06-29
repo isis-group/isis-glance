@@ -40,7 +40,7 @@ namespace glance
 struct CoreLog {static const char *name() {return "CoreLog";}; enum {use = _ENABLE_LOG};};
 
 typedef CoreLog Runtime;
-	
+
 template<typename C>
 struct SharredPointer : public boost::shared_ptr<C> {
 	SharredPointer( const C &c ) {
