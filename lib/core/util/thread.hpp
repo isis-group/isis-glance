@@ -18,43 +18,52 @@
  *
  * Author: Erik Tuerke, etuerke@googlemail.com
  *
- * common.hpp
+ * thread.hpp
  *
  * Description:
  *
- *  Created on: Jun 8, 2012
+ *  Created on: Jun 29, 2012
  *      Author: tuerke
  ******************************************************************/
-#ifndef _ISIS_GLANCE_COMMON_HPP
-#define _ISIS_GLANCE_COMMON_HPP
+#ifndef _ISIS_GLANCE_THREAD_HPP
+#define _ISIS_GLANCE_THREAD_HPP
 
-#include <boost/shared_ptr.hpp>
+#include <boost/thread.hpp>
+#include <boost/scoped_ptr.hpp>
+#include <boost/signals2.hpp>
 
-#include <CoreUtils/common.hpp>
+#include <iostream>
 
-namespace isis
-{
-namespace glance
-{
-
-struct CoreLog {static const char *name() {return "CoreLog";}; enum {use = _ENABLE_LOG};};
-
-typedef CoreLog Runtime;
+namespace isis {
+namespace glance {
 	
-template<typename C>
-struct SharredPointer : public boost::shared_ptr<C> {
-	SharredPointer( const C &c ) {
-		static_cast< boost::shared_ptr<C> &>( *this ) = boost::shared_ptr<C>( new C( c ) );
-	}
-	SharredPointer( C *c ) {
-		static_cast< boost::shared_ptr<C> &>( *this ) = boost::shared_ptr<C>( c );
-	}
+class Thread
+{
+protected:
+	Thread();
+public:
+	void start();
+	void interrupt();
+	void join();
+	void sleep( const size_t &milliseconds );
+	virtual void operator()() = 0;
 
-	SharredPointer() {}
+	boost::thread &get() { return *thread_; }
+	const boost::thread &get() const { return *thread_; }
+
+	bool isRunning() const { return running_; }
+
+	boost::signals2::signal<void()> signal_started;
+	boost::signals2::signal<void()> signal_joined;
+	boost::signals2::signal<void()> signal_interrupted;
+	boost::signals2::signal<void( const size_t & ) > signal_sleep;
+	
+private:
+	boost::scoped_ptr< boost::thread > thread_;
+	bool running_;
 };
-
 
 } // end namespace glance
 } // end namespace isis
 
-#endif // _ISIS_GLANCE_COMMON_HPP
+#endif // _ISIS_GLANCE_THREAD_HPP

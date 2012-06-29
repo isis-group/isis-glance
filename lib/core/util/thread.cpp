@@ -18,43 +18,61 @@
  *
  * Author: Erik Tuerke, etuerke@googlemail.com
  *
- * common.hpp
+ * thread.cpp
  *
  * Description:
  *
- *  Created on: Jun 8, 2012
+ *  Created on: Jun 29, 2012
  *      Author: tuerke
  ******************************************************************/
-#ifndef _ISIS_GLANCE_COMMON_HPP
-#define _ISIS_GLANCE_COMMON_HPP
+#include "thread.hpp"
+#include "common.hpp"
 
-#include <boost/shared_ptr.hpp>
+namespace isis {
+namespace glance {
 
-#include <CoreUtils/common.hpp>
+Thread::Thread()
+	: running_(false)
+{}
 
-namespace isis
+void Thread::start()
 {
-namespace glance
+	signal_started();
+	thread_.reset( new boost::thread( boost::ref( *this ) ) );
+	running_ = true;
+}
+
+void Thread::interrupt()
 {
-
-struct CoreLog {static const char *name() {return "CoreLog";}; enum {use = _ENABLE_LOG};};
-
-typedef CoreLog Runtime;
-	
-template<typename C>
-struct SharredPointer : public boost::shared_ptr<C> {
-	SharredPointer( const C &c ) {
-		static_cast< boost::shared_ptr<C> &>( *this ) = boost::shared_ptr<C>( new C( c ) );
+	if( thread_ ) {
+		signal_interrupted();
+		thread_->interrupt();
+	} else {
+		LOG( Runtime, warning ) << "Trying to interrupt a thread that has not been started!";
 	}
-	SharredPointer( C *c ) {
-		static_cast< boost::shared_ptr<C> &>( *this ) = boost::shared_ptr<C>( c );
+}
+void Thread::join()
+{
+	if( thread_ ) {
+		signal_joined();
+		thread_->join();
+	} else {
+		LOG( Runtime, warning ) << "Trying to join a thread that has not been started!";
 	}
+}
 
-	SharredPointer() {}
-};
+void Thread::sleep ( const size_t& milliseconds )
+{
+	if( thread_ ) {
+		signal_sleep( milliseconds );
+		boost::this_thread::sleep ( boost::posix_time::millisec( milliseconds ) );
+	} else {
+		LOG( Runtime, warning ) << "Trying to make a thread sleeping that has not been started!";
+	}
+}
+
+
 
 
 } // end namespace glance
 } // end namespace isis
-
-#endif // _ISIS_GLANCE_COMMON_HPP
