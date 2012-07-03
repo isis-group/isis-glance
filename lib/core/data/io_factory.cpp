@@ -27,10 +27,14 @@
  ******************************************************************/
 #include "io_factory.hpp"
 
-namespace isis {
-namespace glance {
-namespace data {
-namespace _internal {
+namespace isis
+{
+namespace glance
+{
+namespace data
+{
+namespace _internal
+{
 
 LoadingThread::LoadingThread ( const isis::data::Image &image )
 	: image_( image )
@@ -46,41 +50,43 @@ void LoadingThread::operator() ()
 
 
 }
-util::Signal<void ( const std::string &)> IOFactory::signal_start_loading_path;
-util::Signal<void ( const std::string &)> IOFactory::signal_path_does_not_exist;
-util::Signal<void ( const std::string &)> IOFactory::signal_failed_loading_from_path;
-util::Signal<void ( const size_t &, const std::string &)> IOFactory::signal_loaded_n_images_from_path;
+util::Signal<void ( const std::string & )> IOFactory::signal_start_loading_path;
+util::Signal<void ( const std::string & )> IOFactory::signal_path_does_not_exist;
+util::Signal<void ( const std::string & )> IOFactory::signal_failed_loading_from_path;
+util::Signal<void ( const size_t &, const std::string & )> IOFactory::signal_loaded_n_images_from_path;
 
-bool IOFactory::load ( ImageContainer &container, const isis::util::slist& paths,  const isis::util::istring& suffix_override, const isis::util::istring& dialect )
+bool IOFactory::load ( ImageContainer &container, const isis::util::slist &paths,  const isis::util::istring &suffix_override, const isis::util::istring &dialect )
 {
 	return container.addImages( _load( paths, suffix_override, dialect ) );
 }
 
-ImageVector IOFactory::load ( const isis::util::slist& paths, const isis::util::istring& suffix_override, const isis::util::istring& dialect )
+ImageVector IOFactory::load ( const isis::util::slist &paths, const isis::util::istring &suffix_override, const isis::util::istring &dialect )
 {
 	return _load( paths, suffix_override, dialect );
 }
 
-ImageVector IOFactory::_load ( const isis::util::slist& paths, const isis::util::istring& suffix_override, const isis::util::istring& dialect )
+ImageVector IOFactory::_load ( const isis::util::slist &paths, const isis::util::istring &suffix_override, const isis::util::istring &dialect )
 {
 	LoadingThreadListType loadingThreadList;
 	ImageVector retVec;
 	BOOST_FOREACH( const isis::util::slist::const_reference path, paths ) {
 		const boost::filesystem::path p( path );
+
 		if( !boost::filesystem::exists( p ) ) {
-			signal_path_does_not_exist.call(path);
+			signal_path_does_not_exist.call( path );
 			LOG( Runtime, error ) << "Path " << path << " does not exist!.";
 		} else {
 			const std::list<isis::data::Image> images = isis::data::IOFactory::load( path, suffix_override, dialect );
+
 			if( images.size() == 0 ) {
-				signal_failed_loading_from_path.call(path);
+				signal_failed_loading_from_path.call( path );
 				//we do not need error messages here because isis will send them
 			} else {
 				signal_loaded_n_images_from_path.call( images.size(), path );
 				boost::shared_ptr<_internal::LoadingThread> threadPtr;
 				BOOST_FOREACH( std::list<isis::data::Image>::const_reference image, images ) {
-					threadPtr.reset(new _internal::LoadingThread( image ) );
-					threadPtr->setDebugIdentification(path);
+					threadPtr.reset( new _internal::LoadingThread( image ) );
+					threadPtr->setDebugIdentification( path );
 					loadingThreadList.push_back( threadPtr );
 					loadingThreadList.back()->start();
 				}
@@ -94,7 +100,7 @@ ImageVector IOFactory::_load ( const isis::util::slist& paths, const isis::util:
 		retVec.push_back( thread->viewerImage );
 	}
 	return retVec;
-	
+
 }
 
 

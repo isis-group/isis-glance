@@ -37,7 +37,7 @@ namespace util
 {
 Thread::Thread()
 	: running_( false ),
-	debugIdent_("")
+	  debugIdent_( "" )
 {
 	LOG( Debug, verbose_info ) << "Creating thread";
 }
@@ -46,7 +46,7 @@ Thread::~Thread()
 {
 	if( thread_ ) {
 		LOG( Debug, verbose_info ) << "Destructing thread " << debugIdent_;
-			thread_->join();
+		thread_->join();
 	} else {
 		LOG( Runtime, warning ) << "Destructing thread that has not been started!";
 	}
@@ -57,9 +57,11 @@ void Thread::start()
 {
 	signal_started.call();
 	thread_.reset( new boost::thread( boost::ref( *this ) ) );
+
 	if( debugIdent_.empty() ) {
 		debugIdent_ = boost::lexical_cast< std::string, boost::thread::id>( thread_->get_id() );
 	}
+
 	LOG( Debug, verbose_info ) << "Starting thread " << debugIdent_;
 	running_ = true;
 }
@@ -100,7 +102,7 @@ void Thread::sleep ( const size_t &milliseconds )
 {
 	if( thread_ ) {
 		LOG( Debug, verbose_info ) << "Sending thread " << debugIdent_
-			<< " to sleep for " << milliseconds << " ms";
+								   << " to sleep for " << milliseconds << " ms";
 		signal_sleep.call( milliseconds );
 		boost::this_thread::sleep ( boost::posix_time::millisec( milliseconds ) );
 	} else {

@@ -39,7 +39,7 @@ namespace glance
 {
 namespace util
 {
-	
+
 typedef isis::glance::CoreLog Runtime;
 typedef isis::glance::CoreDebug Debug;
 

@@ -72,7 +72,7 @@ types::ImageDataType ImageDataProperties::getMajorType( const std::pair<isis::ut
 		return static_cast<types::ImageDataType>( _min_max.first->getTypeID() << 8 );
 	} else {
 		LOG( isis::glance::data::Runtime, error ) << "Sorry I dont know which datatype I should use. (" << _min_max.first->getTypeName()
-										  << " or " << _min_max.second->getTypeName() << ")";
+				<< " or " << _min_max.second->getTypeName() << ")";
 	}
 
 	return types::UNDEFINED;

@@ -37,12 +37,17 @@
 #include <boost/filesystem.hpp>
 #include <boost/signals2.hpp>
 
-namespace isis {
-namespace glance {
-namespace data {
+namespace isis
+{
+namespace glance
+{
+namespace data
+{
 
-namespace _internal {
-class LoadingThread : public isis::glance::util::Thread {
+namespace _internal
+{
+class LoadingThread : public isis::glance::util::Thread
+{
 public:
 	LoadingThread( const isis::data::Image &image  );
 	void operator() ();
@@ -56,7 +61,7 @@ private:
 };
 }
 
-	
+
 class IOFactory
 {
 	typedef std::list<boost::shared_ptr<_internal::LoadingThread> > LoadingThreadListType;
@@ -68,15 +73,15 @@ public:
 	static ImageVector load( const isis::util::slist &paths, const isis::util::istring &suffix_override = "", const isis::util::istring &dialect = "" );
 
 	//signals
-	static util::Signal<void ( const std::string &)> signal_start_loading_path;
-	static util::Signal<void ( const std::string &)> signal_path_does_not_exist;
-	static util::Signal<void ( const std::string &)> signal_failed_loading_from_path;
-	static util::Signal<void ( const size_t &, const std::string &)> signal_loaded_n_images_from_path;
+	static util::Signal<void ( const std::string & )> signal_start_loading_path;
+	static util::Signal<void ( const std::string & )> signal_path_does_not_exist;
+	static util::Signal<void ( const std::string & )> signal_failed_loading_from_path;
+	static util::Signal<void ( const size_t &, const std::string & )> signal_loaded_n_images_from_path;
 private:
-	static ImageVector _load(  const isis::util::slist &paths, const isis::util::istring &suffix_override = "", const isis::util::istring &dialect = "");
-	
+	static ImageVector _load(  const isis::util::slist &paths, const isis::util::istring &suffix_override = "", const isis::util::istring &dialect = "" );
+
 };
-	
+
 } // end namespace data
 } // end namespace glance
 } // end namespace isis

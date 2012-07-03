@@ -31,8 +31,9 @@
 /// @cond _internal
 namespace isis
 {
-namespace glance {
-	
+namespace glance
+{
+
 struct CoreLog {static const char *name() {return "GlanceCore";}; enum {use = _ENABLE_LOG};};
 struct CoreDebug {static const char *name() {return "GlanceCoreDebug";}; enum {use = _ENABLE_DEBUG};};
 

@@ -45,7 +45,7 @@ Image::Image ( const isis::data::Image &image, bool force_typed_image )
 
 	if( !is_valid ) {
 		LOG( data::Runtime, error ) << "Creating of isis::glance::Image from "
-										  << file_path << " failed!";
+									<< file_path << " failed!";
 	}
 }
 
@@ -58,7 +58,7 @@ Image::Image ( const isis::data::Image &image, const types::ImageDataType &type 
 
 	if( !is_valid ) {
 		LOG( data::Runtime, error ) << "Creating of isis::glance::Image from "
-										  << file_path << " failed!";
+									<< file_path << " failed!";
 	}
 }
 
@@ -118,8 +118,8 @@ bool Image::synchronizeVoxelContentFrom ( isis::data::Image image )
 		}
 	} else {
 		LOG( data::Runtime, isis::info ) << "The number of chunks (" << chunks.size()
-											   << ") does not coincide with the number of timesteps (" << image_size[isis::data::timeDim]
-											   << ") of image " << file_path << ". Will copy data to contiguous memory.";
+										 << ") does not coincide with the number of timesteps (" << image_size[isis::data::timeDim]
+										 << ") of image " << file_path << ". Will copy data to contiguous memory.";
 
 		//the image is spliced at sliceDim
 		if( chunks.size() ==  image_size[isis::data::timeDim] * image_size[isis::data::sliceDim] ) {
@@ -136,7 +136,7 @@ bool Image::synchronizeVoxelContentFrom ( isis::data::Image image )
 			}
 		} else {
 			LOG( data::Runtime, isis::error ) << "Image " << file_path << " is spliced below sliceDim. "
-													<< "This is not supported yet!";
+											  << "This is not supported yet!";
 			return false;
 		}
 	}
