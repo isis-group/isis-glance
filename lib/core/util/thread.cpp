@@ -28,6 +28,7 @@
 #include "thread.hpp"
 #include "common.hpp"
 #include <boost/lambda/bind.hpp>
+#include <boost/lexical_cast.hpp>
 
 namespace isis
 {

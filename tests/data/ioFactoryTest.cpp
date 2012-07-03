@@ -44,6 +44,7 @@ int main()
 	timer.restart();
 
 	isis::glance::data::IOFactory::signal_start_loading_path.get().connect( &printPath );
+	isis::glance::data::Image::setUseProposedDataType(true);
 	
 	std::cout << isis::glance::data::IOFactory::load( paths ).size() << std::endl;
 	

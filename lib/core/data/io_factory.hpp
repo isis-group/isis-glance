@@ -44,7 +44,6 @@ namespace glance
 namespace data
 {
 /// @cond _internal
-API_EXCLUDE_BEGIN
 namespace _internal
 {
 class LoadingThread : public isis::glance::util::Thread
@@ -64,7 +63,6 @@ private:
 
 };
 }
-API_EXCLUDE_END
 /// @endcond _internal
 
 class IOFactory
@@ -101,6 +99,7 @@ public:
 	static util::Signal<void ( const size_t &, const std::string & )> signal_loaded_n_images_from_path;
 	///This signal is called when loading the paths and creating the isis::glance::data::Image (s) is finished
 	static util::Signal<void ()> signal_finished_loading;
+
 private:
 	/// @cond _internal
 	API_EXCLUDE_BEGIN

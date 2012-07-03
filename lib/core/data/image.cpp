@@ -28,6 +28,7 @@
 
 #include "image.hpp"
 #include "util/signal.hpp"
+#include "common.hpp"
 
 namespace isis
 {
@@ -36,25 +37,67 @@ namespace glance
 namespace data
 {
 
-Image::Image ( const isis::data::Image &image, bool force_typed_image )
-	: ImageBase( image ),
-	  force_typed_image_( force_typed_image ),
-	  type_( major_type )
+bool Image::forceTypedImage_ = false;
+bool Image::forceProposedDataType_ = false;
+
+// util::Signal<void( const util::SharredPointer<Image> &, const types::ImageDataType &)> Image::signal_conversion_begin;
+// util::Signal<void( const util::SharredPointer<Image> &, const types::ImageDataType &)> Image::signal_conversion_end;
+// util::Signal<void( const util::SharredPointer<Image> &, const ImageBase::ImageContentType &)> Image::signal_content_changed;
+
+types::ImageDataType Image::proposedScalar_ = types::SCALAR_PROPOSED;
+types::ImageDataType Image::proposedColor_ = types::COLOR_PROPOSED;
+types::ImageDataType Image::proposedComplex_ = types::COMPLEX_PROPOSED;
+types::ImageDataType Image::proposedVector_ = types::VECTOR_PROPOSED;
+
+Image::Image ( const isis::data::Image& image )
+	: ImageBase ( image ),
+	type_(major_type)
 {
-	is_valid = synchronizeFrom( image, ImageBase::VOXELS );
+	if( forceProposedDataType_ ) {
+		forceTypedImage_ = true;
+		switch( type_group ) {
+			case SCALAR:
+				type_ = proposedScalar_;
+				break;
+			case COLOR:
+				type_ = proposedColor_;
+				break;
+			case COMPLEX:
+				type_ = proposedComplex_;
+				break;
+			case VECTOR:
+				type_ = proposedVector_;
+				break;
+		}
+	}
+	is_valid = synchronizeFrom( image, VOXELS );
 
 	if( !is_valid ) {
-		LOG( data::Runtime, error ) << "Creating of isis::glance::Image from "
+		LOG( Runtime, error ) << "Creating of isis::glance::Image from "
+									<< file_path << " failed!";
+	}
+}
+
+
+Image::Image ( const isis::data::Image &image, bool force_typed_image )
+	: ImageBase( image ),
+	  type_( major_type )
+{
+	forceTypedImage_ = force_typed_image;
+	is_valid = synchronizeFrom( image, VOXELS );
+
+	if( !is_valid ) {
+		LOG( Runtime, error ) << "Creating of isis::glance::Image from "
 									<< file_path << " failed!";
 	}
 }
 
 Image::Image ( const isis::data::Image &image, const types::ImageDataType &type )
 	: ImageBase ( image ),
-	  force_typed_image_( true ),
 	  type_( type )
 {
-	is_valid = synchronizeFrom( image, ImageBase::VOXELS );
+	forceTypedImage_ = true;
+	is_valid = synchronizeFrom( image, VOXELS );
 
 	if( !is_valid ) {
 		LOG( data::Runtime, error ) << "Creating of isis::glance::Image from "
@@ -62,8 +105,29 @@ Image::Image ( const isis::data::Image &image, const types::ImageDataType &type 
 	}
 }
 
+
+void Image::setProposedDataType ( const ImageDataProperties::ImageTypeGroup& type_group, const types::ImageDataType& data_type )
+{
+	switch( type_group ) {
+		case SCALAR:
+			proposedScalar_ = data_type;
+			break;
+		case COLOR:
+			proposedColor_ = data_type;
+			break;
+		case COMPLEX:
+			proposedComplex_ = data_type;
+			break;
+		case VECTOR:
+			proposedVector_ = data_type;
+			break;
+	}
+}
+
+
 void Image::convertVolumesByType ( const types::ImageDataType &type )
 {
+// 	signal_conversion_begin.call(this, type);
 	VolumesType buffer;
 	const size_t volume_size[] = { image_size[0], image_size[1], image_size[2] };
 	BOOST_FOREACH( VolumesType::reference volume, volumes_ ) {
@@ -71,6 +135,7 @@ void Image::convertVolumesByType ( const types::ImageDataType &type )
 	}
 	assert( buffer.size() == volumes_.size() );
 	volumes_ = buffer;
+// 	signal_conversion_end.call(this, type);
 }
 
 
@@ -96,9 +161,8 @@ bool Image::synchronizeFrom ( const isis::data::Image &image, const ImageBase::I
 
 	//send signal if synchronization was successful
 	if( ok ) {
-		util::signals::image_content_changed( this, content );
+// 		signal_content_changed.call(this, content );
 	}
-
 	return ok;
 }
 
@@ -141,7 +205,7 @@ bool Image::synchronizeVoxelContentFrom ( isis::data::Image image )
 		}
 	}
 
-	if( force_typed_image_ ) {
+	if( forceTypedImage_ ) {
 		convertVolumesByType( type_ );
 	}
 

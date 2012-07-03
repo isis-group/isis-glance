@@ -30,9 +30,6 @@
 
 #include <boost/signals2.hpp>
 
-#include "data/image.hpp"
-#include "data/image_container.hpp"
-
 namespace isis
 {
 namespace glance
@@ -72,13 +69,7 @@ private:
 	boost::shared_ptr<boost::signals2::signal< SIGNATURE > > signal_;
 };
 
-namespace signals
-{
 
-//image signals
-static boost::signals2::signal<void ( const data::Image *, const data::Image::ImageContentType & )> image_content_changed;
-
-} // end namespace signal
 } // end namespace util
 } // end namespace glance
 } // end namespace isis

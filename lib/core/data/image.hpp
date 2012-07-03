@@ -29,6 +29,7 @@
 #define _ISIS_GLANCE_IMAGE_HPP
 
 #include "image_base.hpp"
+#include "util/signal.hpp"
 
 namespace isis
 {
@@ -40,12 +41,14 @@ namespace data
 class Image : public ImageBase
 {
 public:
+
+	Image( const isis::data::Image &image );
 	/**
 	 * Creates an isis::glance::data::Image from an existing isis::data::Image.
 	 * \param image The isis::data::Image
 	 * \param force_typed_image If true the isis::glance::data::Image will ensure to have volumes of consistent data type.
 	 */
-	Image( const isis::data::Image &image, bool force_typed_image = false );
+	Image( const isis::data::Image &image, bool force_typed_image );
 
 	/**
 	 * Creates an isis::glance::data::Image from an existing isis::data::Image with specified type.
@@ -76,7 +79,7 @@ public:
 	 * \param type The data type used to synchronize.
 	 * \note This method also calls the setForceTypedImage( true ).
 	 */
-	void setDataType( const types::ImageDataType &type ) { type_ = type; force_typed_image_ = true; }
+	void setDataType( const types::ImageDataType &type ) { type_ = type; forceTypedImage_ = true; }
 
 	types::ImageDataType getDataType() const { return type_; }
 
@@ -87,15 +90,29 @@ public:
 	 * data type was specified or the data type specified by one of the respective functions.
 	 * \param force Specifies if the image should ensure consistent data type.
 	 */
-	void setForceTypedImage( bool force ) { force_typed_image_ = force; }
+	static void setForceTypedImage( const bool &force ) { forceTypedImage_ = force; }
+
+	static void setUseProposedDataType( const bool &use_proposed ) { forceProposedDataType_ = use_proposed; }
+	static void setProposedDataType( const Image::ImageTypeGroup &type_group, const types::ImageDataType &data_type );
+
+// 	//signals
+// 	static util::Signal<void( const util::SharredPointer<Image> &, const types::ImageDataType &)> signal_conversion_begin;
+// 	static util::Signal<void( const util::SharredPointer<Image> &, const types::ImageDataType &)> signal_conversion_end;
+// 	static util::Signal<void( const util::SharredPointer<Image> &, const ImageContentType &)> signal_content_changed;
 
 protected:
 	bool synchronizeVoxelContentFrom( isis::data::Image image );
 	void convertVolumesByType( const types::ImageDataType &type );
 private:
 	//we need to hold these properties for future calls of synchronize and synchronizeFrom
-	bool force_typed_image_;
 	types::ImageDataType type_;
+
+	static bool forceTypedImage_;
+	static bool forceProposedDataType_;
+	static types::ImageDataType proposedScalar_;
+	static types::ImageDataType proposedComplex_;
+	static types::ImageDataType proposedColor_;
+	static types::ImageDataType proposedVector_;
 };
 
 } // end namespace data

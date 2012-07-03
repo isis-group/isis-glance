@@ -28,6 +28,8 @@
 #ifndef _ISIS_GLANCE_LOG_MOUDLES_HPP
 #define _ISIS_GLANCE_LOG_MOUDLES_HPP
 
+#include <CoreUtils/log.hpp>
+
 /// @cond _internal
 namespace isis
 {
