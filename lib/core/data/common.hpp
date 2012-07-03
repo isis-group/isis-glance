@@ -28,9 +28,9 @@
 #ifndef _ISIS_GLANCE_DATA_COMMON_HPP
 #define _ISIS_GLANCE_DATA_COMMON_HPP
 
-#include <DataStorage/common.hpp>
 #include <DataStorage/valuearray.hpp>
 #include "util/common.hpp"
+#include "util/log_modules.hpp"
 
 namespace isis
 {
@@ -38,19 +38,22 @@ namespace glance
 {
 namespace data
 {
-class ImageBase;
 
+typedef isis::glance::DataLog Runtime;
+typedef isis::glance::DataDebug Debug;
 
-typedef SharredPointer<ImageBase> ImageSharedPointer;
+class Image;
+
+typedef util::SharredPointer<Image> ImageSharedPointer;
 typedef std::vector< ImageSharedPointer > ImageVector;
 
-typedef SharredPointer<isis::data::Image> IsisImageSharredPointer;
+typedef util::SharredPointer<isis::data::Image> IsisImageSharredPointer;
 
 
 } // end namespace data
 } // end namespace glance
 } // end namespace isis
 
-#include "image_base.hpp"
+#include "image.hpp"
 
 #endif // _ISIS_GLANCE_COMMON_HPP

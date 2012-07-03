@@ -49,10 +49,10 @@ public:
 	ImageState( const isis::data::Image &image );
 
 	///The current coordinates we are looking at in image space
-	util::ivector4 voxel_coords;
+	isis::util::ivector4 voxel_coords;
 
 	///The current coordinates we are looking at in physical space
-	util::ivector4 physical_coords;
+	isis::util::ivector4 physical_coords;
 
 	///Is this image visible?
 	bool is_visible;

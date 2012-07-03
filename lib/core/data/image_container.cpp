@@ -45,7 +45,7 @@ bool ImageContainer::addImage ( const ImageSharedPointer &image )
 		signal_image_added( this, image );
 		return true;
 	} else {
-		LOG( isis::data::Runtime, warning ) << "Trying to add already existing image with file_path: "
+		LOG( data::Runtime, warning ) << "Trying to add already existing image with file_path: "
 											<< image->file_path << " ! Will not do that.";
 		return false;
 	}
@@ -73,7 +73,7 @@ bool ImageContainer::removeImage ( const ImageSharedPointer &image )
 	}
 }
 
-bool ImageContainer::hasImage ( const data::ImageSharedPointer &image ) const
+bool ImageContainer::hasImage ( const isis::glance::data::ImageSharedPointer &image ) const
 {
 	return std::find( begin(), end(), image ) != end();
 }

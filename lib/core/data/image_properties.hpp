@@ -37,6 +37,7 @@
 
 #include "types.hpp"
 
+
 namespace isis
 {
 namespace glance
@@ -134,6 +135,5 @@ private:
 } // end namespace data
 } // end namespace glance
 } // end namespace isis
-
 
 #endif // _ISIS_GLANCE_IMAGE_PROPERTIES_HPP

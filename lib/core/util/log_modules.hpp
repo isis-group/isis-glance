@@ -18,33 +18,29 @@
  *
  * Author: Erik Tuerke, etuerke@googlemail.com
  *
- * signals.hpp
+ * log_modules.hpp
  *
  * Description:
  *
- *  Created on: Jun 22, 2012
+ *  Created on: Jun 29, 2012
  *      Author: tuerke
  ******************************************************************/
-#ifndef _ISIS_GLANCE_SIGNALS_HPP
-#define _ISIS_GLANCE_SIGNALS_HPP
+#ifndef _ISIS_GLANCE_LOG_MOUDLES_HPP
+#define _ISIS_GLANCE_LOG_MOUDLES_HPP
 
-#include <boost/signals2.hpp>
-
-#include "data/image.hpp"
-#include "data/image_container.hpp"
-
+/// @cond _internal
 namespace isis
 {
-namespace glance
-{
-namespace signal
-{
+namespace glance {
+	
+struct CoreLog {static const char *name() {return "GlanceCore";}; enum {use = _ENABLE_LOG};};
+struct CoreDebug {static const char *name() {return "GlanceCoreDebug";}; enum {use = _ENABLE_DEBUG};};
 
-//image signals
-static boost::signals2::signal<void ( const data::Image *, const data::Image::ImageContentType & )> image_content_changed;
+struct DataLog {static const char *name() {return "GlanceData";}; enum {use = _ENABLE_LOG};};
+struct DataDebug {static const char *name() {return "GlanceDataDebug";}; enum {use = _ENABLE_DEBUG};};
 
-} // end namespace signal
 } // end namespace glance
 } // end namespace isis
+/// @endcond
 
-#endif // _ISIS_GLANCE_SIGNALS_HPP
+#endif //_ISIS_GLANCE_LOG_MOUDLES_HPP

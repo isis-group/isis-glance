@@ -30,7 +30,7 @@
 
 #include <boost/thread.hpp>
 #include <boost/scoped_ptr.hpp>
-#include <boost/signals2.hpp>
+#include <util/signal.hpp>
 
 #include <iostream>
 
@@ -38,33 +38,40 @@ namespace isis
 {
 namespace glance
 {
-
+namespace util
+{
 class Thread
 {
 protected:
 	Thread();
 public:
+	virtual ~Thread();
 	void start();
 	void interrupt();
 	void join();
+	void yield();
 	void sleep( const size_t &milliseconds );
-	virtual void operator()() = 0;
+	virtual void operator() () = 0;
 
 	boost::thread &get() { return *thread_; }
 	const boost::thread &get() const { return *thread_; }
 
 	bool isRunning() const { return running_; }
 
-	boost::signals2::signal<void()> signal_started;
-	boost::signals2::signal<void()> signal_joined;
-	boost::signals2::signal<void()> signal_interrupted;
-	boost::signals2::signal<void( const size_t & ) > signal_sleep;
+	Signal<void ()> signal_started;
+	Signal<void ()> signal_joined;
+	Signal<void ()> signal_interrupted;
+	Signal<void ()> signal_yielded;
+	Signal<void( const size_t & ) > signal_sleep;
+
+	void setDebugIdentification( const std::string &debugIdent ) { debugIdent_ = debugIdent; }
 
 private:
-	boost::scoped_ptr< boost::thread > thread_;
+	boost::shared_ptr< boost::thread > thread_;
 	bool running_;
+	std::string debugIdent_;
 };
-
+} // end namespace util
 } // end namespace glance
 } // end namespace isis
 

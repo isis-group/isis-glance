@@ -27,6 +27,7 @@
  ******************************************************************/
 #include "image_properties.hpp"
 #include "util/geometrical.hpp"
+#include "common.hpp"
 
 #include <boost/filesystem.hpp>
 
@@ -41,7 +42,7 @@ namespace data
 ImageDataProperties::ImageDataProperties ( const isis::data::Image &image )
 {
 	//setting all the needed properties from the image
-	const std::pair<util::ValueReference, util::ValueReference> _min_max = image.getMinMax();
+	const std::pair<isis::util::ValueReference, isis::util::ValueReference> _min_max = image.getMinMax();
 	major_type = getMajorType( _min_max );
 	has_one_type = getHasOneType( image );
 
@@ -61,7 +62,7 @@ ImageDataProperties::ImageDataProperties ( const isis::data::Image &image )
 }
 
 
-types::ImageDataType ImageDataProperties::getMajorType( const std::pair<util::ValueReference, util::ValueReference> &_min_max ) const
+types::ImageDataType ImageDataProperties::getMajorType( const std::pair<isis::util::ValueReference, isis::util::ValueReference> &_min_max ) const
 {
 	if( _min_max.first->getTypeID() == _min_max.second->getTypeID() ) { // ok min and max are the same type - trivial case
 		return static_cast<types::ImageDataType>( _min_max.first->getTypeID() << 8 ); // btw: we do the shift, because min and max are Value - but we want the ID's ValuePtr
@@ -70,7 +71,7 @@ types::ImageDataType ImageDataProperties::getMajorType( const std::pair<util::Va
 	} else if( _min_max.second->fitsInto( _min_max.first->getTypeID() ) ) { // if max fits into the type of min, use that
 		return static_cast<types::ImageDataType>( _min_max.first->getTypeID() << 8 );
 	} else {
-		LOG( isis::util::Runtime, error ) << "Sorry I dont know which datatype I should use. (" << _min_max.first->getTypeName()
+		LOG( isis::glance::data::Runtime, error ) << "Sorry I dont know which datatype I should use. (" << _min_max.first->getTypeName()
 										  << " or " << _min_max.second->getTypeName() << ")";
 	}
 
@@ -93,13 +94,13 @@ ImageMetaProperties::ImageMetaProperties ( const isis::data::Image &image )
 {
 	//geometrical stuff
 	image_size = image.getSizeAsVector();
-	image_size_aligned32 = geometrical::get32BitAlignedSize( image_size );
-	orientation_matrix = geometrical::getOrientationMatrixFromPropMap( image );
-	orientation_matrix_latched = geometrical::getLatchedOrienation( orientation_matrix );
-	voxel_size = image.getPropertyAs<util::fvector4>( "voxelSize" );
+	image_size_aligned32 = util::get32BitAlignedSize( image_size );
+	orientation_matrix = util::getOrientationMatrixFromPropMap( image );
+	orientation_matrix_latched = util::getLatchedOrienation( orientation_matrix );
+	voxel_size = image.getPropertyAs<isis::util::fvector4>( "voxelSize" );
 
 	if( image.hasProperty( "voxelGap" ) ) {
-		voxel_size += image.getPropertyAs<util::fvector4>( "voxelGap" ) ;
+		voxel_size += image.getPropertyAs<isis::util::fvector4>( "voxelGap" ) ;
 	}
 
 	if( image.hasProperty( "file_path" ) ) {

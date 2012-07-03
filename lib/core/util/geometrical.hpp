@@ -36,17 +36,17 @@ namespace isis
 {
 namespace glance
 {
-namespace geometrical
+namespace util
 {
 
-util::ivector4 get32BitAlignedSize( const util::ivector4 &orig_size );
+isis::util::ivector4 get32BitAlignedSize( const isis::util::ivector4 &orig_size );
 
-util::Matrix4x4<float> getOrientationMatrixFromPropMap( const util::PropertyMap &propmap );
+isis::util::Matrix4x4<float> getOrientationMatrixFromPropMap( const isis::util::PropertyMap &propmap );
 
-util::Matrix4x4<float> getLatchedOrienation( const util::Matrix4x4<float> &orientation_matrix );
+isis::util::Matrix4x4<float> getLatchedOrienation( const isis::util::Matrix4x4<float> &orientation_matrix );
 
 
-} // end namespace geometrical
+} // end namespace util
 } // end namespace glance
 } // end namespace isis
 

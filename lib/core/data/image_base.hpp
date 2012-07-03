@@ -39,8 +39,8 @@
 #include "image_state.hpp"
 #include "image_properties.hpp"
 #include "data_container.hpp"
-#include "common.hpp"
 #include "types.hpp"
+#include "util/common.hpp"
 
 namespace isis
 {
@@ -82,7 +82,7 @@ protected:
 	API_EXCLUDE_END
 	/// @endcond _internal
 
-	const IsisImageSharredPointer isis_image_;
+	const util::SharredPointer<isis::data::Image> isis_image_;
 
 	VolumesType volumes_;
 private:

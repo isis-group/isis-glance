@@ -31,14 +31,14 @@ namespace isis
 {
 namespace glance
 {
-namespace geometrical
+namespace util
 {
 
-util::ivector4 get32BitAlignedSize ( const util::ivector4 &orig_size )
+isis::util::ivector4 get32BitAlignedSize ( const isis::util::ivector4 &orig_size )
 {
-	util::ivector4 ret_size;
+	isis::util::ivector4 ret_size;
 
-	for ( util::ivector4::value_type i = 0; i < 4; i++ ) {
+	for ( isis::util::ivector4::value_type i = 0; i < 4; i++ ) {
 		const int m = orig_size[i] % 4;
 
 		if( m > 0 ) {
@@ -51,21 +51,21 @@ util::ivector4 get32BitAlignedSize ( const util::ivector4 &orig_size )
 	return ret_size;
 }
 
-isis::util::Matrix4x4< float > getOrientationMatrixFromPropMap ( const util::PropertyMap &propmap )
+isis::util::Matrix4x4< float > getOrientationMatrixFromPropMap ( const isis::util::PropertyMap &propmap )
 {
-	const util::Matrix4x4<float> retMatrix (  propmap.getPropertyAs<util::fvector4>( "rowVec" ),
-			propmap.getPropertyAs<util::fvector4>( "columnVec" ),
-			propmap.getPropertyAs<util::fvector4>( "sliceVec" ) );
+	const isis::util::Matrix4x4<float> retMatrix (  propmap.getPropertyAs<isis::util::fvector4>( "rowVec" ),
+			propmap.getPropertyAs<isis::util::fvector4>( "columnVec" ),
+			propmap.getPropertyAs<isis::util::fvector4>( "sliceVec" ) );
 	return retMatrix;
 }
 
 isis::util::Matrix4x4< float > getLatchedOrienation ( const isis::util::Matrix4x4< float > &orientation_matrix )
 {
-	util::Matrix4x4<float> retMatrix;
+	isis::util::Matrix4x4<float> retMatrix;
 	retMatrix.fill( 0 );
-	const util::fvector4 &rowVec = orientation_matrix.getRow( 0 );
-	const util::fvector4 &columnVec = orientation_matrix.getRow( 1 );
-	const util::fvector4 &sliceVec = orientation_matrix.getRow( 2 );
+	const isis::util::fvector4 &rowVec = orientation_matrix.getRow( 0 );
+	const isis::util::fvector4 &columnVec = orientation_matrix.getRow( 1 );
+	const isis::util::fvector4 &sliceVec = orientation_matrix.getRow( 2 );
 
 	size_t rB = rowVec.getBiggestVecElemAbs();
 	size_t cB = columnVec.getBiggestVecElemAbs();
@@ -119,6 +119,6 @@ isis::util::Matrix4x4< float > getLatchedOrienation ( const isis::util::Matrix4x
 
 
 
-} // end namespace geometrical
+} // end namespace util
 } // end namespace glance
 } // end namespace isis

@@ -27,27 +27,48 @@
  ******************************************************************/
 #include "thread.hpp"
 #include "common.hpp"
+#include <boost/lambda/bind.hpp>
 
 namespace isis
 {
 namespace glance
 {
-
+namespace util
+{
 Thread::Thread()
-	: running_( false )
-{}
+	: running_( false ),
+	debugIdent_("")
+{
+	LOG( Debug, verbose_info ) << "Creating thread";
+}
+
+Thread::~Thread()
+{
+	if( thread_ ) {
+		LOG( Debug, verbose_info ) << "Destructing thread " << debugIdent_;
+			thread_->join();
+	} else {
+		LOG( Runtime, warning ) << "Destructing thread that has not been started!";
+	}
+}
+
 
 void Thread::start()
 {
-	signal_started();
+	signal_started.call();
 	thread_.reset( new boost::thread( boost::ref( *this ) ) );
+	if( debugIdent_.empty() ) {
+		debugIdent_ = boost::lexical_cast< std::string, boost::thread::id>( thread_->get_id() );
+	}
+	LOG( Debug, verbose_info ) << "Starting thread " << debugIdent_;
 	running_ = true;
 }
 
 void Thread::interrupt()
 {
 	if( thread_ ) {
-		signal_interrupted();
+		LOG( Debug, verbose_info ) << "Interrupting thread " << debugIdent_;
+		signal_interrupted.call();
 		thread_->interrupt();
 	} else {
 		LOG( Runtime, warning ) << "Trying to interrupt a thread that has not been started!";
@@ -56,17 +77,31 @@ void Thread::interrupt()
 void Thread::join()
 {
 	if( thread_ ) {
-		signal_joined();
+		LOG( Debug, verbose_info ) << "Joining thread " << debugIdent_;
+		signal_joined.call();
 		thread_->join();
 	} else {
 		LOG( Runtime, warning ) << "Trying to join a thread that has not been started!";
 	}
 }
 
+void Thread::yield()
+{
+	if( thread_ ) {
+		signal_yielded.call();
+		boost::this_thread::yield();
+	} else {
+		LOG( Runtime, warning ) << "Trying to yield a thread hat has not been started!";
+	}
+}
+
+
 void Thread::sleep ( const size_t &milliseconds )
 {
 	if( thread_ ) {
-		signal_sleep( milliseconds );
+		LOG( Debug, verbose_info ) << "Sending thread " << debugIdent_
+			<< " to sleep for " << milliseconds << " ms";
+		signal_sleep.call( milliseconds );
 		boost::this_thread::sleep ( boost::posix_time::millisec( milliseconds ) );
 	} else {
 		LOG( Runtime, warning ) << "Trying to make a thread sleeping that has not been started!";
@@ -75,6 +110,6 @@ void Thread::sleep ( const size_t &milliseconds )
 
 
 
-
+} // end namespace util
 } // end namespace glance
 } // end namespace isis

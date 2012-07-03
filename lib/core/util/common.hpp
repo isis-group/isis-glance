@@ -29,17 +29,19 @@
 #define _ISIS_GLANCE_COMMON_HPP
 
 #include <boost/shared_ptr.hpp>
+#include <boost/signals2.hpp>
 
-#include <CoreUtils/common.hpp>
+#include "log_modules.hpp"
 
 namespace isis
 {
 namespace glance
 {
-
-struct CoreLog {static const char *name() {return "CoreLog";}; enum {use = _ENABLE_LOG};};
-
-typedef CoreLog Runtime;
+namespace util
+{
+	
+typedef isis::glance::CoreLog Runtime;
+typedef isis::glance::CoreDebug Debug;
 
 template<typename C>
 struct SharredPointer : public boost::shared_ptr<C> {
@@ -54,6 +56,8 @@ struct SharredPointer : public boost::shared_ptr<C> {
 };
 
 
+
+} // end namespace util
 } // end namespace glance
 } // end namespace isis
 
