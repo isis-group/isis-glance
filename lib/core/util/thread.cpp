@@ -38,9 +38,7 @@ namespace util
 Thread::Thread()
 	: running_( false ),
 	  debugIdent_( "" )
-{
-	LOG( Debug, verbose_info ) << "Creating thread";
-}
+{}
 
 Thread::~Thread()
 {
@@ -55,16 +53,32 @@ Thread::~Thread()
 
 void Thread::start()
 {
-	signal_started.call();
+	signal_created.call();
 	thread_.reset( new boost::thread( boost::ref( *this ) ) );
 
 	if( debugIdent_.empty() ) {
 		debugIdent_ = boost::lexical_cast< std::string, boost::thread::id>( thread_->get_id() );
 	}
-
-	LOG( Debug, verbose_info ) << "Starting thread " << debugIdent_;
-	running_ = true;
+	mutex_.lock();
+	LOG( Debug, verbose_info ) << "Created thread " << debugIdent_;
+	mutex_.unlock();
 }
+
+void Thread::operator() ()
+{
+	signal_started.call();
+	mutex_.lock();
+	LOG( Debug, verbose_info ) << "Started thread " << debugIdent_;
+	mutex_.unlock();
+	running_ = true;
+	run();
+	signal_finished.call();
+	mutex_.lock();
+	LOG( Debug, verbose_info ) << "Finished thread" << debugIdent_;
+	mutex_.unlock();
+	running_ = false;
+}
+
 
 void Thread::interrupt()
 {
@@ -79,7 +93,9 @@ void Thread::interrupt()
 void Thread::join()
 {
 	if( thread_ ) {
+		mutex_.lock();
 		LOG( Debug, verbose_info ) << "Joining thread " << debugIdent_;
+		mutex_.unlock();
 		signal_joined.call();
 		thread_->join();
 	} else {

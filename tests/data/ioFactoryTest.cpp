@@ -11,7 +11,10 @@
 // namespace test
 // {
 
-// BOOST_AUTO_TEST_CASE( io_factory_test )
+// BOOST_AUTO_TEST_CASE( io_factory_test )#
+void printPath( const std::string &path) {
+	std::cout << "PATH: " << path << std::endl;
+}
 int main()
 {
 	//  ENABLE_LOG( isis::glance::data::Debug, isis::util::DefaultMsgPrint, isis::verbose_info );
@@ -40,7 +43,10 @@ int main()
 	boost::timer timer;
 	timer.restart();
 
+	isis::glance::data::IOFactory::signal_start_loading_path.get().connect( &printPath );
+	
 	std::cout << isis::glance::data::IOFactory::load( paths ).size() << std::endl;
+	
 	std::cout << timer.elapsed() << " seconds" << std::endl;
 	return 0;
 }

@@ -51,14 +51,18 @@ public:
 	void join();
 	void yield();
 	void sleep( const size_t &milliseconds );
-	virtual void operator() () = 0;
+	virtual void operator() ();
 
+	virtual void run() = 0;
+	
 	boost::thread &get() { return *thread_; }
 	const boost::thread &get() const { return *thread_; }
 
 	bool isRunning() const { return running_; }
 
+	Signal<void ()> signal_created;
 	Signal<void ()> signal_started;
+	Signal<void ()> signal_finished;
 	Signal<void ()> signal_joined;
 	Signal<void ()> signal_interrupted;
 	Signal<void ()> signal_yielded;
@@ -70,6 +74,7 @@ private:
 	boost::shared_ptr< boost::thread > thread_;
 	bool running_;
 	std::string debugIdent_;
+	boost::mutex mutex_;
 };
 } // end namespace util
 } // end namespace glance

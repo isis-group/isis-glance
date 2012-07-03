@@ -33,23 +33,7 @@ namespace glance
 {
 namespace data
 {
-namespace _internal
-{
 
-LoadingThread::LoadingThread ( const isis::data::Image &image )
-	: image_( image )
-{}
-
-
-void LoadingThread::operator() ()
-{
-	LOG( Debug, verbose_info ) << "Starting loading thread " << get().get_id();
-	viewerImage.reset( new Image( image_ ) );
-	LOG( Debug, verbose_info ) << "Finished loading thread " << get().get_id();
-}
-
-
-}
 util::Signal<void ( const std::string & )> IOFactory::signal_start_loading_path;
 util::Signal<void ( const std::string & )> IOFactory::signal_path_does_not_exist;
 util::Signal<void ( const std::string & )> IOFactory::signal_failed_loading_from_path;
@@ -76,6 +60,8 @@ ImageVector IOFactory::_load ( const isis::util::slist &paths, const isis::util:
 			signal_path_does_not_exist.call( path );
 			LOG( Runtime, error ) << "Path " << path << " does not exist!.";
 		} else {
+			signal_start_loading_path.call(path);
+			//we have to do this consecutively cause IOFactory uses Singletons and so is not thread-safe
 			const std::list<isis::data::Image> images = isis::data::IOFactory::load( path, suffix_override, dialect );
 
 			if( images.size() == 0 ) {
@@ -87,17 +73,23 @@ ImageVector IOFactory::_load ( const isis::util::slist &paths, const isis::util:
 				BOOST_FOREACH( std::list<isis::data::Image>::const_reference image, images ) {
 					threadPtr.reset( new _internal::LoadingThread( image ) );
 					threadPtr->setDebugIdentification( path );
+					threadPtr->start();
 					loadingThreadList.push_back( threadPtr );
-					loadingThreadList.back()->start();
 				}
 			}
 		}
 	}
+	//make sure all threads get the chance to finish
 	BOOST_FOREACH( LoadingThreadListType::reference thread, loadingThreadList ) {
 		thread->join();
 	}
 	BOOST_FOREACH( LoadingThreadListType::const_reference thread, loadingThreadList ) {
-		retVec.push_back( thread->viewerImage );
+		if( thread->isRunning() ) {
+			LOG( Runtime, error ) << "Trying to get image from thread " << thread->get().get_id()
+				<< " but obviously this thread is still running.";
+		} else {
+			retVec.push_back( thread->viewerImage );
+		}
 	}
 	return retVec;
 
