@@ -16,17 +16,17 @@ void printPath( const isis::glance::data::Image &, const isis::glance::data::Ima
 {
 	std::cout << "PATH: " /*<< path*/ << std::endl;
 }
-int main(int argc, char** argv)
+int main( int argc, char **argv )
 {
 	//  ENABLE_LOG( isis::glance::data::Debug, isis::util::DefaultMsgPrint, isis::verbose_info );
 	ENABLE_LOG( isis::glance::util::Debug, isis::util::DefaultMsgPrint, isis::verbose_info );
 	ENABLE_LOG( isis::glance::data::Runtime, isis::util::DefaultMsgPrint, isis::verbose_info );
 
 	isis::util::slist paths;
-// 	paths.push_back( "/SCR/DATA/ana9_contrast1_s16bit.nii" );
-// 	paths.push_back( "/SCR/DATA/ana9_contrast1_u16bit.nii" );
-	paths.push_back(argv[1]);
-	
+	//  paths.push_back( "/SCR/DATA/ana9_contrast1_s16bit.nii" );
+	//  paths.push_back( "/SCR/DATA/ana9_contrast1_u16bit.nii" );
+	paths.push_back( argv[1] );
+
 	boost::timer timer;
 	timer.restart();
 

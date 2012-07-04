@@ -159,19 +159,22 @@ bool Image::synchronizeVoxelContentFrom ( isis::data::Image image )
 	volumes_.clear();
 	//since we want to have size[timeDim] volumes we have to splice the image
 	image.spliceDownTo( isis::data::timeDim );
-	if( !has_one_type || forceProposedDataType_) {
+
+	if( !has_one_type || forceProposedDataType_ ) {
 		LOG_IF( !has_one_type, Runtime, info ) << "Image " << file_path << " has more than one data type. Converting it to the major data type ("
-			<< isis::util::getTypeMap(false).at( type_ ) << ").";
+											   << isis::util::getTypeMap( false ).at( type_ ) << ").";
 		LOG_IF( forceProposedDataType_, Runtime, info ) << "Converting " << file_path << " to proposed data type "
-			<< isis::util::getTypeMap(false).at(type_);
-		if( !image.convertToType(type_) ) {
+				<< isis::util::getTypeMap( false ).at( type_ );
+
+		if( !image.convertToType( type_ ) ) {
 			LOG( Runtime, error ) << "Conversion of " << file_path << " to type "
-				<< isis::util::getTypeMap(false).at(type_) << " failed.";
+								  << isis::util::getTypeMap( false ).at( type_ ) << " failed.";
 			return false;
 		};
 	}
 
 	const size_t volume[] = { image_size[0], image_size[1], image_size[2] };
+
 	std::vector<isis::data::Chunk> chunks = image.copyChunksToVector( false );
 
 	if( chunks.size() == image_size[isis::data::timeDim] ) {
@@ -187,8 +190,9 @@ bool Image::synchronizeVoxelContentFrom ( isis::data::Image image )
 		if( chunks.size() ==  image_size[isis::data::timeDim] * image_size[isis::data::sliceDim] ) {
 			for( size_t timestep = 0; timestep < image_size[isis::data::timeDim]; timestep++ ) {
 				isis::data::Chunk chunk = chunks.front().cloneToNew( image_size[isis::data::rowDim],
-																	image_size[isis::data::columnDim],
-																	image_size[isis::data::sliceDim] );
+										  image_size[isis::data::columnDim],
+										  image_size[isis::data::sliceDim] );
+
 				for( size_t slice = 0; slice < image_size[isis::data::sliceDim]; slice++ ) {
 					const size_t index = slice + timestep * image_size[isis::data::sliceDim];
 					isis::data::Chunk &tmpChunk = chunks[index];
