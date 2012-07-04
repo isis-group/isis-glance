@@ -42,14 +42,14 @@ class Image : public ImageBase
 {
 public:
 	typedef util::SharredPointer<Image> SharredPointer;
-	
-	Image( const isis::data::Image &image );
+
 	/**
 	 * Creates an isis::glance::data::Image from an existing isis::data::Image.
-	 * \param image The isis::data::Image
-	 * \param force_typed_image If true the isis::glance::data::Image will ensure to have volumes of consistent data type.
+	 * If you wish the isis::glance::data::Image to have a certain data type you
+	 * can use setProposedDataType and setUseProposedDataType to specify this type.
+	 * \param image Ths isis::data::Image
 	 */
-	Image( const isis::data::Image &image, bool force_typed_image );
+	Image( const isis::data::Image &image );
 
 	/**
 	 * Creates an isis::glance::data::Image from an existing isis::data::Image with specified type.
@@ -80,7 +80,7 @@ public:
 	 * \param type The data type used to synchronize.
 	 * \note This method also calls the setForceTypedImage( true ).
 	 */
-	void setDataType( const types::ImageDataType &type ) { type_ = type; forceTypedImage_ = true; }
+	void setDataType( const types::ImageDataType &type ) { type_ = type; }
 
 	types::ImageDataType getDataType() const { return type_; }
 
@@ -91,7 +91,6 @@ public:
 	 * data type was specified or the data type specified by one of the respective functions.
 	 * \param force Specifies if the image should ensure consistent data type.
 	 */
-	static void setForceTypedImage( const bool &force ) { forceTypedImage_ = force; }
 
 	static void setUseProposedDataType( const bool &use_proposed ) { forceProposedDataType_ = use_proposed; }
 	static void setProposedDataType( const Image::ImageTypeGroup &type_group, const types::ImageDataType &data_type );
@@ -108,7 +107,6 @@ private:
 	//we need to hold these properties for future calls of synchronize and synchronizeFrom
 	types::ImageDataType type_;
 
-	static bool forceTypedImage_;
 	static bool forceProposedDataType_;
 	static types::ImageDataType proposedScalar_;
 	static types::ImageDataType proposedComplex_;

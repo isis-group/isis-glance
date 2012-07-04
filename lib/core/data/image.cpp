@@ -37,7 +37,6 @@ namespace glance
 namespace data
 {
 
-bool Image::forceTypedImage_ = false;
 bool Image::forceProposedDataType_ = false;
 
 util::Signal<void( const Image &, const types::ImageDataType & )> Image::signal_conversion_begin;
@@ -54,8 +53,6 @@ Image::Image ( const isis::data::Image &image )
 	  type_( major_type )
 {
 	if( forceProposedDataType_ ) {
-		forceTypedImage_ = true;
-
 		switch( type_group ) {
 		case SCALAR:
 			type_ = proposedScalar_;
@@ -81,24 +78,10 @@ Image::Image ( const isis::data::Image &image )
 }
 
 
-Image::Image ( const isis::data::Image &image, bool force_typed_image )
-	: ImageBase( image ),
-	  type_( major_type )
-{
-	forceTypedImage_ = force_typed_image;
-	is_valid = synchronizeVoxelContentFrom( image );
-
-	if( !is_valid ) {
-		LOG( Runtime, error ) << "Creating of isis::glance::Image from "
-							  << file_path << " failed!";
-	}
-}
-
 Image::Image ( const isis::data::Image &image, const types::ImageDataType &type )
 	: ImageBase ( image ),
 	  type_( type )
 {
-	forceTypedImage_ = true;
 	is_valid = synchronizeVoxelContentFrom( image );
 
 	if( !is_valid ) {
@@ -176,9 +159,16 @@ bool Image::synchronizeVoxelContentFrom ( isis::data::Image image )
 	volumes_.clear();
 	//since we want to have size[timeDim] volumes we have to splice the image
 	image.spliceDownTo( isis::data::timeDim );
+	if( !has_one_type ) {
+		LOG( Runtime, info ) << "Image " << file_path << " has more than one data type. Converting it to the major data type.";
+		if( !image.convertToType(type_) ) {
+			LOG( Runtime, error ) << "Conversion of " << file_path << " to type "
+				<< isis::util::getTypeMap(false).at(type_) << " failed.";
+			return false;
+		};
+	}
 
 	const size_t volume[] = { image_size[0], image_size[1], image_size[2] };
-
 	std::vector<isis::data::Chunk> chunks = image.copyChunksToVector( false );
 
 	if( chunks.size() == image_size[isis::data::timeDim] ) {
@@ -194,11 +184,12 @@ bool Image::synchronizeVoxelContentFrom ( isis::data::Image image )
 		if( chunks.size() ==  image_size[isis::data::timeDim] * image_size[isis::data::sliceDim] ) {
 			for( size_t timestep = 0; timestep < image_size[isis::data::timeDim]; timestep++ ) {
 				isis::data::Chunk chunk = chunks.front().cloneToNew( image_size[isis::data::rowDim],
-										  image_size[isis::data::columnDim],
-										  image_size[isis::data::sliceDim] );
-
+																	image_size[isis::data::columnDim],
+																	image_size[isis::data::sliceDim] );
 				for( size_t slice = 0; slice < image_size[isis::data::sliceDim]; slice++ ) {
-					chunks[slice + timestep * image_size[isis::data::sliceDim]].copySlice( 0, 0, chunk, slice, 0 );
+					const size_t index = slice + timestep * image_size[isis::data::sliceDim];
+					isis::data::Chunk &tmpChunk = chunks[index];
+					tmpChunk.copySlice( 0, 0, chunk, slice, 0 );
 				}
 
 				volumes_.push_back( VolumeType( chunk.asValueArrayBase(), volume ) );
@@ -208,10 +199,6 @@ bool Image::synchronizeVoxelContentFrom ( isis::data::Image image )
 											  << "This is not supported yet!";
 			return false;
 		}
-	}
-
-	if( forceTypedImage_ ) {
-		convertVolumesByType( type_ );
 	}
 
 	return volumes_.size() == image_size[isis::data::timeDim];
