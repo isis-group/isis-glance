@@ -42,7 +42,7 @@ bool ImageContainer::addImage ( const ImageSharedPointer &image )
 {
 	if ( !hasImage( image ) || allow_multiple_ ) {
 		push_back( image );
-		signal_image_added( this, image );
+		signal_image_added( *this, image );
 		return true;
 	} else {
 		LOG( data::Runtime, warning ) << "Trying to add already existing image with file_path: "
@@ -68,7 +68,7 @@ bool ImageContainer::removeImage ( const ImageSharedPointer &image )
 		return false;
 	} else {
 		erase( iter );
-		signal_image_removed( this, image );
+		signal_image_removed( *this, image );
 		return true;
 	}
 }

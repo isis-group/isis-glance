@@ -41,7 +41,8 @@ namespace data
 class Image : public ImageBase
 {
 public:
-
+	typedef util::SharredPointer<Image> SharredPointer;
+	
 	Image( const isis::data::Image &image );
 	/**
 	 * Creates an isis::glance::data::Image from an existing isis::data::Image.
