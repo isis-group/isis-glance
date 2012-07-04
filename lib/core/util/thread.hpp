@@ -54,7 +54,7 @@ public:
 	virtual void operator() ();
 
 	virtual void run() = 0;
-	
+
 	boost::thread &get() { return *thread_; }
 	const boost::thread &get() const { return *thread_; }
 

@@ -95,10 +95,10 @@ public:
 	static void setUseProposedDataType( const bool &use_proposed ) { forceProposedDataType_ = use_proposed; }
 	static void setProposedDataType( const Image::ImageTypeGroup &type_group, const types::ImageDataType &data_type );
 
-// 	//signals
-	static util::Signal<void( const Image &, const types::ImageDataType &)> signal_conversion_begin;
-	static util::Signal<void( const Image &, const types::ImageDataType &)> signal_conversion_end;
-	static util::Signal<void( const Image &, const ImageContentType &)> signal_content_changed;
+	//  //signals
+	static util::Signal<void( const Image &, const types::ImageDataType & )> signal_conversion_begin;
+	static util::Signal<void( const Image &, const types::ImageDataType & )> signal_conversion_end;
+	static util::Signal<void( const Image &, const ImageContentType & )> signal_content_changed;
 
 protected:
 	bool synchronizeVoxelContentFrom( isis::data::Image image );

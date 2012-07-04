@@ -60,7 +60,7 @@ ImageVector IOFactory::_load ( const isis::util::slist &paths, const isis::util:
 			signal_path_does_not_exist.call( path );
 			LOG( Runtime, error ) << "Path " << path << " does not exist!.";
 		} else {
-			signal_start_loading_path.call(path);
+			signal_start_loading_path.call( path );
 			//we have to do this consecutively cause IOFactory uses Singletons and so is not thread-safe
 			std::list<isis::data::Image> images = isis::data::IOFactory::load( path, suffix_override, dialect );
 
@@ -72,7 +72,7 @@ ImageVector IOFactory::_load ( const isis::util::slist &paths, const isis::util:
 				boost::shared_ptr<_internal::LoadingThread> threadPtr;
 				BOOST_FOREACH( std::list<isis::data::Image>::reference image, images ) {
 					//setting the file_path so we can use that later
-					image.setPropertyAs<std::string>("file_path", path );
+					image.setPropertyAs<std::string>( "file_path", path );
 					threadPtr.reset( new _internal::LoadingThread( image ) );
 					threadPtr->setDebugIdentification( path );
 					threadPtr->start();
@@ -88,7 +88,7 @@ ImageVector IOFactory::_load ( const isis::util::slist &paths, const isis::util:
 	BOOST_FOREACH( LoadingThreadListType::const_reference thread, loadingThreadList ) {
 		if( thread->isRunning() ) {
 			LOG( Runtime, error ) << "Trying to get image from thread " << thread->get().get_id()
-				<< " but obviously this thread is still running.";
+								  << " but obviously this thread is still running.";
 		} else {
 			retVec.push_back( thread->viewerImage );
 		}

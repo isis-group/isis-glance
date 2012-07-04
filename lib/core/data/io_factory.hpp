@@ -50,12 +50,12 @@ class LoadingThread : public isis::glance::util::Thread
 {
 public:
 	LoadingThread( const isis::data::Image &image  ) : image_( image ) {};
-	void run()	{
+	void run()  {
 		LOG( Debug, verbose_info ) << "Start loading thread " << get().get_id();
 		viewerImage.reset( new Image( image_ ) );
 		LOG( Debug, verbose_info ) << "Finished loading thread " << get().get_id();
 	};
-	
+
 	ImageSharedPointer viewerImage;
 private:
 	isis::data::Image image_;
@@ -71,7 +71,7 @@ class IOFactory
 public:
 
 	/**
-	 *	Load images from a list of paths and pass them to the image container.
+	 *  Load images from a list of paths and pass them to the image container.
 	 * \param container The container where the images should be passed to.
 	 * \param paths A list of paths where the images should be loaded from. Is handed to the isis::data::IOFactory::load function.
 	 * \param suffix_override This parameter is handed to the isis::data::IOFactory::load function.
@@ -81,14 +81,14 @@ public:
 	static bool load( ImageContainer &container, const isis::util::slist &paths, const isis::util::istring &suffix_override = "", const isis::util::istring &dialect = "" );
 
 	/**
-	 *	Load and return a list of images from a list of paths.
+	 *  Load and return a list of images from a list of paths.
 	 * \param paths A list of paths where the images should be loaded from. Is handed to the isis::data::IOFactory::load function.
 	 * \param suffix_override This parameter is handed to the isis::data::IOFactory::load function.
 	 * \param dialect This parameter is handed to the isis::data::IOFactory::load function.
 	 */
 	static ImageVector load( const isis::util::slist &paths, const isis::util::istring &suffix_override = "", const isis::util::istring &dialect = "" );
 
-	static void setForceTypedImage( const bool &force ) { isis::glance::data::Image::setForceTypedImage(force); }
+	static void setForceTypedImage( const bool &force ) { isis::glance::data::Image::setForceTypedImage( force ); }
 	static void setUseProposedDataType( const bool &use_proposed ) { isis::glance::data::Image::setUseProposedDataType( use_proposed ); }
 	static void setProposedDataType( const Image::ImageTypeGroup &type_group, const types::ImageDataType &data_type ) {
 		isis::glance::data::Image::setProposedDataType( type_group, data_type );

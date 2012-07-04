@@ -60,6 +60,7 @@ void Thread::start()
 	if( debugIdent_.empty() ) {
 		debugIdent_ = boost::lexical_cast< std::string, boost::thread::id>( thread_->get_id() );
 	}
+
 	mutex_.lock();
 	LOG( Debug, verbose_info ) << "Created thread " << debugIdent_;
 	mutex_.unlock();
