@@ -88,6 +88,12 @@ public:
 	 */
 	static ImageVector load( const isis::util::slist &paths, const isis::util::istring &suffix_override = "", const isis::util::istring &dialect = "" );
 
+	static void setForceTypedImage( const bool &force ) { isis::glance::data::Image::setForceTypedImage(force); }
+	static void setUseProposedDataType( const bool &use_proposed ) { isis::glance::data::Image::setUseProposedDataType( use_proposed ); }
+	static void setProposedDataType( const Image::ImageTypeGroup &type_group, const types::ImageDataType &data_type ) {
+		isis::glance::data::Image::setProposedDataType( type_group, data_type );
+	}
+
 	//signals
 	///This signal is called when starting to load a path
 	static util::Signal<void ( const std::string & )> signal_start_loading_path;

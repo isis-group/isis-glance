@@ -62,7 +62,7 @@ ImageVector IOFactory::_load ( const isis::util::slist &paths, const isis::util:
 		} else {
 			signal_start_loading_path.call(path);
 			//we have to do this consecutively cause IOFactory uses Singletons and so is not thread-safe
-			const std::list<isis::data::Image> images = isis::data::IOFactory::load( path, suffix_override, dialect );
+			std::list<isis::data::Image> images = isis::data::IOFactory::load( path, suffix_override, dialect );
 
 			if( images.size() == 0 ) {
 				signal_failed_loading_from_path.call( path );
@@ -70,7 +70,9 @@ ImageVector IOFactory::_load ( const isis::util::slist &paths, const isis::util:
 			} else {
 				signal_loaded_n_images_from_path.call( images.size(), path );
 				boost::shared_ptr<_internal::LoadingThread> threadPtr;
-				BOOST_FOREACH( std::list<isis::data::Image>::const_reference image, images ) {
+				BOOST_FOREACH( std::list<isis::data::Image>::reference image, images ) {
+					//setting the file_path so we can use that later
+					image.setPropertyAs<std::string>("file_path", path );
 					threadPtr.reset( new _internal::LoadingThread( image ) );
 					threadPtr->setDebugIdentification( path );
 					threadPtr->start();
