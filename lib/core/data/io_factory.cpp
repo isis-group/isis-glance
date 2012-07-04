@@ -57,18 +57,18 @@ ImageVector IOFactory::_load ( const isis::util::slist &paths, const isis::util:
 		const boost::filesystem::path p( path );
 
 		if( !boost::filesystem::exists( p ) ) {
-			signal_path_does_not_exist.call( path );
+			signal_path_does_not_exist( path );
 			LOG( Runtime, error ) << "Path " << path << " does not exist!.";
 		} else {
-			signal_start_loading_path.call( path );
+			signal_start_loading_path( path );
 			//we have to do this consecutively cause IOFactory uses Singletons and so is not thread-safe
 			std::list<isis::data::Image> images = isis::data::IOFactory::load( path, suffix_override, dialect );
 
 			if( images.size() == 0 ) {
-				signal_failed_loading_from_path.call( path );
+				signal_failed_loading_from_path( path );
 				//we do not need error messages here because isis will send them
 			} else {
-				signal_loaded_n_images_from_path.call( images.size(), path );
+				signal_loaded_n_images_from_path( images.size(), path );
 				boost::shared_ptr<_internal::LoadingThread> threadPtr;
 				BOOST_FOREACH( std::list<isis::data::Image>::reference image, images ) {
 					//setting the file_path so we can use that later

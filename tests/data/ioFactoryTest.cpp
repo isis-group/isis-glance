@@ -12,7 +12,7 @@
 // {
 
 // BOOST_AUTO_TEST_CASE( io_factory_test )#
-void printPath( const isis::glance::util::SharredPointer<isis::glance::data::Image> &, const isis::glance::data::Image::ImageContentType & )
+void printPath( const isis::glance::data::Image &, const isis::glance::data::Image::ImageContentType & )
 {
 	std::cout << "PATH: " /*<< path*/ << std::endl;
 }
@@ -30,7 +30,7 @@ int main(int argc, char** argv)
 	boost::timer timer;
 	timer.restart();
 
-	//  isis::glance::data::Image::signal_content_changed.get().connect( &printPath );
+	isis::glance::data::Image::signal_content_changed.get().connect( &printPath );
 	isis::glance::data::IOFactory::setUseProposedDataType( true );
 	isis::glance::data::IOFactory::setProposedDataType( isis::glance::data::ImageDataProperties::SCALAR, isis::glance::data::types::BOOL );
 	isis::glance::data::ImageVector images = isis::glance::data::IOFactory::load( paths );

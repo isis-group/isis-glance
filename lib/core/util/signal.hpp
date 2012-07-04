@@ -45,22 +45,22 @@ class Signal
 public:
 	Signal() : signal_( boost::shared_ptr<boost::signals2::signal<SIGNATURE> >( new boost::signals2::signal<SIGNATURE> ) ) {}
 
-	void call() { ( *signal_ )(); }
+	void operator()() { ( *signal_ )(); }
 
 	template<typename TYPE>
-	void call( const TYPE &arg1 ) { ( *signal_ )( arg1 ); }
+	void operator()( const TYPE &arg1 ) { ( *signal_ )( arg1 ); }
 
 	template<typename TYPE1, typename TYPE2>
-	void call( const TYPE1 &arg1, const TYPE2 &arg2 ) { ( *signal_ )( arg1, arg2 ); }
+	void operator()( const TYPE1 &arg1, const TYPE2 &arg2 ) { ( *signal_ )( arg1, arg2 ); }
 
 	template<typename TYPE1, typename TYPE2, typename TYPE3>
-	void call( const TYPE1 &arg1, const TYPE2 &arg2, const TYPE3 &arg3 ) { ( *signal_ )( arg1, arg2, arg3 ); }
+	void operator()( const TYPE1 &arg1, const TYPE2 &arg2, const TYPE3 &arg3 ) { ( *signal_ )( arg1, arg2, arg3 ); }
 
 	template<typename TYPE1, typename TYPE2, typename TYPE3, typename TYPE4>
-	void call( const TYPE1 &arg1, const TYPE2 &arg2, const TYPE3 &arg3, const TYPE4 &arg4 ) { ( *signal_ )( arg1, arg2, arg3, arg4 ); }
+	void operator()( const TYPE1 &arg1, const TYPE2 &arg2, const TYPE3 &arg3, const TYPE4 &arg4 ) { ( *signal_ )( arg1, arg2, arg3, arg4 ); }
 
 	template<typename TYPE1, typename TYPE2, typename TYPE3, typename TYPE4, typename TYPE5>
-	void call( const TYPE1 &arg1, const TYPE2 &arg2, const TYPE3 &arg3, const TYPE4 &arg4, const TYPE5 &arg5 ) { ( *signal_ )( arg1, arg2, arg3, arg4, arg5 ); }
+	void operator()( const TYPE1 &arg1, const TYPE2 &arg2, const TYPE3 &arg3, const TYPE4 &arg4, const TYPE5 &arg5 ) { ( *signal_ )( arg1, arg2, arg3, arg4, arg5 ); }
 
 	const boost::signals2::signal< SIGNATURE > &get() const { return *signal_; }
 	boost::signals2::signal< SIGNATURE > &get() { return *signal_; }

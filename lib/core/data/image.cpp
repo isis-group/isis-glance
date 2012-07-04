@@ -41,7 +41,7 @@ bool Image::forceProposedDataType_ = false;
 
 util::Signal<void( const Image &, const types::ImageDataType & )> Image::signal_conversion_begin;
 util::Signal<void( const Image &, const types::ImageDataType & )> Image::signal_conversion_end;
-util::Signal<void( const Image &, const ImageBase::ImageContentType & )> Image::signal_content_changed;
+util::Signal<void( const Image &, const Image::ImageContentType & )> Image::signal_content_changed;
 
 types::ImageDataType Image::proposedScalar_ = types::SCALAR_PROPOSED;
 types::ImageDataType Image::proposedColor_ = types::COLOR_PROPOSED;
@@ -112,7 +112,7 @@ void Image::setProposedDataType ( const ImageDataProperties::ImageTypeGroup &typ
 
 void Image::convertVolumesByType ( const types::ImageDataType &type )
 {
-	signal_conversion_begin.call( *this, type );
+	signal_conversion_begin( *this, type );
 	LOG( Runtime, info ) << "Converting image " << file_path << " to type "
 						 << isis::util::getTypeMap( false ).at( type );
 	VolumesType buffer;
@@ -122,7 +122,7 @@ void Image::convertVolumesByType ( const types::ImageDataType &type )
 	}
 	assert( buffer.size() == volumes_.size() );
 	volumes_ = buffer;
-	signal_conversion_end.call( *this, type );
+	signal_conversion_end( *this, type );
 }
 
 
@@ -148,7 +148,7 @@ bool Image::synchronizeFrom ( const isis::data::Image &image, const ImageBase::I
 
 	//send signal if synchronization was successful
 	if( ok ) {
-		signal_content_changed.call( *this, content );
+		signal_content_changed( *this, content );
 	}
 
 	return ok;
@@ -159,8 +159,11 @@ bool Image::synchronizeVoxelContentFrom ( isis::data::Image image )
 	volumes_.clear();
 	//since we want to have size[timeDim] volumes we have to splice the image
 	image.spliceDownTo( isis::data::timeDim );
-	if( !has_one_type ) {
-		LOG( Runtime, info ) << "Image " << file_path << " has more than one data type. Converting it to the major data type.";
+	if( !has_one_type || forceProposedDataType_) {
+		LOG_IF( !has_one_type, Runtime, info ) << "Image " << file_path << " has more than one data type. Converting it to the major data type ("
+			<< isis::util::getTypeMap(false).at( type_ ) << ").";
+		LOG_IF( forceProposedDataType_, Runtime, info ) << "Converting " << file_path << " to proposed data type "
+			<< isis::util::getTypeMap(false).at(type_);
 		if( !image.convertToType(type_) ) {
 			LOG( Runtime, error ) << "Conversion of " << file_path << " to type "
 				<< isis::util::getTypeMap(false).at(type_) << " failed.";

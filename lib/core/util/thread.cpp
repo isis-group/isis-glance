@@ -54,7 +54,7 @@ Thread::~Thread()
 
 void Thread::start()
 {
-	signal_created.call();
+	signal_created();
 	thread_.reset( new boost::thread( boost::ref( *this ) ) );
 
 	if( debugIdent_.empty() ) {
@@ -68,13 +68,13 @@ void Thread::start()
 
 void Thread::operator() ()
 {
-	signal_started.call();
+	signal_started();
 	mutex_.lock();
 	LOG( Debug, verbose_info ) << "Started thread " << debugIdent_;
 	mutex_.unlock();
 	running_ = true;
 	run();
-	signal_finished.call();
+	signal_finished();
 	mutex_.lock();
 	LOG( Debug, verbose_info ) << "Finished thread" << debugIdent_;
 	mutex_.unlock();
@@ -86,7 +86,7 @@ void Thread::interrupt()
 {
 	if( thread_ ) {
 		LOG( Debug, verbose_info ) << "Interrupting thread " << debugIdent_;
-		signal_interrupted.call();
+		signal_interrupted();
 		thread_->interrupt();
 	} else {
 		LOG( Runtime, warning ) << "Trying to interrupt a thread that has not been started!";
@@ -98,7 +98,7 @@ void Thread::join()
 		mutex_.lock();
 		LOG( Debug, verbose_info ) << "Joining thread " << debugIdent_;
 		mutex_.unlock();
-		signal_joined.call();
+		signal_joined();
 		thread_->join();
 	} else {
 		LOG( Runtime, warning ) << "Trying to join a thread that has not been started!";
@@ -108,7 +108,7 @@ void Thread::join()
 void Thread::yield()
 {
 	if( thread_ ) {
-		signal_yielded.call();
+		signal_yielded();
 		boost::this_thread::yield();
 	} else {
 		LOG( Runtime, warning ) << "Trying to yield a thread hat has not been started!";
@@ -121,7 +121,7 @@ void Thread::sleep ( const size_t &milliseconds )
 	if( thread_ ) {
 		LOG( Debug, verbose_info ) << "Sending thread " << debugIdent_
 								   << " to sleep for " << milliseconds << " ms";
-		signal_sleep.call( milliseconds );
+		signal_sleep( milliseconds );
 		boost::this_thread::sleep ( boost::posix_time::millisec( milliseconds ) );
 	} else {
 		LOG( Runtime, warning ) << "Trying to make a thread sleeping that has not been started!";
