@@ -18,49 +18,38 @@
  *
  * Author: Erik Tuerke, etuerke@googlemail.com
  *
- * widget_base.hpp
+ * plugin_interface_base.hpp
  *
  * Description:
  *
- *  Created on: Jun 7, 2012
+ *  Created on: Jul 5, 2012
  *      Author: tuerke
  ******************************************************************/
-#ifndef _ISIS_GLANCE_WIDGET_BASE_HPP
-#define _ISIS_GLANCE_WIDGET_BASE_HPP
+#ifndef _ISIS_GLANCE_PLUGIN_INTERFACE_BASE_HPP
+#define _ISIS_GLANCE_PLUGIN_INTERFACE_BASE_HPP
 
-#include "data/image_container.hpp"
-#include "plugin_interface_base.hpp"
+#include <string>
+#include "generic_plugin_loader.hpp"
 
-namespace isis
-{
-namespace glance
-{
-namespace widget
-{
+namespace isis {
+namespace glance {
+namespace plugin {
 
-struct NoBaseWidget {};
-
-/**
-* Abstract base class for widgets.
-*/
-
-template < class BASE = NoBaseWidget >
-class WidgetBase :
-	public plugin::PluginInterfaceBase,
-	public BASE,
-	public isis::glance::data::ImageContainer
-{
+class PluginInterfaceBase {
+	
 public:
-
-protected:
-	WidgetBase( BASE *parent ) : BASE( parent ) {}
-
-
+	const std::string &getPluginPath() const { return pluginPath_; }
+	const std::string &getPluginFile() const { return pluginFile_; }
+	
+	void setPluginPath( const std::string pluginPath ) { pluginPath_ = pluginPath; }
+	void setPluginFile( const std::string pluginFile ) { pluginFile_ = pluginFile; }
+private:
+	std::string pluginPath_;
+	std::string pluginFile_;
 };
 
-} // end namespace widget
+} // end namespace plugin
 } // end namespace glance
-} // end namespace isis
+} // end namespace plugin
 
-
-#endif //_ISIS_GLANCE_WIDGET_BASE_HPP
+#endif // _ISIS_GLANCE_PLUGIN_INTERFACE_BASE_HPP

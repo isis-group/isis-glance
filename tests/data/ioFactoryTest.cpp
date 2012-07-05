@@ -3,7 +3,8 @@
 // #include <boost/test/unit_test.hpp>
 
 #include "data/io_factory.hpp"
-
+#include "util/generic_plugin_loader.hpp"
+#include "util/widget_base.hpp"
 // namespace isis
 // {
 // namespace glance
@@ -30,13 +31,20 @@ int main( int argc, char **argv )
 	boost::timer timer;
 	timer.restart();
 
-	isis::glance::data::Image::signal_content_changed.get().connect( &printPath );
-	isis::glance::data::IOFactory::setUseProposedDataType( true );
-	isis::glance::data::IOFactory::setProposedDataType( isis::glance::data::ImageDataProperties::SCALAR, isis::glance::data::types::BOOL );
-	isis::glance::data::ImageVector images = isis::glance::data::IOFactory::load( paths );
-
-	images.front()->synchronize( isis::glance::data::ImageBase::ALL );
-	std::cout << timer.elapsed() << " seconds" << std::endl;
+	typedef isis::glance::widget::WidgetBase<> T;
+	
+	isis::glance::util::GenericPluginLoader<T>::addPluginSearchPath("/tmp");
+	isis::glance::util::GenericPluginLoader<T>::setPluginSubSearchPath("isis/bin");
+	isis::glance::util::GenericPluginLoader<T>::setPluginSearchPattern("^libvastPlugin[[:word:]]+.so$");
+	
+	isis::glance::util::GenericPluginLoader<T> pl = isis::glance::util::GenericPluginLoader<T>::get();
+// 	isis::glance::data::Image::signal_content_changed.get().connect( &printPath );
+// 	isis::glance::data::IOFactory::setUseProposedDataType( true );
+// 	isis::glance::data::IOFactory::setProposedDataType( isis::glance::data::ImageDataProperties::SCALAR, isis::glance::data::types::BOOL );
+// 	isis::glance::data::ImageVector images = isis::glance::data::IOFactory::load( paths );
+// 
+// 	images.front()->synchronize( isis::glance::data::ImageBase::ALL );
+// 	std::cout << timer.elapsed() << " seconds" << std::endl;
 	return 0;
 }
 // }
