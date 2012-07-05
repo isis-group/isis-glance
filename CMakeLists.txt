@@ -155,7 +155,7 @@ find_package(ISIS REQUIRED)
 ###########################################################
 # since ISIS-Glance stongly depends on the boost libraries we will configure them
 # globally.
-find_package(Boost REQUIRED COMPONENTS thread)
+find_package(Boost REQUIRED COMPONENTS thread system filesystem regex)
 
 include_directories(${ISIS_INCLUDE_DIRS} ${Boost_INCLUDE_DIR})
 
