@@ -17,7 +17,7 @@ void printPath( const isis::glance::data::Image &, const isis::glance::data::Ima
 {
 	std::cout << "PATH: " /*<< path*/ << std::endl;
 }
-int main( int argc, char **argv )
+int main( int /*argc*/, char **argv )
 {
 	//  ENABLE_LOG( isis::glance::data::Debug, isis::util::DefaultMsgPrint, isis::verbose_info );
 	ENABLE_LOG( isis::glance::util::Debug, isis::util::DefaultMsgPrint, isis::verbose_info );

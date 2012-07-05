@@ -61,7 +61,7 @@ template<typename Interface> std::string GenericPluginLoader<Interface>::pluginL
 template<typename Interface> std::string GenericPluginLoader<Interface>::subSearchPath_;
 
 template<typename Interface> isis::glance::util::Signal<void( const Interface* )> GenericPluginLoader<Interface>::signal_plugin_registered;
-template<typename Interface> isis::glance::util::Signal<void( const Interface* )> GenericPluginLoader<Interface>::signal_plugin_registering_failed;
+template<typename Interface> isis::glance::util::Signal<void( const std::string& )> GenericPluginLoader<Interface>::signal_plugin_registering_failed;
 template<typename Interface> isis::glance::util::Signal<void( const std::string& )> GenericPluginLoader<Interface>::signal_scanning_path;
 template<typename Interface> isis::glance::util::Signal<void()> GenericPluginLoader<Interface>::signal_no_search_path;
 
@@ -146,7 +146,7 @@ GenericPluginLoader<Interface>::findPlugins() {
 								ret++;
 								signal_plugin_registered( plugin_class.get() );
 							} else {
-								signal_plugin_registering_failed( plugin_class.get() );
+								signal_plugin_registering_failed( pluginName );
 								LOG( Runtime, warning ) << "Failed to register plugin " << isis::util::MSubject( pluginName );
 							}
 						} else {

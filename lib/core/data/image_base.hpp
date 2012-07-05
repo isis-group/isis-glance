@@ -38,7 +38,7 @@
 
 #include "image_state.hpp"
 #include "image_properties.hpp"
-#include "data_container.hpp"
+#include "volume.hpp"
 #include "types.hpp"
 #include "util/common.hpp"
 
@@ -55,18 +55,17 @@ class ImageBase
   public ImageMetaProperties
 {
 public:
-	typedef DataContainer<3> VolumeType;
-	typedef std::vector<VolumeType> VolumesType;
+	typedef std::vector<Volume> VolumesType;
 
 	enum ImageContentType { VOXELS, PROPERTIES_DATA, PROPERTIES_META, STATE, ALL };
 
 	///Returns the underlying isis image.
 	const isis::data::Image &get() const { return *isis_image_; }
 
-	VolumeType &operator[]( VolumesType::size_type const &index ) {
+	Volume &operator[]( VolumesType::size_type const &index ) {
 		return volumes_[index];
 	}
-	const VolumeType &operator[]( VolumesType::size_type const &index ) const {
+	const Volume &operator[]( VolumesType::size_type const &index ) const {
 		return volumes_[index];
 	}
 

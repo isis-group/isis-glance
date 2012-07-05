@@ -71,7 +71,7 @@ public:
 	
 	//signals
 	static isis::glance::util::Signal<void ( const Interface *)> signal_plugin_registered;
-	static isis::glance::util::Signal<void ( const Interface *)> signal_plugin_registering_failed;
+	static isis::glance::util::Signal<void ( const std::string &)> signal_plugin_registering_failed;
 	static isis::glance::util::Signal<void ( const std::string &)> signal_scanning_path;
 	static isis::glance::util::Signal<void()> signal_no_search_path;
 

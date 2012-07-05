@@ -118,7 +118,7 @@ void Image::convertVolumesByType ( const types::ImageDataType &type )
 	VolumesType buffer;
 	const size_t volume_size[] = { image_size[0], image_size[1], image_size[2] };
 	BOOST_FOREACH( VolumesType::reference volume, volumes_ ) {
-		buffer.push_back( VolumeType( volume->convertByID( type ), volume_size ) );
+		buffer.push_back( Volume( volume->convertByID( type ), volume_size ) );
 	}
 	assert( buffer.size() == volumes_.size() );
 	volumes_ = buffer;
@@ -179,7 +179,7 @@ bool Image::synchronizeVoxelContentFrom ( isis::data::Image image )
 
 	if( chunks.size() == image_size[isis::data::timeDim] ) {
 		BOOST_FOREACH( std::vector<isis::data::Chunk>::reference chunk, chunks ) {
-			volumes_.push_back( VolumeType( chunk.asValueArrayBase(), volume ) );
+			volumes_.push_back( Volume( chunk.asValueArrayBase(), volume ) );
 		}
 	} else {
 		LOG( data::Runtime, isis::info ) << "The number of chunks (" << chunks.size()
@@ -199,7 +199,7 @@ bool Image::synchronizeVoxelContentFrom ( isis::data::Image image )
 					tmpChunk.copySlice( 0, 0, chunk, slice, 0 );
 				}
 
-				volumes_.push_back( VolumeType( chunk.asValueArrayBase(), volume ) );
+				volumes_.push_back( Volume( chunk.asValueArrayBase(), volume ) );
 			}
 		} else {
 			LOG( data::Runtime, isis::error ) << "Image " << file_path << " is spliced below sliceDim. "
