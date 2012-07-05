@@ -30,9 +30,12 @@
 
 #include <dlfcn.h>
 
-namespace isis {
-namespace glance {
-namespace util {
+namespace isis
+{
+namespace glance
+{
+namespace util
+{
 namespace _internal
 {
 template<typename Interface>
@@ -60,19 +63,21 @@ template<typename Interface> bool GenericPluginLoader<Interface>::pluginSearchPa
 template<typename Interface> std::string GenericPluginLoader<Interface>::pluginLoadingFunctionName_ = "loadPlugin";
 template<typename Interface> std::string GenericPluginLoader<Interface>::subSearchPath_;
 
-template<typename Interface> isis::glance::util::Signal<void( const Interface* )> GenericPluginLoader<Interface>::signal_plugin_registered;
-template<typename Interface> isis::glance::util::Signal<void( const std::string& )> GenericPluginLoader<Interface>::signal_plugin_registering_failed;
-template<typename Interface> isis::glance::util::Signal<void( const std::string& )> GenericPluginLoader<Interface>::signal_scanning_path;
+template<typename Interface> isis::glance::util::Signal<void( const Interface * )> GenericPluginLoader<Interface>::signal_plugin_registered;
+template<typename Interface> isis::glance::util::Signal<void( const std::string & )> GenericPluginLoader<Interface>::signal_plugin_registering_failed;
+template<typename Interface> isis::glance::util::Signal<void( const std::string & )> GenericPluginLoader<Interface>::signal_scanning_path;
 template<typename Interface> isis::glance::util::Signal<void()> GenericPluginLoader<Interface>::signal_no_search_path;
 
 template<typename Interface>
 GenericPluginLoader<Interface>::GenericPluginLoader()
 {
 	//use this as standard plugin search path
-	const char* homeSearchPath = getenv("HOME");
+	const char *homeSearchPath = getenv( "HOME" );
+
 	if( homeSearchPath ) {
 		addPluginSearchPath( homeSearchPath );
 	}
+
 	if( pluginSearchPatternIsSet_ ) {
 		findPlugins();
 	} else {
@@ -82,19 +87,21 @@ GenericPluginLoader<Interface>::GenericPluginLoader()
 
 template<typename Interface>
 bool
-GenericPluginLoader<Interface>::registerPlugin( const PluginInterfacePointerType plugin ) {
+GenericPluginLoader<Interface>::registerPlugin( const PluginInterfacePointerType plugin )
+{
 	if( !plugin ) {
 		return false;
 	} else {
 		pluginList_.push_back( plugin );
 		return true;
 	}
-		
+
 }
 
 template<typename Interface>
 unsigned int
-GenericPluginLoader<Interface>::findPlugins() {
+GenericPluginLoader<Interface>::findPlugins()
+{
 	unsigned int ret = 0;
 	bool pathOk;
 
@@ -102,11 +109,12 @@ GenericPluginLoader<Interface>::findPlugins() {
 		LOG( Runtime, warning ) << "No pluginpath to search for.";
 		signal_no_search_path();
 	}
-	
+
 	BOOST_FOREACH( PathListType::const_reference path, searchPaths_ ) {
 		boost::filesystem::path pPath( path );
 		pPath /= subSearchPath_;
 		pathOk = true;
+
 		if( !boost::filesystem::exists( pPath ) ) {
 			LOG( Runtime, warning ) << "Pluginpath " << isis::util::MSubject( pPath.native_file_string() ) << " not found!";
 			pathOk = false;
@@ -122,9 +130,10 @@ GenericPluginLoader<Interface>::findPlugins() {
 
 		if( pathOk ) {
 			boost::regex pluginFilter( pluginSearchPattern_ );
+
 			for ( boost::filesystem::directory_iterator itr( pPath ); itr != boost::filesystem::directory_iterator(); ++itr ) {
 				if ( boost::filesystem::is_directory( *itr ) )continue;
-				
+
 				if ( boost::regex_match( itr->path().leaf(), pluginFilter ) ) {
 					const std::string pluginName = itr->path().file_string();
 #ifdef WIN32
@@ -132,14 +141,17 @@ GenericPluginLoader<Interface>::findPlugins() {
 #else
 					void *handle = dlopen( pluginName.c_str(), RTLD_NOW );
 #endif
+
 					if( handle ) {
 #ifdef WIN32
-						Interface* ( *loadPlugin_func )() = ( Interface* ( * )() )GetProcAddress( handle, pluginLoadingFunctionName_.c_str() );
+						Interface* ( *loadPlugin_func )() = ( Interface * ( * )() )GetProcAddress( handle, pluginLoadingFunctionName_.c_str() );
 #else
-						Interface* ( *loadPlugin_func )() = ( Interface* ( * )() )dlsym( handle, pluginLoadingFunctionName_.c_str() );
+						Interface* ( *loadPlugin_func )() = ( Interface * ( * )() )dlsym( handle, pluginLoadingFunctionName_.c_str() );
 #endif
+
 						if ( loadPlugin_func ) {
 							PluginInterfacePointerType plugin_class( loadPlugin_func(), _internal::pluginDeleter<Interface>( handle, pluginName ) );
+
 							if ( registerPlugin( plugin_class ) ) {
 								plugin_class->setPluginPath( pPath.native_file_string() );
 								plugin_class->setPluginFile( pluginName );
@@ -170,8 +182,8 @@ GenericPluginLoader<Interface>::findPlugins() {
 					}
 				} else {
 					LOG( Runtime, verbose_info )
-						<< "Ignoring " << isis::util::MSubject( itr->path() )
-						<< " because it doesn't match " << pluginFilter.str();
+							<< "Ignoring " << isis::util::MSubject( itr->path() )
+							<< " because it doesn't match " << pluginFilter.str();
 				}
 			}
 		}
@@ -184,9 +196,10 @@ void
 GenericPluginLoader<Interface>::addPluginSearchPath( const std::string &pluginSearchPath )
 {
 	boost::filesystem::path p( pluginSearchPath );
+
 	if( !boost::filesystem::exists( pluginSearchPath ) ) {
 		LOG( Runtime, warning ) << "Plugin search path "
-			<< p.directory_string() << " does not exist. Will not add it!";
+								<< p.directory_string() << " does not exist. Will not add it!";
 	} else {
 		searchPaths_.push_back( pluginSearchPath );
 	}

@@ -27,15 +27,18 @@
  ******************************************************************/
 #include "volume.hpp"
 
-namespace isis {
-namespace glance {
-namespace data {
+namespace isis
+{
+namespace glance
+{
+namespace data
+{
 
-Volume::Volume ( const isis::data::ValueArrayReference& src, const size_t dims[] )
+Volume::Volume ( const isis::data::ValueArrayReference &src, const size_t dims[] )
 	: DataContainer< 3 > ( src, dims )
 {}
 
-Slice Volume::extractSlice ( const fvec& perpendicular, const ivec& coords ) const
+Slice Volume::extractSlice ( const fvec &perpendicular, const ivec &coords ) const
 {
 
 }

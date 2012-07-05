@@ -31,16 +31,20 @@
 #include <string>
 #include "generic_plugin_loader.hpp"
 
-namespace isis {
-namespace glance {
-namespace plugin {
+namespace isis
+{
+namespace glance
+{
+namespace plugin
+{
 
-class PluginInterfaceBase {
-	
+class PluginInterfaceBase
+{
+
 public:
 	const std::string &getPluginPath() const { return pluginPath_; }
 	const std::string &getPluginFile() const { return pluginFile_; }
-	
+
 	void setPluginPath( const std::string pluginPath ) { pluginPath_ = pluginPath; }
 	void setPluginFile( const std::string pluginFile ) { pluginFile_ = pluginFile; }
 private:

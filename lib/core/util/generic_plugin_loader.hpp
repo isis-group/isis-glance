@@ -39,22 +39,25 @@
 #include "common.hpp"
 #include "signal.hpp"
 
-namespace isis {
-namespace glance {
-namespace util {
+namespace isis
+{
+namespace glance
+{
+namespace util
+{
 
 
 template<typename Interface>
 class GenericPluginLoader
 {
-friend class isis::util::Singletons;
+	friend class isis::util::Singletons;
 public:
 	typedef isis::util::slist PathListType;
 	typedef boost::shared_ptr<Interface> PluginInterfacePointerType;
 	typedef std::list<PluginInterfacePointerType> PluginListType;
 
 	static GenericPluginLoader &get() {
-		return isis::util::Singletons::get<GenericPluginLoader<Interface>, INT_MAX>(); 
+		return isis::util::Singletons::get<GenericPluginLoader<Interface>, INT_MAX>();
 	}
 
 	static void addPluginSearchPath( const std::string &pluginSearchPath );
@@ -68,18 +71,18 @@ public:
 	static void setPluginSubSearchPath( const std::string &subSearchPath ) { subSearchPath_ = subSearchPath; }
 
 	PluginListType getPLugins() const { return pluginList_; }
-	
+
 	//signals
-	static isis::glance::util::Signal<void ( const Interface *)> signal_plugin_registered;
-	static isis::glance::util::Signal<void ( const std::string &)> signal_plugin_registering_failed;
-	static isis::glance::util::Signal<void ( const std::string &)> signal_scanning_path;
+	static isis::glance::util::Signal<void ( const Interface * )> signal_plugin_registered;
+	static isis::glance::util::Signal<void ( const std::string & )> signal_plugin_registering_failed;
+	static isis::glance::util::Signal<void ( const std::string & )> signal_scanning_path;
 	static isis::glance::util::Signal<void()> signal_no_search_path;
 
 protected:
 	GenericPluginLoader();
 	unsigned int findPlugins();
 	bool registerPlugin( const PluginInterfacePointerType );
-	
+
 private:
 	static PathListType searchPaths_;
 	static std::string subSearchPath_;

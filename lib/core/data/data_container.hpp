@@ -39,7 +39,7 @@ namespace data
 {
 namespace _internal
 {
-	
+
 template<unsigned short DIMS>
 class DataContainer
 	: public isis::data::_internal::NDimensional<DIMS>,
@@ -49,7 +49,7 @@ public:
 	typedef isis::util::FixedVector<float, DIMS> fvec;
 	typedef isis::util::FixedVector<int32_t, DIMS> ivec;
 	typedef isis::util::FixedVector<double, DIMS> dvec;
-	
+
 	inline DataContainer( const isis::data::ValueArrayReference &src, const size_t dims[DIMS] )
 		: isis::data::ValueArrayReference( src ) {
 		isis::data::_internal::NDimensional<DIMS>::init( dims );

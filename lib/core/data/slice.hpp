@@ -30,14 +30,17 @@
 
 #include "data_container.hpp"
 
-namespace isis {
-namespace glance {
-namespace data {
+namespace isis
+{
+namespace glance
+{
+namespace data
+{
 
 class Slice : public _internal::DataContainer<2>
 {
 public:
-    Slice ( const isis::data::ValueArrayReference& src,  const size_t dims[] )
+	Slice ( const isis::data::ValueArrayReference &src,  const size_t dims[] )
 		: DataContainer< 2 >( src, dims ) {};
 };
 
