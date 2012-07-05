@@ -49,8 +49,11 @@ int main( int /*argc*/, char **argv )
 	timer.restart();
 
 // 	for( unsigned int i = 0; i < 30000; i++ )
-		isis::glance::data::Slice slice = vol.extractSlice( perp, coords );
-	isis::data::Image imageOut( isis::data::Chunk( slice, image->image_size[0], image->image_size[1] ) );
+	isis::glance::data::Slice slice = vol.extractSlice( perp, coords );
+	
+	isis::data::Chunk chunk( slice,  image->image_size[0], image->image_size[1],1,1,true );
+	isis::data::Image imageOut( chunk );
+// 	isis::data::Image imageOut( isis::data::Chunk( slice, image->image_size[0], image->image_size[1] ) );
 	
 	isis::data::IOFactory::write( imageOut, "/tmp/gna.nii");
 	
