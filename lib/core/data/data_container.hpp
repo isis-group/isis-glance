@@ -59,9 +59,11 @@ public:
 	inline DataContainer( const isis::data::ValueArrayReference &src, const size_type &dims )
 		: isis::data::ValueArrayReference( src ) {
 		size_t size_[DIMS];
+
 		for( size_t d = 0; d < DIMS; d++ ) {
 			size_[d] = dims[d];
 		}
+
 		isis::data::_internal::NDimensional<DIMS>::init( size_ );
 	}
 

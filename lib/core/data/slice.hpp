@@ -42,7 +42,7 @@ class Slice : public _internal::DataContainer<2>
 public:
 	Slice ( const isis::data::ValueArrayReference &src,  const size_t dims[] )
 		: DataContainer< 2 >( src, dims ) {};
-    Slice ( const isis::data::ValueArrayReference& src, const size_type& dims )
+	Slice ( const isis::data::ValueArrayReference &src, const size_type &dims )
 		: DataContainer< 2 >( src, dims ) {}
 };
 
