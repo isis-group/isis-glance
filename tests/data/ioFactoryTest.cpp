@@ -45,20 +45,23 @@ int main( int /*argc*/, char **argv )
 	coords[0] = image->image_size[0] / 2;
 	coords[1] = image->image_size[1] / 2;
 	coords[2] = image->image_size[2] / 2;
+	std::cout << coords << std::endl;
 
 	timer.restart();
 
 // 	for( unsigned int i = 0; i < 30000; i++ )
 	isis::glance::data::Slice slice = vol.extractSlice( perp, coords );
+	std::cout << timer.elapsed() << " seconds" << std::endl;
+	std::cout << slice->getLength() << std::endl;
 	
-	isis::data::Chunk chunk( slice,  image->image_size[0], image->image_size[1],1,1,true );
+	isis::data::Chunk chunk( slice,  slice.getSizeAsVector()[0], slice.getSizeAsVector()[1], 1,1,true );
 	isis::data::Image imageOut( chunk );
 // 	isis::data::Image imageOut( isis::data::Chunk( slice, image->image_size[0], image->image_size[1] ) );
 	
 	isis::data::IOFactory::write( imageOut, "/tmp/gna.nii");
 	
 	
-	std::cout << timer.elapsed() << " seconds" << std::endl;
+
 	return 0;
 }
 // }

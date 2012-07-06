@@ -29,6 +29,7 @@
 #define _ISIS_GLANCE_SLICE_HPP
 
 #include "data_container.hpp"
+#include <CoreUtils/vector.hpp>
 
 namespace isis
 {
@@ -36,10 +37,29 @@ namespace glance
 {
 namespace data
 {
-
+namespace _internal
+{
+template<typename TYPE>
+class vector2 : public isis::util::FixedVector<TYPE,2>
+{
+public:
+	vector2() {}
+	vector2( const TYPE src[2] ): isis::util::FixedVector< TYPE, 2>( src ) {}
+	vector2( TYPE first, TYPE second ) {
+		this->operator[]( 1 ) = second;
+		this->operator[]( 0 ) = first;
+	}
+};
+}
+	
 class Slice : public _internal::DataContainer<2>
 {
 public:
+	typedef _internal::vector2<float> fvec;
+	typedef _internal::vector2<int32_t> ivec;
+	typedef _internal::vector2<double> dvec;
+	typedef _internal::vector2<size_t> size_type;
+	
 	Slice ( const isis::data::ValueArrayReference &src,  const size_t dims[] )
 		: DataContainer< 2 >( src, dims ) {};
 	Slice ( const isis::data::ValueArrayReference &src, const size_type &dims )

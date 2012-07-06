@@ -39,51 +39,54 @@ Volume::Volume ( const isis::data::ValueArrayReference &src, const size_t dims[]
 	: DataContainer< 3 > ( src, dims )
 {}
 
-Slice Volume::extractSlice ( const fvec &perpendicular, const ivec &coords ) const
+Slice Volume::extractSlice (  fvec perpendicular, const ivec &coords ) const
 {
+	perpendicular.norm();
 	const isis::data::ValueArrayBase *src = this->operator->();
 	const size_t bytesPerElem = src->bytesPerElem();
+	const size_t typeFac = bytesPerElem / sizeof(uint8_t);
 	const uint8_t *srcPtr = static_cast<const uint8_t *>( src->getRawAddress().get() );
 	const size_type size = getSizeAsVector();
-	Slice::size_type size2d;
-
 	//we can define some special cases to increase performance
 	if( std::abs( perpendicular[2] ) == 1 ) {
 		const isis::data::ValueArrayReference dest = src->cloneToNew( size[0] * size[1] );
 		uint8_t *destPtr = static_cast<uint8_t *>( dest->getRawAddress().get() );
-		std::memcpy( destPtr,
-					 srcPtr + size[0] * size[1] * coords[2],
+			memcpy( destPtr,
+					 srcPtr + size[0] * size[1] * coords[2] * typeFac,
 					 size[0] * size[1] * bytesPerElem );
-		size2d[0] = size[0];
-		size2d[1] = size[1];
-		return Slice( dest, size2d );
+		
+		return Slice( dest, Slice::size_type( size[0], size[1] ) );
 	} else if ( std::abs( perpendicular[1] ) == 1 ) {
 		const isis::data::ValueArrayReference dest = src->cloneToNew( size[0] * size[2] );
 		uint8_t *destPtr = static_cast<uint8_t *>( dest->getRawAddress().get() );
 
 		for( size_t slice = 0; slice < size[2]; slice++ ) {
-			std::memcpy( destPtr + size[0] * slice,
-						 srcPtr + size[0] * coords[1] + size[0] * size[1] * slice,
+			memcpy( destPtr + size[0] * slice * typeFac,
+						 srcPtr + (size[0] * coords[1] + size[0] * size[1] * slice) * typeFac,
 						 size[0] * bytesPerElem );
 		}
 
-		size2d[0] = size[0];
-		size2d[1] = size[2];
-		return Slice( dest, size2d );
+		return Slice( dest, Slice::size_type( size[0], size[2] ) );
 	} else if ( std::abs( perpendicular[0] ) == 1 ) {
 		const isis::data::ValueArrayReference dest = src->cloneToNew( size[1] * size[2] );
 		uint8_t *destPtr = static_cast<uint8_t *>( dest->getRawAddress().get() );
 
 		for( size_t slice = 0; slice < size[2]; slice++ ) {
 			for( size_t column = 0; column < size[1]; column++ ) {
-				destPtr[column + size[1] * slice] = srcPtr[coords[0] + column * size[0] + slice * size[0] * size[1]];
+				memcpy( destPtr + (column + size[1] * slice) * typeFac,
+						srcPtr + ( coords[0] + column * size[0] + slice * size[0] * size[1] ) * typeFac,
+						bytesPerElem );
 			}
 		}
-
-		size2d[0] = size[1];
-		size2d[1] = size[2];
-		return Slice( dest, size2d );
+		return Slice( dest, Slice::size_type( size[1], size[2] ) );
+	} else {
+		return extractSliceGeneric( perpendicular, coords );
 	}
+}
+
+Slice Volume::extractSliceGeneric ( const fvec& perpendicular, const ivec& coords ) const
+{
+	
 }
 
 

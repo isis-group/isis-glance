@@ -42,7 +42,9 @@ class Volume : public _internal::DataContainer<3>
 public:
 	Volume ( const isis::data::ValueArrayReference &src, const size_t  dims[] );
 
-	Slice extractSlice( const fvec &perpendicular, const ivec &coords ) const;
+	Slice extractSlice( fvec perpendicular, const ivec &coords ) const;
+private:
+	Slice extractSliceGeneric( const fvec &perpendicular, const ivec &coords ) const;
 };
 } // end namespace data
 } // end namespace glance
