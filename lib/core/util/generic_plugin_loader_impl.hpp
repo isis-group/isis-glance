@@ -28,7 +28,6 @@
 #include "generic_plugin_loader.hpp"
 #include "boost/regex.hpp"
 
-#include <dlfcn.h>
 
 namespace isis
 {
@@ -36,40 +35,20 @@ namespace glance
 {
 namespace util
 {
-namespace _internal
-{
-template<typename Interface>
-struct pluginDeleter {
-	void *m_dlHandle;
-	std::string m_pluginName;
-	pluginDeleter( void *dlHandle, std::string pluginName ): m_dlHandle( dlHandle ), m_pluginName( pluginName ) {}
-	void operator()( Interface *format ) {
-		delete format;
-#ifdef WIN32
 
-		if( !FreeLibrary( ( HINSTANCE )m_dlHandle ) )
-#else
-		if ( dlclose( m_dlHandle ) != 0 )
-#endif
-			std::cerr << "Failed to release plugin " << m_pluginName << " (was loaded at " << m_dlHandle << ")";
+template<typename Interface, typename PluginDeleter> typename GenericPluginLoader<Interface, PluginDeleter>::PathListType GenericPluginLoader<Interface, PluginDeleter>::searchPaths_;
+template<typename Interface, typename PluginDeleter> std::string GenericPluginLoader<Interface, PluginDeleter>::pluginSearchPattern_;
+template<typename Interface, typename PluginDeleter> bool GenericPluginLoader<Interface, PluginDeleter>::pluginSearchPatternIsSet_ = false;
+template<typename Interface, typename PluginDeleter> std::string GenericPluginLoader<Interface, PluginDeleter>::pluginLoadingFunctionName_ = "loadPlugin";
+template<typename Interface, typename PluginDeleter> std::string GenericPluginLoader<Interface, PluginDeleter>::subSearchPath_;
 
-		//we cannot use LOG here, because the loggers are gone allready
-	}
-};
-}
-template<typename Interface> typename GenericPluginLoader<Interface>::PathListType GenericPluginLoader<Interface>::searchPaths_;
-template<typename Interface> std::string GenericPluginLoader<Interface>::pluginSearchPattern_;
-template<typename Interface> bool GenericPluginLoader<Interface>::pluginSearchPatternIsSet_ = false;
-template<typename Interface> std::string GenericPluginLoader<Interface>::pluginLoadingFunctionName_ = "loadPlugin";
-template<typename Interface> std::string GenericPluginLoader<Interface>::subSearchPath_;
+template<typename Interface, typename PluginDeleter> isis::glance::util::Signal<void( const Interface * )> GenericPluginLoader<Interface, PluginDeleter>::signal_plugin_registered;
+template<typename Interface, typename PluginDeleter> isis::glance::util::Signal<void( const std::string & )> GenericPluginLoader<Interface, PluginDeleter>::signal_plugin_registering_failed;
+template<typename Interface, typename PluginDeleter> isis::glance::util::Signal<void( const std::string & )> GenericPluginLoader<Interface, PluginDeleter>::signal_scanning_path;
+template<typename Interface, typename PluginDeleter> isis::glance::util::Signal<void()> GenericPluginLoader<Interface, PluginDeleter>::signal_no_search_path;
 
-template<typename Interface> isis::glance::util::Signal<void( const Interface * )> GenericPluginLoader<Interface>::signal_plugin_registered;
-template<typename Interface> isis::glance::util::Signal<void( const std::string & )> GenericPluginLoader<Interface>::signal_plugin_registering_failed;
-template<typename Interface> isis::glance::util::Signal<void( const std::string & )> GenericPluginLoader<Interface>::signal_scanning_path;
-template<typename Interface> isis::glance::util::Signal<void()> GenericPluginLoader<Interface>::signal_no_search_path;
-
-template<typename Interface>
-GenericPluginLoader<Interface>::GenericPluginLoader()
+template<typename Interface, typename PluginDeleter>
+GenericPluginLoader<Interface, PluginDeleter>::GenericPluginLoader()
 {
 	//use this as standard plugin search path
 	const char *homeSearchPath = getenv( "HOME" );
@@ -85,9 +64,9 @@ GenericPluginLoader<Interface>::GenericPluginLoader()
 	}
 }
 
-template<typename Interface>
+template<typename Interface, typename PluginDeleter>
 bool
-GenericPluginLoader<Interface>::registerPlugin( const PluginInterfacePointerType plugin )
+GenericPluginLoader<Interface, PluginDeleter>::registerPlugin( const PluginInterfacePointerType plugin )
 {
 	if( !plugin ) {
 		return false;
@@ -98,9 +77,9 @@ GenericPluginLoader<Interface>::registerPlugin( const PluginInterfacePointerType
 
 }
 
-template<typename Interface>
+template<typename Interface, typename PluginDeleter>
 unsigned int
-GenericPluginLoader<Interface>::findPlugins()
+GenericPluginLoader<Interface, PluginDeleter>::findPlugins()
 {
 	unsigned int ret = 0;
 	bool pathOk;
@@ -150,7 +129,10 @@ GenericPluginLoader<Interface>::findPlugins()
 #endif
 
 						if ( loadPlugin_func ) {
-							PluginInterfacePointerType plugin_class( loadPlugin_func(), _internal::pluginDeleter<Interface>( handle, pluginName ) );
+							PluginDeleter deleter;
+							deleter.setHandle( handle );
+							deleter.setPluginName( pluginName );
+							PluginInterfacePointerType plugin_class( loadPlugin_func(), deleter );
 
 							if ( registerPlugin( plugin_class ) ) {
 								plugin_class->setPluginPath( pPath.native_file_string() );
@@ -191,9 +173,9 @@ GenericPluginLoader<Interface>::findPlugins()
 	return ret;
 }
 
-template<typename Interface>
+template<typename Interface, typename PluginDeleter>
 void
-GenericPluginLoader<Interface>::addPluginSearchPath( const std::string &pluginSearchPath )
+GenericPluginLoader<Interface, PluginDeleter>::addPluginSearchPath( const std::string &pluginSearchPath )
 {
 	boost::filesystem::path p( pluginSearchPath );
 

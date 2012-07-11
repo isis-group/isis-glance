@@ -86,6 +86,9 @@ Slice Volume::extractSlice (  fvec perpendicular, const ivec &coords ) const
 
 Slice Volume::extractSliceGeneric ( const fvec& perpendicular, const ivec& coords ) const
 {
+
+	
+	
 	
 }
 

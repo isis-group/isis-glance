@@ -39,7 +39,7 @@ int main( int /*argc*/, char **argv )
 
 	isis::glance::data::Volume::fvec perp;
 	perp[0] = 1;
-	perp[1] = 0;
+	perp[1] = 1;
 	perp[2] = 0;
 	isis::glance::data::Volume::size_type coords;
 	coords[0] = image->image_size[0] / 2;

@@ -41,7 +41,7 @@ namespace widget
 struct NoBaseWidget {};
 
 /**
-* Abstract base class for widgets.
+* Base class for widgets.
 */
 
 template < class BASE = NoBaseWidget >

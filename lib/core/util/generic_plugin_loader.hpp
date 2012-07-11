@@ -39,15 +39,49 @@
 #include "common.hpp"
 #include "signal.hpp"
 
+#include <dlfcn.h>
+
 namespace isis
 {
 namespace glance
 {
 namespace util
 {
+namespace _internal
+{
+
+template<typename Interface>
+class PluginDeleterBase
+{
+public:
+	void setHandle( void* handle ) { dlHandle_ = handle; }
+	void setPluginName( std::string pluginName ) { pluginName_ = pluginName; }
+	virtual void operator() ( Interface *format ) = 0;
+protected:
+	void *dlHandle_;
+	std::string pluginName_;
+};
 
 
 template<typename Interface>
+class DefaultPluginDeleter : public PluginDeleterBase<Interface> {
+public:
+	virtual void operator()( Interface *format ) {
+		delete format;
+#ifdef WIN32
+
+		if( !FreeLibrary( ( HINSTANCE )PluginDeleterBase<Interface>::dlHandle_ ) )
+#else
+		if ( dlclose( PluginDeleterBase<Interface>::dlHandle_ ) != 0 )
+#endif
+			std::cerr << "Failed to release plugin " << PluginDeleterBase<Interface>::pluginName_ << " (was loaded at " << PluginDeleterBase<Interface>::dlHandle_ << ")";
+
+		//we cannot use LOG here, because the loggers are gone allready
+	}
+};
+}
+
+template<typename Interface, typename PluginDeleter = _internal::DefaultPluginDeleter<Interface> >
 class GenericPluginLoader
 {
 	friend class isis::util::Singletons;
