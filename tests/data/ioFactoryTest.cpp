@@ -34,7 +34,7 @@ int main( int /*argc*/, char **argv )
 	coords[2] = image->image_size[2] / 2;
 
 	timer.restart();
-	//  for( unsigned int i = 0; i < 30000; i++ )
+// 	 for( unsigned int i = 0; i < 30000; i++ )
 	isis::glance::data::Slice slice = vol.extractSlice( perp, coords );
 	std::cout << timer.elapsed() << " seconds sagittal" << std::endl;
 

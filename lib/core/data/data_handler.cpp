@@ -101,7 +101,32 @@ Slice DataHandler::extractSagittal ( const Volume &vol, const int32_t &x )
 		return _extractSagittal<int8_t>( *vol.operator->(), vol.getSizeAsVector()[1], vol.getSizeAsVector()[2], x, vol.getPermutationSagittal() );
 	case isis::data::ValueArray<uint8_t>::staticID:
 		return _extractSagittal<uint8_t>( *vol.operator->(), vol.getSizeAsVector()[1], vol.getSizeAsVector()[2], x, vol.getPermutationSagittal() );
-
+	case isis::data::ValueArray<int16_t>::staticID:
+		return _extractSagittal<int16_t>( *vol.operator->(), vol.getSizeAsVector()[1], vol.getSizeAsVector()[2], x, vol.getPermutationSagittal() );
+	case isis::data::ValueArray<uint16_t>::staticID:
+		return _extractSagittal<uint16_t>( *vol.operator->(), vol.getSizeAsVector()[1], vol.getSizeAsVector()[2], x, vol.getPermutationSagittal() );
+	case isis::data::ValueArray<int32_t>::staticID:
+		return _extractSagittal<int32_t>( *vol.operator->(), vol.getSizeAsVector()[1], vol.getSizeAsVector()[2], x, vol.getPermutationSagittal() );
+	case isis::data::ValueArray<uint32_t>::staticID:
+		return _extractSagittal<uint32_t>( *vol.operator->(), vol.getSizeAsVector()[1], vol.getSizeAsVector()[2], x, vol.getPermutationSagittal() );
+	case isis::data::ValueArray<int64_t>::staticID:
+		return _extractSagittal<int64_t>( *vol.operator->(), vol.getSizeAsVector()[1], vol.getSizeAsVector()[2], x, vol.getPermutationSagittal() );
+	case isis::data::ValueArray<uint64_t>::staticID:
+		return _extractSagittal<uint64_t>( *vol.operator->(), vol.getSizeAsVector()[1], vol.getSizeAsVector()[2], x, vol.getPermutationSagittal() );
+	case isis::data::ValueArray<float>::staticID:
+		return _extractSagittal<float>( *vol.operator->(), vol.getSizeAsVector()[1], vol.getSizeAsVector()[2], x, vol.getPermutationSagittal() );
+	case isis::data::ValueArray<double>::staticID:
+		return _extractSagittal<double>( *vol.operator->(), vol.getSizeAsVector()[1], vol.getSizeAsVector()[2], x, vol.getPermutationSagittal() );
+	case isis::data::ValueArray<isis::util::color24>::staticID:
+		return _extractSagittal<isis::util::color24>( *vol.operator->(), vol.getSizeAsVector()[1], vol.getSizeAsVector()[2], x, vol.getPermutationSagittal() );
+	case isis::data::ValueArray<isis::util::color48>::staticID:
+		return _extractSagittal<isis::util::color48>( *vol.operator->(), vol.getSizeAsVector()[1], vol.getSizeAsVector()[2], x, vol.getPermutationSagittal() );
+	case isis::data::ValueArray<std::complex<float> >::staticID:
+		return _extractSagittal<std::complex<float> >( *vol.operator->(), vol.getSizeAsVector()[1], vol.getSizeAsVector()[2], x, vol.getPermutationSagittal() );
+	case isis::data::ValueArray<std::complex<double> >::staticID:
+		return _extractSagittal<std::complex<double> >( *vol.operator->(), vol.getSizeAsVector()[1], vol.getSizeAsVector()[2], x, vol.getPermutationSagittal() );
+	default:
+		LOG( Runtime, error ) << "Extraction of sagittal slice is not yet implemented for type " << isis::util::getTypeMap(false).at(vol->getTypeID() );
 	}
 
 }
