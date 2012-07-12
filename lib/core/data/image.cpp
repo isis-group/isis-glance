@@ -207,6 +207,7 @@ bool Image::synchronizeVoxelContentFrom ( isis::data::Image image )
 			return false;
 		}
 	}
+
 	return volumes_.size() == image_size[isis::data::timeDim];
 }
 

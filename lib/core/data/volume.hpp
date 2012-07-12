@@ -54,7 +54,7 @@ public:
 	DataHandler::PermutationType getPermutationSagittal() const;
 private:
 	Slice extractSliceGeneric( const fvec &perpendicular, const ivec &coords ) const;
-	
+
 	ImageSharedPointer parentImage_;
 	DataHandler::PermutationType permutationSagittal_;
 

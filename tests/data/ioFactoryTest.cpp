@@ -9,8 +9,8 @@
 int main( int /*argc*/, char **argv )
 {
 	//  ENABLE_LOG( isis::glance::data::Debug, isis::util::DefaultMsgPrint, isis::verbose_info );
-// 	ENABLE_LOG( isis::glance::util::Debug, isis::util::DefaultMsgPrint, isis::verbose_info );
-// 	ENABLE_LOG( isis::glance::data::Runtime, isis::util::DefaultMsgPrint, isis::verbose_info );
+	//  ENABLE_LOG( isis::glance::util::Debug, isis::util::DefaultMsgPrint, isis::verbose_info );
+	//  ENABLE_LOG( isis::glance::data::Runtime, isis::util::DefaultMsgPrint, isis::verbose_info );
 
 	isis::util::slist paths;
 	paths.push_back( argv[1] );
@@ -34,18 +34,18 @@ int main( int /*argc*/, char **argv )
 	coords[2] = image->image_size[2] / 2;
 
 	timer.restart();
-// 	for( unsigned int i = 0; i < 30000; i++ )
-		isis::glance::data::Slice slice = vol.extractSlice( perp, coords );
+	//  for( unsigned int i = 0; i < 30000; i++ )
+	isis::glance::data::Slice slice = vol.extractSlice( perp, coords );
 	std::cout << timer.elapsed() << " seconds sagittal" << std::endl;
 
 
-	
-	isis::data::Chunk chunk( slice,  slice.getSizeAsVector()[0], slice.getSizeAsVector()[1], 1,1,true );
+
+	isis::data::Chunk chunk( slice,  slice.getSizeAsVector()[0], slice.getSizeAsVector()[1], 1, 1, true );
 	isis::data::Image imageOut( chunk );
-	
-	isis::data::IOFactory::write( imageOut, "/tmp/gna.nii");
-	
-	
+
+	isis::data::IOFactory::write( imageOut, "/tmp/gna.nii" );
+
+
 
 	return 0;
 }

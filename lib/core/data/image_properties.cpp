@@ -110,6 +110,7 @@ ImageMetaProperties::ImageMetaProperties ( const isis::data::Image &image )
 		file_name = p.filename();
 		file_path = p.directory_string();
 	}
+
 	Volume::size_type volSize;
 	volSize[0] = image_size[0];
 	volSize[1] = image_size[1];

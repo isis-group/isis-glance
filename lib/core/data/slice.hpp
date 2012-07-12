@@ -40,7 +40,7 @@ namespace data
 namespace _internal
 {
 template<typename TYPE>
-class vector2 : public isis::util::FixedVector<TYPE,2>
+class vector2 : public isis::util::FixedVector<TYPE, 2>
 {
 public:
 	vector2() {}
@@ -51,7 +51,7 @@ public:
 	}
 };
 }
-	
+
 class Slice : public _internal::DataContainer<2>
 {
 public:
@@ -59,7 +59,7 @@ public:
 	typedef _internal::vector2<int32_t> ivec;
 	typedef _internal::vector2<double> dvec;
 	typedef _internal::vector2<size_t> size_type;
-	
+
 	Slice ( const isis::data::ValueArrayReference &src,  const size_t dims[] )
 		: DataContainer< 2 >( src, dims ) {};
 	Slice ( const isis::data::ValueArrayReference &src, const size_type &dims )

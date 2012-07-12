@@ -41,11 +41,15 @@ extern "C" {
 }
 #endif
 
-namespace isis {
-namespace glance {
-namespace data {
+namespace isis
+{
+namespace glance
+{
+namespace data
+{
 
-namespace _internal {
+namespace _internal
+{
 struct OilInitializer {
 	OilInitializer() {
 #ifdef ISIS_GLANCE_USE_LIBOIL
@@ -56,36 +60,36 @@ struct OilInitializer {
 
 #ifdef ISIS_GLANCE_USE_LIBOIL
 template<typename T>
-void _oilExtractSagittal( T* destPtr, const T* srcPtr, const int32_t* permutation, const size_t &length )
+void _oilExtractSagittal( T *destPtr, const T *srcPtr, const int32_t *permutation, const size_t &length )
 {
 	for ( size_t index = 0; index < length; index++ ) {
-			destPtr[index] = srcPtr[permutation[index]];
+		destPtr[index] = srcPtr[permutation[index]];
 	}
 }
 
 template<>
-void _oilExtractSagittal<uint8_t>( uint8_t* destPtr, const uint8_t* srcPtr, const int32_t* permutation, const size_t &length );
+void _oilExtractSagittal<uint8_t>( uint8_t *destPtr, const uint8_t *srcPtr, const int32_t *permutation, const size_t &length );
 
 template<>
-void _oilExtractSagittal<int8_t>( int8_t* destPtr, const int8_t* srcPtr, const int32_t* permutation, const size_t &length );
+void _oilExtractSagittal<int8_t>( int8_t *destPtr, const int8_t *srcPtr, const int32_t *permutation, const size_t &length );
 
 template<>
-void _oilExtractSagittal<float>( float* destPtr, const float* srcPtr, const int32_t* permutation, const size_t &length );
+void _oilExtractSagittal<float>( float *destPtr, const float *srcPtr, const int32_t *permutation, const size_t &length );
 
 template<>
-void _oilExtractSagittal<double>( double* destPtr, const double* srcPtr, const int32_t* permutation, const size_t &length );
+void _oilExtractSagittal<double>( double *destPtr, const double *srcPtr, const int32_t *permutation, const size_t &length );
 
 template<>
-void _oilExtractSagittal<int16_t>( int16_t* destPtr, const int16_t* srcPtr, const int32_t* permutation, const size_t &length );
+void _oilExtractSagittal<int16_t>( int16_t *destPtr, const int16_t *srcPtr, const int32_t *permutation, const size_t &length );
 
 template<>
-void _oilExtractSagittal<uint16_t>( uint16_t* destPtr, const uint16_t* srcPtr, const int32_t* permutation, const size_t &length );
+void _oilExtractSagittal<uint16_t>( uint16_t *destPtr, const uint16_t *srcPtr, const int32_t *permutation, const size_t &length );
 
 template<>
-void _oilExtractSagittal<int32_t>( int32_t* destPtr, const int32_t* srcPtr, const int32_t* permutation, const size_t &length );
+void _oilExtractSagittal<int32_t>( int32_t *destPtr, const int32_t *srcPtr, const int32_t *permutation, const size_t &length );
 
 template<>
-void _oilExtractSagittal<uint32_t>( uint32_t* destPtr, const uint32_t* srcPtr, const int32_t* permutation, const size_t &length );
+void _oilExtractSagittal<uint32_t>( uint32_t *destPtr, const uint32_t *srcPtr, const int32_t *permutation, const size_t &length );
 
 
 #endif
@@ -99,26 +103,28 @@ public:
 
 	static Slice extractSagittal( const Volume &vol, const int32_t &x );
 
-	static PermutationType getPermutationSagittal( const isis::util::FixedVector<size_t,3> &size );
+	static PermutationType getPermutationSagittal( const isis::util::FixedVector<size_t, 3> &size );
 private:
 	template<typename T>
 	static Slice _extractSagittal( const isis::data::ValueArrayBase &src, const size_t &col, const size_t &slice, const size_t &offset, DataHandler::PermutationType permutation ) {
-		const T* srcPtr = static_cast<const T *>( src.getRawAddress(offset).get() );
+		const T *srcPtr = static_cast<const T *>( src.getRawAddress( offset ).get() );
 		const isis::data::ValueArrayReference dest = src.cloneToNew( col * slice );
 		T *destPtr = static_cast<T *>( dest->getRawAddress().get() );
 #ifdef ISIS_GLANCE_USE_LIBOIL
 		_internal::_oilExtractSagittal<T>( destPtr, srcPtr, permutation.get(), col * slice );
-#else 
-		for ( size_t index = 0; index < (col*slice); index++ ) {
+#else
+
+		for ( size_t index = 0; index < ( col * slice ); index++ ) {
 			destPtr[index] = srcPtr[permutation[index]];
 		}
+
 #endif
 		return Slice( dest, Slice::size_type( col, slice ) );
 	}
 };
 
 
-	
+
 
 } // end namespace data
 } // end namespace glance

@@ -54,7 +54,7 @@ template<typename Interface>
 class PluginDeleterBase
 {
 public:
-	void setHandle( void* handle ) { dlHandle_ = handle; }
+	void setHandle( void *handle ) { dlHandle_ = handle; }
 	void setPluginName( std::string pluginName ) { pluginName_ = pluginName; }
 	virtual void operator() ( Interface *format ) = 0;
 protected:
@@ -64,7 +64,8 @@ protected:
 
 
 template<typename Interface>
-class DefaultPluginDeleter : public PluginDeleterBase<Interface> {
+class DefaultPluginDeleter : public PluginDeleterBase<Interface>
+{
 public:
 	virtual void operator()( Interface *format ) {
 		delete format;
@@ -81,7 +82,7 @@ public:
 };
 }
 
-template<typename Interface, typename PluginDeleter = _internal::DefaultPluginDeleter<Interface> >
+template < typename Interface, typename PluginDeleter = _internal::DefaultPluginDeleter<Interface> >
 class GenericPluginLoader
 {
 	friend class isis::util::Singletons;

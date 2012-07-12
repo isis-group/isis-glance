@@ -29,75 +29,79 @@
 #include "volume.hpp"
 #include "image.hpp"
 
-namespace isis {
-namespace glance {
-namespace data {
+namespace isis
+{
+namespace glance
+{
+namespace data
+{
 
-namespace _internal {
+namespace _internal
+{
 
 template<>
-void _oilExtractSagittal< int8_t > ( int8_t* destPtr, const int8_t* srcPtr, const int32_t* permutation, const size_t& length )
+void _oilExtractSagittal< int8_t > ( int8_t *destPtr, const int8_t *srcPtr, const int32_t *permutation, const size_t &length )
 {
-	oil_permute_s8( destPtr, 0,	srcPtr,	0, permutation, 0, length );
+	oil_permute_s8( destPtr, 0, srcPtr, 0, permutation, 0, length );
 }
 
 template<>
-void _oilExtractSagittal< uint8_t > ( uint8_t* destPtr, const uint8_t* srcPtr, const int32_t* permutation, const size_t& length )
+void _oilExtractSagittal< uint8_t > ( uint8_t *destPtr, const uint8_t *srcPtr, const int32_t *permutation, const size_t &length )
 {
 	oil_permute_u8( destPtr, 0, srcPtr, 0, permutation, 0, length );
 }
 
 template<>
-void _oilExtractSagittal< double > ( double* destPtr, const double* srcPtr, const int32_t* permutation, const size_t& length )
+void _oilExtractSagittal< double > ( double *destPtr, const double *srcPtr, const int32_t *permutation, const size_t &length )
 {
 	oil_permute_f64( destPtr, 0, srcPtr, 0, permutation, 0, length );
 }
 
 template<>
-void _oilExtractSagittal< float > ( float* destPtr, const float* srcPtr, const int32_t* permutation, const size_t& length )
+void _oilExtractSagittal< float > ( float *destPtr, const float *srcPtr, const int32_t *permutation, const size_t &length )
 {
 	oil_permute_f32( destPtr, 0, srcPtr, 0, permutation, 0, length );
 }
 
 template<>
-void _oilExtractSagittal< int16_t > ( int16_t* destPtr, const int16_t* srcPtr, const int32_t* permutation, const size_t& length )
+void _oilExtractSagittal< int16_t > ( int16_t *destPtr, const int16_t *srcPtr, const int32_t *permutation, const size_t &length )
 {
 	oil_permute_s16( destPtr, 0, srcPtr, 0, permutation, 0, length );
 }
 
 template<>
-void _oilExtractSagittal< uint16_t > ( uint16_t* destPtr, const uint16_t* srcPtr, const int32_t* permutation, const size_t& length )
+void _oilExtractSagittal< uint16_t > ( uint16_t *destPtr, const uint16_t *srcPtr, const int32_t *permutation, const size_t &length )
 {
 	oil_permute_u16( destPtr, 0, srcPtr, 0, permutation, 0, length );
 }
 
 template<>
-void _oilExtractSagittal< int32_t > ( int32_t* destPtr, const int32_t* srcPtr, const int32_t* permutation, const size_t& length )
+void _oilExtractSagittal< int32_t > ( int32_t *destPtr, const int32_t *srcPtr, const int32_t *permutation, const size_t &length )
 {
 	oil_permute_s32( destPtr, 0, srcPtr, 0, permutation, 0, length );
 }
 
 template<>
-void _oilExtractSagittal< uint32_t > ( uint32_t* destPtr, const uint32_t* srcPtr, const int32_t* permutation, const size_t& length )
+void _oilExtractSagittal< uint32_t > ( uint32_t *destPtr, const uint32_t *srcPtr, const int32_t *permutation, const size_t &length )
 {
 	oil_permute_u32( destPtr, 0, srcPtr, 0, permutation, 0, length );
 }
 
 
 }
-	
-Slice DataHandler::extractSagittal ( const Volume& vol, const int32_t& x )
+
+Slice DataHandler::extractSagittal ( const Volume &vol, const int32_t &x )
 {
 #ifdef ISIS_GLANCE_USE_LIBOIL
 	const static _internal::OilInitializer initializeOil;
 #endif
 
 	switch( vol->getTypeID() ) {
-		case isis::data::ValueArray<int8_t>::staticID:
-			return _extractSagittal<int8_t>( *vol.operator->(), vol.getSizeAsVector()[1], vol.getSizeAsVector()[2], x, vol.getPermutationSagittal() );
-		case isis::data::ValueArray<uint8_t>::staticID:
-			return _extractSagittal<uint8_t>( *vol.operator->(), vol.getSizeAsVector()[1], vol.getSizeAsVector()[2], x, vol.getPermutationSagittal() );
-			
+	case isis::data::ValueArray<int8_t>::staticID:
+		return _extractSagittal<int8_t>( *vol.operator->(), vol.getSizeAsVector()[1], vol.getSizeAsVector()[2], x, vol.getPermutationSagittal() );
+	case isis::data::ValueArray<uint8_t>::staticID:
+		return _extractSagittal<uint8_t>( *vol.operator->(), vol.getSizeAsVector()[1], vol.getSizeAsVector()[2], x, vol.getPermutationSagittal() );
+
 	}
 
 }
@@ -106,16 +110,18 @@ DataHandler::PermutationType DataHandler::getPermutationSagittal ( const Volume:
 {
 	boost::shared_array<int32_t> retPerm( new int32_t[size[1]*size[2]] );
 	size_t index = 0;
+
 	for( size_t z = 0; z < size[2]; z++ ) {
 		for( size_t y = 0; y < size[1]; y++ ) {
 			retPerm[index++] = y * size[0] + z * size[0] * size[1];
 		}
 	}
+
 	return retPerm;
 }
 
 
 
-} // end namespace data 
+} // end namespace data
 } // end namespace glance
 } // end namespace isis

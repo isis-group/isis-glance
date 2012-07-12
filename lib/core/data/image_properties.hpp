@@ -51,7 +51,7 @@ namespace data
 
 class ImageMetaProperties : public isis::util::PropertyMap
 {
-friend class Volume;
+	friend class Volume;
 public:
 	typedef isis::util::FixedVector<size_t, 4> SizeType;
 	typedef isis::util::Matrix4x4<float> OrientationMatrixType;

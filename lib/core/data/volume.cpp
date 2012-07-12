@@ -38,12 +38,12 @@ namespace glance
 namespace data
 {
 
-Volume::Volume ( const isis::data::ValueArrayReference& src, const size_t dims[], const ImageSharedPointer parentImage_ )
+Volume::Volume ( const isis::data::ValueArrayReference &src, const size_t dims[], const ImageSharedPointer parentImage_ )
 	: DataContainer< 3 > ( src, dims ),
-	parentImage_( parentImage_ )
+	  parentImage_( parentImage_ )
 {}
 
-	
+
 Volume::Volume ( const isis::data::ValueArrayReference &src, const size_t dims[] )
 	: DataContainer< 3 > ( src, dims )
 {
@@ -66,17 +66,18 @@ Slice Volume::extractSlice (  fvec perpendicular, const ivec &coords ) const
 	perpendicular.norm();
 	const isis::data::ValueArrayBase *src = this->operator->();
 	const size_t bytesPerElem = src->bytesPerElem();
-	const size_t typeFac = bytesPerElem / sizeof(uint8_t);
+	const size_t typeFac = bytesPerElem / sizeof( uint8_t );
 	const uint8_t *srcPtr = static_cast<const uint8_t *>( src->getRawAddress().get() );
 	const size_type size = getSizeAsVector();
+
 	//we can define some special cases to increase performance
 	if( std::abs( perpendicular[2] ) == 1 ) {
 		const isis::data::ValueArrayReference dest = src->cloneToNew( size[0] * size[1] );
 		uint8_t *destPtr = static_cast<uint8_t *>( dest->getRawAddress().get() );
-			memcpy( destPtr,
-					 srcPtr + size[0] * size[1] * coords[2] * typeFac,
-					 size[0] * size[1] * bytesPerElem );
-		
+		memcpy( destPtr,
+				srcPtr + size[0] * size[1] * coords[2] * typeFac,
+				size[0] * size[1] * bytesPerElem );
+
 		return Slice( dest, Slice::size_type( size[0], size[1] ) );
 	} else if ( std::abs( perpendicular[1] ) == 1 ) {
 		const isis::data::ValueArrayReference dest = src->cloneToNew( size[0] * size[2] );
@@ -84,8 +85,8 @@ Slice Volume::extractSlice (  fvec perpendicular, const ivec &coords ) const
 
 		for( size_t slice = 0; slice < size[2]; slice++ ) {
 			memcpy( destPtr + size[0] * slice * typeFac,
-						 srcPtr + (size[0] * coords[1] + size[0] * size[1] * slice) * typeFac,
-						 size[0] * bytesPerElem );
+					srcPtr + ( size[0] * coords[1] + size[0] * size[1] * slice ) * typeFac,
+					size[0] * bytesPerElem );
 		}
 
 		return Slice( dest, Slice::size_type( size[0], size[2] ) );
@@ -93,19 +94,19 @@ Slice Volume::extractSlice (  fvec perpendicular, const ivec &coords ) const
 		const isis::data::ValueArrayReference dest = src->cloneToNew( size[1] * size[2] );
 		uint8_t *destPtr = static_cast<uint8_t *>( dest->getRawAddress().get() );
 		const uint8_t *shiftedPtr = srcPtr + coords[0];
-		
+
 		return DataHandler::extractSagittal( *this, coords[0] );
 	} else {
 		return extractSliceGeneric( perpendicular, coords );
 	}
 }
 
-Slice Volume::extractSliceGeneric ( const fvec& perpendicular, const ivec& coords ) const
+Slice Volume::extractSliceGeneric ( const fvec &perpendicular, const ivec &coords ) const
 {
 
-	
-	
-	
+
+
+
 }
 
 
