@@ -46,8 +46,8 @@ public:
 	vector2() {}
 	vector2( const TYPE src[2] ): isis::util::FixedVector< TYPE, 2>( src ) {}
 	vector2( TYPE first, TYPE second ) {
-		this->operator[]( 1 ) = second;
 		this->operator[]( 0 ) = first;
+		this->operator[]( 1 ) = second;
 	}
 };
 }

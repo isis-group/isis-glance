@@ -43,8 +43,8 @@ namespace types
 {
 
 typedef uint8_t ScalarRepnProposed;
-typedef util::color24 ColorRepnProposed;
-typedef util::fvector4 VectorRepnProposed;
+typedef isis::util::color24 ColorRepnProposed;
+typedef isis::util::fvector4 VectorRepnProposed;
 typedef std::complex< float > ComplexRepnProposed;
 
 enum ImageDataType {UNDEFINED = 0,

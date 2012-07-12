@@ -26,7 +26,10 @@
  *      Author: tuerke
  ******************************************************************/
 #include "volume.hpp"
+#include "data_handler.hpp"
+#include "image.hpp"
 #include <cstring>
+#include <stdlib.h>
 
 namespace isis
 {
@@ -35,9 +38,28 @@ namespace glance
 namespace data
 {
 
+Volume::Volume ( const isis::data::ValueArrayReference& src, const size_t dims[], const ImageSharedPointer parentImage_ )
+	: DataContainer< 3 > ( src, dims ),
+	parentImage_( parentImage_ )
+{}
+
+	
 Volume::Volume ( const isis::data::ValueArrayReference &src, const size_t dims[] )
 	: DataContainer< 3 > ( src, dims )
-{}
+{
+	permutationSagittal_ = DataHandler::getPermutationSagittal( getSizeAsVector() );
+}
+
+DataHandler::PermutationType Volume::getPermutationSagittal() const
+{
+	if( parentImage_ ) {
+		return parentImage_->permutation_sagittal;
+	} else {
+		return permutationSagittal_;
+	}
+}
+
+
 
 Slice Volume::extractSlice (  fvec perpendicular, const ivec &coords ) const
 {
@@ -70,15 +92,9 @@ Slice Volume::extractSlice (  fvec perpendicular, const ivec &coords ) const
 	} else if ( std::abs( perpendicular[0] ) == 1 ) {
 		const isis::data::ValueArrayReference dest = src->cloneToNew( size[1] * size[2] );
 		uint8_t *destPtr = static_cast<uint8_t *>( dest->getRawAddress().get() );
-
-		for( size_t slice = 0; slice < size[2]; slice++ ) {
-			for( size_t column = 0; column < size[1]; column++ ) {
-				memcpy( destPtr + (column + size[1] * slice) * typeFac,
-						srcPtr + ( coords[0] + column * size[0] + slice * size[0] * size[1] ) * typeFac,
-						bytesPerElem );
-			}
-		}
-		return Slice( dest, Slice::size_type( size[1], size[2] ) );
+		const uint8_t *shiftedPtr = srcPtr + coords[0];
+		
+		return DataHandler::extractSagittal( *this, coords[0] );
 	} else {
 		return extractSliceGeneric( perpendicular, coords );
 	}

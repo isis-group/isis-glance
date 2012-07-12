@@ -35,8 +35,8 @@
 #include <CoreUtils/propmap.hpp>
 #include <DataStorage/image.hpp>
 
+#include "data_handler.hpp"
 #include "types.hpp"
-
 
 namespace isis
 {
@@ -51,6 +51,7 @@ namespace data
 
 class ImageMetaProperties : public isis::util::PropertyMap
 {
+friend class Volume;
 public:
 	typedef isis::util::FixedVector<size_t, 4> SizeType;
 	typedef isis::util::Matrix4x4<float> OrientationMatrixType;
@@ -92,10 +93,11 @@ public:
 	OrientationMatrixType orientation_matrix_latched;
 
 	///The sum of voxelSize and voxelGap
-	util::fvector4 voxel_size;
+	isis::util::fvector4 voxel_size;
 
 protected:
 	const bool &isValid() const { return is_valid_; }
+	DataHandler::PermutationType permutation_sagittal;
 
 private:
 	bool is_valid_;
@@ -127,8 +129,9 @@ public:
 
 	///The images type group
 	ImageTypeGroup type_group;
+
 private:
-	types::ImageDataType getMajorType( const std::pair<util::ValueReference, util::ValueReference> &_min_max ) const;
+	types::ImageDataType getMajorType( const std::pair<isis::util::ValueReference, isis::util::ValueReference> &_min_max ) const;
 	bool getHasOneType( const isis::data::Image &image ) const;
 };
 

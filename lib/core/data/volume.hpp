@@ -28,8 +28,12 @@
 #ifndef _ISIS_GLANCE_VOLUME_HPP
 #define _ISIS_GLANCE_VOLUME_HPP
 
+#include <boost/shared_array.hpp>
+
 #include "data_container.hpp"
+#include "common.hpp"
 #include "slice.hpp"
+#include "data_handler.hpp"
 
 namespace isis
 {
@@ -40,11 +44,20 @@ namespace data
 class Volume : public _internal::DataContainer<3>
 {
 public:
-	Volume ( const isis::data::ValueArrayReference &src, const size_t  dims[] );
+	Volume ( const isis::data::ValueArrayReference &src, const size_t dims[] );
+	Volume ( const isis::data::ValueArrayReference &src, const size_t dims[], const ImageSharedPointer parentImage_ );
 
 	Slice extractSlice( fvec perpendicular, const ivec &coords ) const;
+
+	const ImageSharedPointer getParent() const { return parentImage_; }
+
+	DataHandler::PermutationType getPermutationSagittal() const;
 private:
 	Slice extractSliceGeneric( const fvec &perpendicular, const ivec &coords ) const;
+	
+	ImageSharedPointer parentImage_;
+	DataHandler::PermutationType permutationSagittal_;
+
 };
 } // end namespace data
 } // end namespace glance

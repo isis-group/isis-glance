@@ -38,7 +38,6 @@
 
 #include "image_state.hpp"
 #include "image_properties.hpp"
-#include "volume.hpp"
 #include "types.hpp"
 #include "util/common.hpp"
 
@@ -48,7 +47,7 @@ namespace glance
 {
 namespace data
 {
-
+class Volume;
 class ImageBase
 	: public ImageState,
   public ImageDataProperties,
@@ -81,7 +80,7 @@ protected:
 	API_EXCLUDE_END
 	/// @endcond _internal
 
-	const util::SharredPointer<isis::data::Image> isis_image_;
+	const util::SharedPointer<isis::data::Image> isis_image_;
 
 	VolumesType volumes_;
 private:
@@ -95,5 +94,5 @@ private:
 } // end namespace data
 } // end namespace glance
 } // end namespace isis
-
+#include "volume.hpp"
 #endif // _ISIS_GLANCE_IMAGE_BASE_HPP

@@ -41,7 +41,7 @@ namespace data
 class Image : public ImageBase
 {
 public:
-	typedef util::SharredPointer<Image> SharredPointer;
+	typedef util::SharedPointer<Image> SharedPointer;
 
 	/**
 	 * Creates an isis::glance::data::Image from an existing isis::data::Image.
@@ -84,14 +84,6 @@ public:
 
 	types::ImageDataType getDataType() const { return type_; }
 
-	/**
-	 * An isis::data::Image can consist of chunks with different data type.
-	 * If setForceTypedImage is set to true the isis::glance::data::Image will ensure
-	 * to all volumes to have one image type. This can either be the major_type if no
-	 * data type was specified or the data type specified by one of the respective functions.
-	 * \param force Specifies if the image should ensure consistent data type.
-	 */
-
 	static void setUseProposedDataType( const bool &use_proposed ) { forceProposedDataType_ = use_proposed; }
 	static void setProposedDataType( const Image::ImageTypeGroup &type_group, const types::ImageDataType &data_type );
 
@@ -112,6 +104,7 @@ private:
 	static types::ImageDataType proposedComplex_;
 	static types::ImageDataType proposedColor_;
 	static types::ImageDataType proposedVector_;
+
 };
 
 } // end namespace data

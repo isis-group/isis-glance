@@ -8,11 +8,24 @@ set(ISIS_GLANCE_BUILD_PROPERTIES CLEAN_DIRECT_OUTPUT 1)
 set(ISIS_GLANCE_BUILD_STATIC OFF CACHE BOOL "enable build of the static library. If OFF a dynamic library will be build and linked." )
 
 ############################################################
+# check for liboil
+############################################################
+set(ISIS_GLANCE_USE_LIBOIL OFF CACHE BOOL "use liboil" )
+if(ISIS_GLANCE_USE_LIBOIL)
+	find_path(LibOil_INCLUDE_DIR "liboil/liboil.h" PATH_SUFFIXES "liboil" "liboil-0.3")
+	find_library(LibOil_LIBRARY NAMES "oil-0.3")
+	include_directories(${LibOil_INCLUDE_DIR})
+	add_definitions(-DISIS_GLANCE_USE_LIBOIL)
+else(ISIS_GLANCE_USE_LIBOIL)
+	set(LibOil_LIBRARY "")
+endif(ISIS_GLANCE_USE_LIBOIL)
+
+############################################################
 # the core library shared and static build
 ############################################################
 macro( build_core name type)
     add_library( ${name} ${type} ${GLANCE_CORE_SRC_FILES} )
-	target_link_libraries( ${name} ${CMAKE_DL_LIBS} ${Boost_LIBRARIES})
+	target_link_libraries( ${name} ${CMAKE_DL_LIBS} ${LibOil_LIBRARY})
     set_target_properties( ${name} PROPERTIES
 		${ISIS_GLANCE_BUILD_PROPERTIES}
 		SOVERSION ${ISIS_GLANCE_VERSION_SO}

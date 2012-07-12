@@ -44,15 +44,15 @@ typedef isis::glance::CoreLog Runtime;
 typedef isis::glance::CoreDebug Debug;
 
 template<typename C>
-struct SharredPointer : public boost::shared_ptr<C> {
-	SharredPointer( const C &c ) {
+struct SharedPointer : public boost::shared_ptr<C> {
+	SharedPointer( const C &c ) {
 		static_cast< boost::shared_ptr<C> &>( *this ) = boost::shared_ptr<C>( new C( c ) );
 	}
-	SharredPointer( C *c ) {
+	SharedPointer( C *c ) {
 		static_cast< boost::shared_ptr<C> &>( *this ) = boost::shared_ptr<C>( c );
 	}
 
-	SharredPointer() {}
+	SharedPointer() {}
 };
 
 

@@ -43,11 +43,14 @@ typedef isis::glance::DataLog Runtime;
 typedef isis::glance::DataDebug Debug;
 
 class Image;
+class Volume;
 
-typedef util::SharredPointer<Image> ImageSharedPointer;
+typedef util::SharedPointer<Image> ImageSharedPointer;
+typedef util::SharedPointer<Volume> VolumeSharedPointer;
+
 typedef std::vector< ImageSharedPointer > ImageVector;
 
-typedef util::SharredPointer<isis::data::Image> IsisImageSharredPointer;
+typedef util::SharedPointer<isis::data::Image> IsisImageSharredPointer;
 
 
 } // end namespace data
@@ -55,5 +58,6 @@ typedef util::SharredPointer<isis::data::Image> IsisImageSharredPointer;
 } // end namespace isis
 
 #include "image.hpp"
+#include "volume.hpp"
 
 #endif // _ISIS_GLANCE_COMMON_HPP

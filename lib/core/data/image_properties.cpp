@@ -90,6 +90,8 @@ bool ImageDataProperties::getHasOneType( const isis::data::Image &image ) const
 	return true;
 }
 
+
+
 ImageMetaProperties::ImageMetaProperties ( const isis::data::Image &image )
 {
 	//geometrical stuff
@@ -108,7 +110,14 @@ ImageMetaProperties::ImageMetaProperties ( const isis::data::Image &image )
 		file_name = p.filename();
 		file_path = p.directory_string();
 	}
+	Volume::size_type volSize;
+	volSize[0] = image_size[0];
+	volSize[1] = image_size[1];
+	volSize[2] = image_size[2];
+	permutation_sagittal = DataHandler::getPermutationSagittal( volSize );
 }
+
+
 
 
 } // end namespace data

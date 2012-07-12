@@ -199,7 +199,7 @@ bool Image::synchronizeVoxelContentFrom ( isis::data::Image image )
 					tmpChunk.copySlice( 0, 0, chunk, slice, 0 );
 				}
 
-				volumes_.push_back( Volume( chunk.asValueArrayBase(), volume ) );
+				volumes_.push_back( Volume( chunk.asValueArrayBase(), volume, this ) );
 			}
 		} else {
 			LOG( data::Runtime, isis::error ) << "Image " << file_path << " is spliced below sliceDim. "
@@ -207,7 +207,6 @@ bool Image::synchronizeVoxelContentFrom ( isis::data::Image image )
 			return false;
 		}
 	}
-
 	return volumes_.size() == image_size[isis::data::timeDim];
 }
 
