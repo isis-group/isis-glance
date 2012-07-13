@@ -99,6 +99,29 @@ Slice Volume::extractSlice (  fvec perpendicular, const ivec &coords,  bool forc
 	}
 }
 
+std::vector< Slice > Volume::extractAllSlices ( fvec perpendicular, bool force32BitAligned ) const
+{
+	perpendicular.norm();
+	std::vector< Slice > ret;
+	ivec coords;
+	for( unsigned short dim = 0; dim < 3; dim++ ) {
+		if( perpendicular[dim] == 1 ) {
+			for( size_t i = 0; i < getSizeAsVector()[dim]; i++ ) {
+				coords[dim] = i;
+				ret.push_back( extractSlice( perpendicular, coords, force32BitAligned ) );
+			}
+		} else if ( perpendicular[dim] == -1 ) {
+			for( size_t i = getSizeAsVector()[dim] - 1; i >= 0; i-- ) {
+				coords[dim] = i;
+				ret.push_back( extractSlice( perpendicular, coords, force32BitAligned ) );
+			}
+		}
+	}
+	return ret;
+	
+}
+
+
 Slice Volume::extractSliceAxial ( const isis::data::ValueArrayBase *src, const size_t &slice, const size_type &size, const size_type &sliceSize, const size_t &bytesPerElem, const size_t &typeFac ) const
 {
 	const uint8_t *srcPtr = static_cast<const uint8_t *>( src->getRawAddress().get() );

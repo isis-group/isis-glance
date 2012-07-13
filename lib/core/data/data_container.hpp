@@ -67,7 +67,6 @@ public:
 		isis::data::_internal::NDimensional<DIMS>::init( size_ );
 	}
 
-
 	template<typename TYPE>
 	inline TYPE &voxel( const size_t dims[DIMS] ) {
 		assert( ( *this )->getTypeID() == isis::data::ValueArray<TYPE>::staticID );

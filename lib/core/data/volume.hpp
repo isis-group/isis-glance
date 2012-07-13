@@ -49,6 +49,7 @@ public:
 	Volume ( const isis::data::ValueArrayReference &src, const size_t dims[], const ImageSharedPointer parentImage );
 
 	Slice extractSlice( fvec perpendicular, const ivec &coords, bool force32BitAligned = false ) const;
+	std::vector< isis::glance::data::Slice > extractAllSlices ( fvec perpendicular, bool force32BitAligned = false ) const;
 
 	const ImageSharedPointer getParent() const { return parentImage_; }
 
@@ -61,6 +62,7 @@ public:
 			return getSizeAsVector();
 		}
 	};
+
 
 private:
 	Slice extractSliceGeneric( const fvec &perpendicular, const ivec &coords, bool force32BitAligned ) const;

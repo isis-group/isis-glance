@@ -36,6 +36,9 @@ int main( int /*argc*/, char **argv )
 
 	boost::timer timer;
 
+	isis::glance::data::IOFactory::setUseProposedDataType(true);
+	isis::glance::data::IOFactory::setProposedDataType(isis::glance::data::ImageDataProperties::SCALAR, isis::glance::data::types::UINT16_T);
+	
 	isis::glance::data::Image::SharedPointer image = isis::glance::data::IOFactory::load( paths ).front();
 
 	const isis::glance::data::Volume &vol = image->operator[]( 0 );
@@ -50,38 +53,43 @@ int main( int /*argc*/, char **argv )
 	coords[2] = image->image_size[2] / 2;
 
 	const size_t iterations = 5000;
+	const bool aligned = true;
 
-	timer.restart();
-
-	for( unsigned int i = 0; i < iterations; i++ )
-		isis::glance::data::Slice slice = vol.extractSlice( perp, coords );
-
-	std::cout << timer.elapsed() << " seconds sagittal" << std::endl;
-
-	timer.restart();
-
+	isis::glance::data::Slice sliceSagittal = vol.extractSlice( perp, coords, aligned );
+	isis::data::Chunk chunkSag( sliceSagittal,  sliceSagittal.getSizeAsVector()[0], sliceSagittal.getSizeAsVector()[1], 1, 1, true );
+	isis::data::Image imageOutSag( chunkSag );
+	isis::data::IOFactory::write( imageOutSag, "/tmp/sagittal.nii" );
+	
 	perp[0] = 0;
 	perp[1] = 1;
 	perp[2] = 0;
 
-	for( unsigned int i = 0; i < iterations; i++ )
-		isis::glance::data::Slice slice = vol.extractSlice( perp, coords );
+	isis::glance::data::Slice sliceCoronal = vol.extractSlice( perp, coords, aligned );
+	isis::data::Chunk chunkCoronal( sliceCoronal,  sliceCoronal.getSizeAsVector()[0], sliceCoronal.getSizeAsVector()[1], 1, 1, true );
+	isis::data::Image imageOutCoronal( chunkCoronal );
+	isis::data::IOFactory::write( imageOutCoronal, "/tmp/coronal.nii" );
+	
 
-	std::cout << timer.elapsed() << " seconds coronal" << std::endl;
-
-	timer.restart();
-
-	perp[0] = 1;
+	perp[0] = 0;
 	perp[1] = 0;
-	perp[2] = 0;
-	//  for( unsigned int i = 0; i < iterations; i++ )
-	isis::glance::data::Slice slice = vol.extractSlice( perp, coords, true );
-	std::cout << timer.elapsed() << " seconds axial" << std::endl;
+	perp[2] = 1;
+	isis::glance::data::Slice slice = vol.extractSlice( perp, coords, aligned );
 
 	isis::data::Chunk chunk( slice,  slice.getSizeAsVector()[0], slice.getSizeAsVector()[1], 1, 1, true );
 	isis::data::Image imageOut( chunk );
 
-	isis::data::IOFactory::write( imageOut, "/tmp/gna.nii" );
+	isis::data::IOFactory::write( imageOut, "/tmp/axial.nii" );
+
+	std::vector<isis::glance::data::Slice> slices = vol.extractAllSlices(perp);
+
+	for ( size_t i = 0; i < slices.size(); i++ ) {
+		isis::data::Chunk chunk( slices[i],  slices[i].getSizeAsVector()[0], slices[i].getSizeAsVector()[1], 1, 1, true );
+		isis::data::Image imageOut( chunk );
+		std::stringstream name;
+		name << "/tmp/series" << i << ".nii";
+		isis::data::IOFactory::write( imageOut, name.str() );
+	}
+
 
 
 
