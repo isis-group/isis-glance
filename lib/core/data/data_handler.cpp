@@ -35,60 +35,31 @@ namespace glance
 {
 namespace data
 {
-
+#ifdef ISIS_GLANCE_USE_LIBOIL
+	
 namespace _internal
 {
 
-template<>
-void _oilExtractSagittal< int8_t > ( int8_t *destPtr, const int8_t *srcPtr, const int32_t *permutation, const size_t &length )
-{
-	oil_permute_s8( destPtr, 0, srcPtr, 0, permutation, 0, length );
+#define IMPL_OIL_EXTRACT_SAG( TYPE, OIL_SUFFIX ) \
+	template<> void oilExtractSagittal<TYPE>( TYPE *destPtr, const TYPE *srcPtr, const int32_t *permutation, const size_t &length ) {\
+		oil_permute_ ## OIL_SUFFIX ( destPtr, sizeof(TYPE), srcPtr, sizeof(TYPE), permutation, 4, length ); \
 }
 
-template<>
-void _oilExtractSagittal< uint8_t > ( uint8_t *destPtr, const uint8_t *srcPtr, const int32_t *permutation, const size_t &length )
-{
-	oil_permute_u8( destPtr, 0, srcPtr, 0, permutation, 0, length );
-}
+IMPL_OIL_EXTRACT_SAG( int8_t, s8 )
+IMPL_OIL_EXTRACT_SAG( uint8_t, u8 )
 
-template<>
-void _oilExtractSagittal< double > ( double *destPtr, const double *srcPtr, const int32_t *permutation, const size_t &length )
-{
-	oil_permute_f64( destPtr, 0, srcPtr, 0, permutation, 0, length );
-}
+IMPL_OIL_EXTRACT_SAG( int16_t, s16 )
+IMPL_OIL_EXTRACT_SAG( uint16_t, u16 )
 
-template<>
-void _oilExtractSagittal< float > ( float *destPtr, const float *srcPtr, const int32_t *permutation, const size_t &length )
-{
-	oil_permute_f32( destPtr, 0, srcPtr, 0, permutation, 0, length );
-}
+IMPL_OIL_EXTRACT_SAG( int32_t, s32 )
+IMPL_OIL_EXTRACT_SAG( uint32_t, u32 )
 
-template<>
-void _oilExtractSagittal< int16_t > ( int16_t *destPtr, const int16_t *srcPtr, const int32_t *permutation, const size_t &length )
-{
-	oil_permute_s16( destPtr, 0, srcPtr, 0, permutation, 0, length );
-}
-
-template<>
-void _oilExtractSagittal< uint16_t > ( uint16_t *destPtr, const uint16_t *srcPtr, const int32_t *permutation, const size_t &length )
-{
-	oil_permute_u16( destPtr, 0, srcPtr, 0, permutation, 0, length );
-}
-
-template<>
-void _oilExtractSagittal< int32_t > ( int32_t *destPtr, const int32_t *srcPtr, const int32_t *permutation, const size_t &length )
-{
-	oil_permute_s32( destPtr, 0, srcPtr, 0, permutation, 0, length );
-}
-
-template<>
-void _oilExtractSagittal< uint32_t > ( uint32_t *destPtr, const uint32_t *srcPtr, const int32_t *permutation, const size_t &length )
-{
-	oil_permute_u32( destPtr, 0, srcPtr, 0, permutation, 0, length );
-}
-
+IMPL_OIL_EXTRACT_SAG( double, f64 )
+IMPL_OIL_EXTRACT_SAG( float, f32 )
 
 }
+
+#endif
 
 Slice DataHandler::extractSagittal ( const Volume &vol, const int32_t &x )
 {
