@@ -70,13 +70,15 @@ isis::data::ValueArrayReference DataHandler::extractSagittal ( const Volume &vol
 
 	Volume::size_type sizeAligned32Bit;
 	const Volume::size_type size = vol.getSize( false );
+
 	if( aligned32Bit ) {
 		sizeAligned32Bit = vol.getSize( true );
 	} else {
 		sizeAligned32Bit = size;
 	}
-	
+
 	const size_t lengthAligned32Bit = sizeAligned32Bit[1] * sizeAligned32Bit[2];
+
 	const size_t length = size[1] * size[2];
 
 #define CASE( TYPE ) case isis::data::ValueArray<TYPE>::staticID: \

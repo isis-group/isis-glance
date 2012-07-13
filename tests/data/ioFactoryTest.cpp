@@ -36,9 +36,9 @@ int main( int /*argc*/, char **argv )
 
 	boost::timer timer;
 
-	isis::glance::data::IOFactory::setUseProposedDataType(true);
-	isis::glance::data::IOFactory::setProposedDataType(isis::glance::data::ImageDataProperties::SCALAR, isis::glance::data::types::UINT16_T);
-	
+	isis::glance::data::IOFactory::setUseProposedDataType( true );
+	isis::glance::data::IOFactory::setProposedDataType( isis::glance::data::ImageDataProperties::SCALAR, isis::glance::data::types::UINT16_T );
+
 	isis::glance::data::Image::SharedPointer image = isis::glance::data::IOFactory::load( paths ).front();
 
 	const isis::glance::data::Volume &vol = image->operator[]( 0 );
@@ -59,7 +59,7 @@ int main( int /*argc*/, char **argv )
 	isis::data::Chunk chunkSag( sliceSagittal,  sliceSagittal.getSizeAsVector()[0], sliceSagittal.getSizeAsVector()[1], 1, 1, true );
 	isis::data::Image imageOutSag( chunkSag );
 	isis::data::IOFactory::write( imageOutSag, "/tmp/sagittal.nii" );
-	
+
 	perp[0] = 0;
 	perp[1] = 1;
 	perp[2] = 0;
@@ -68,7 +68,7 @@ int main( int /*argc*/, char **argv )
 	isis::data::Chunk chunkCoronal( sliceCoronal,  sliceCoronal.getSizeAsVector()[0], sliceCoronal.getSizeAsVector()[1], 1, 1, true );
 	isis::data::Image imageOutCoronal( chunkCoronal );
 	isis::data::IOFactory::write( imageOutCoronal, "/tmp/coronal.nii" );
-	
+
 
 	perp[0] = 0;
 	perp[1] = 0;
@@ -80,7 +80,7 @@ int main( int /*argc*/, char **argv )
 
 	isis::data::IOFactory::write( imageOut, "/tmp/axial.nii" );
 
-	std::vector<isis::glance::data::Slice> slices = vol.extractAllSlices(perp);
+	std::vector<isis::glance::data::Slice> slices = vol.extractAllSlices( perp );
 
 	for ( size_t i = 0; i < slices.size(); i++ ) {
 		isis::data::Chunk chunk( slices[i],  slices[i].getSizeAsVector()[0], slices[i].getSizeAsVector()[1], 1, 1, true );

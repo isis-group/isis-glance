@@ -104,6 +104,7 @@ std::vector< Slice > Volume::extractAllSlices ( fvec perpendicular, bool force32
 	perpendicular.norm();
 	std::vector< Slice > ret;
 	ivec coords;
+
 	for( unsigned short dim = 0; dim < 3; dim++ ) {
 		if( perpendicular[dim] == 1 ) {
 			for( size_t i = 0; i < getSizeAsVector()[dim]; i++ ) {
@@ -117,8 +118,9 @@ std::vector< Slice > Volume::extractAllSlices ( fvec perpendicular, bool force32
 			}
 		}
 	}
+
 	return ret;
-	
+
 }
 
 
