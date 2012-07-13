@@ -28,6 +28,7 @@
 #include "image_properties.hpp"
 #include "util/geometrical.hpp"
 #include "common.hpp"
+#include "volume.hpp"
 
 #include <boost/filesystem.hpp>
 
@@ -96,7 +97,7 @@ ImageMetaProperties::ImageMetaProperties ( const isis::data::Image &image )
 {
 	//geometrical stuff
 	image_size = image.getSizeAsVector();
-	image_size_aligned32 = util::get32BitAlignedSize( image_size );
+	image_size_aligned32 = util::get32BitAlignedSize<4>( image_size );
 	orientation_matrix = util::getOrientationMatrixFromPropMap( image );
 	orientation_matrix_latched = util::getLatchedOrienation( orientation_matrix );
 	voxel_size = image.getPropertyAs<isis::util::fvector4>( "voxelSize" );
@@ -115,7 +116,8 @@ ImageMetaProperties::ImageMetaProperties ( const isis::data::Image &image )
 	volSize[0] = image_size[0];
 	volSize[1] = image_size[1];
 	volSize[2] = image_size[2];
-	permutation_sagittal = DataHandler::getPermutationSagittal( volSize );
+	permutation_sagittal = DataHandler::getPermutationSagittal( volSize, false );
+	permutation_sagittal_aligned32Bit = DataHandler::getPermutationSagittal( volSize, true );
 }
 
 

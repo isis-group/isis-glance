@@ -32,8 +32,7 @@
 #include <map>
 #include <CoreUtils/vector.hpp>
 #include <DataStorage/valuearray_base.hpp>
-#include "slice.hpp"
-
+#include "common.hpp"
 
 #ifdef ISIS_GLANCE_USE_LIBOIL
 extern "C" {
@@ -53,6 +52,7 @@ namespace _internal
 {
 struct OilInitializer {
 	OilInitializer() {
+		LOG( Runtime, info ) << "Initializing oil";
 		oil_init();
 	}
 };
@@ -85,25 +85,25 @@ class DataHandler
 public:
 	typedef boost::shared_array<int32_t> PermutationType;
 
-	static Slice extractSagittal( const Volume &vol, const int32_t &x );
+	static isis::data::ValueArrayReference extractSagittal( const Volume &vol, const int32_t &x, bool aligned32Bit );
 
-	static PermutationType getPermutationSagittal( const isis::util::FixedVector<size_t, 3> &size );
+	static PermutationType getPermutationSagittal( const isis::util::FixedVector<size_t, 3> &size, bool aligned32Bit );
 private:
 	template<typename T>
-	static Slice _extractSagittal( const isis::data::ValueArrayBase &src, const size_t &col, const size_t &slice, const size_t &offset, DataHandler::PermutationType permutation ) {
+	static isis::data::ValueArrayReference _extractSagittal( const isis::data::ValueArrayBase &src, const size_t &lengthAligned32Bit, const size_t &length, const size_t &offset, DataHandler::PermutationType permutation ) {
 		const T *srcPtr = static_cast<const T *>( src.getRawAddress( offset * sizeof( T ) ).get() );
-		const isis::data::ValueArrayReference dest = src.cloneToNew( col * slice );
+		const isis::data::ValueArrayReference dest = src.cloneToNew( lengthAligned32Bit );
 		T *destPtr = static_cast<T *>( dest->getRawAddress().get() );
 #ifdef ISIS_GLANCE_USE_LIBOIL
-		_internal::oilExtractSagittal<T>( destPtr, srcPtr, permutation.get(), col * slice );
+		_internal::oilExtractSagittal<T>( destPtr, srcPtr, permutation.get(), length );
 #else
 
-		for ( size_t index = 0; index < ( col * slice ); index++ ) {
+		for ( size_t index = 0; index < length; index++ ) {
 			destPtr[index] = srcPtr[permutation[index]];
 		}
 
 #endif
-		return Slice( dest, Slice::size_type( col, slice ) );
+		return dest;
 	}
 };
 

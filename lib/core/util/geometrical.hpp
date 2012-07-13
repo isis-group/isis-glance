@@ -39,7 +39,23 @@ namespace glance
 namespace util
 {
 
-isis::util::ivector4 get32BitAlignedSize( const isis::util::ivector4 &orig_size );
+template<unsigned short DIM>
+isis::util::FixedVector<size_t,DIM> get32BitAlignedSize( const isis::util::FixedVector<size_t,DIM> &orig_size )
+{
+	isis::util::FixedVector<size_t, DIM> ret_size;
+
+	for ( isis::util::ivector4::value_type i = 0; i < DIM; i++ ) {
+		const int m = orig_size[i] % 4;
+
+		if( m > 0 ) {
+			ret_size[i] = orig_size[i] + 4 - m;
+		} else {
+			ret_size[i] = orig_size[i];
+		}
+	}
+
+	return ret_size;
+}
 
 isis::util::Matrix4x4<float> getOrientationMatrixFromPropMap( const isis::util::PropertyMap &propmap );
 

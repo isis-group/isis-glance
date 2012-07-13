@@ -28,6 +28,7 @@
 #include "data_handler.hpp"
 #include "volume.hpp"
 #include "image.hpp"
+#include "util/geometrical.hpp"
 
 namespace isis
 {
@@ -42,8 +43,9 @@ namespace _internal
 
 #define IMPL_OIL_EXTRACT_SAG( TYPE, OIL_SUFFIX ) \
 	template<> void oilExtractSagittal<TYPE>( TYPE *destPtr, const TYPE *srcPtr, const int32_t *permutation, const size_t &length ) {\
-		oil_permute_ ## OIL_SUFFIX ( destPtr, sizeof(TYPE), srcPtr, sizeof(TYPE), permutation, 4, length ); \
+		oil_permute_ ## OIL_SUFFIX ( destPtr, sizeof(TYPE), srcPtr, sizeof(TYPE), permutation, sizeof(int32_t), length ); \
 	}
+
 IMPL_OIL_EXTRACT_SAG( int8_t, s8 )
 IMPL_OIL_EXTRACT_SAG( uint8_t, u8 )
 
@@ -60,14 +62,19 @@ IMPL_OIL_EXTRACT_SAG( float, f32 )
 
 #endif
 
-Slice DataHandler::extractSagittal ( const Volume &vol, const int32_t &x )
+isis::data::ValueArrayReference DataHandler::extractSagittal ( const Volume &vol, const int32_t &x, bool aligned32Bit )
 {
 #ifdef ISIS_GLANCE_USE_LIBOIL
 	const static _internal::OilInitializer initializeOil;
 #endif
 
+	const Volume::size_type sizeAligned32Bit = vol.getSize(true);
+	const Volume::size_type size = vol.getSize(false);
+	const size_t lengthAligned32Bit = sizeAligned32Bit[1] * sizeAligned32Bit[2];
+	const size_t length = size[1] * size[2];
+	
 #define CASE( TYPE ) case isis::data::ValueArray<TYPE>::staticID: \
-		return _extractSagittal<TYPE>(*vol.operator->(), vol.getSizeAsVector()[1], vol.getSizeAsVector()[2], x, vol.getPermutationSagittal());
+		return _extractSagittal<TYPE>(*vol.operator->(), lengthAligned32Bit, length, x, vol.getPermutationSagittal(aligned32Bit));
 
 	switch( vol->getTypeID() ) {
 		CASE( bool )
@@ -91,20 +98,24 @@ Slice DataHandler::extractSagittal ( const Volume &vol, const int32_t &x )
 	default:
 		LOG( Runtime, error ) << "Extraction of sagittal slice is not yet implemented for type " << isis::util::getTypeMap( false ).at( vol->getTypeID() );
 	}
-
 }
 
-DataHandler::PermutationType DataHandler::getPermutationSagittal ( const Volume::size_type &size )
+DataHandler::PermutationType DataHandler::getPermutationSagittal ( const Volume::size_type &size, bool aligned32Bit )
 {
-	boost::shared_array<int32_t> retPerm( new int32_t[size[1]*size[2]] );
+	Volume::size_type _size;
+	if( aligned32Bit ) {
+		_size = isis::glance::util::get32BitAlignedSize<3>(size);
+	} else {
+		_size = size;
+	}
+	boost::shared_array<int32_t> retPerm( new int32_t[_size[1]*_size[2]] );
 	size_t index = 0;
 
-	for( size_t z = 0; z < size[2]; z++ ) {
-		for( size_t y = 0; y < size[1]; y++ ) {
+	for( size_t z = 0; z < _size[2]; z++ ) {
+		for( size_t y = 0; y < _size[1]; y++ ) {
 			retPerm[index++] = y * size[0] + z * size[0] * size[1];
 		}
 	}
-
 	return retPerm;
 }
 

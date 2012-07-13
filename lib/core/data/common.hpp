@@ -57,7 +57,5 @@ typedef util::SharedPointer<isis::data::Image> IsisImageSharredPointer;
 } // end namespace glance
 } // end namespace isis
 
-#include "image.hpp"
-#include "volume.hpp"
 
 #endif // _ISIS_GLANCE_COMMON_HPP

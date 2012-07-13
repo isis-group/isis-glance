@@ -34,6 +34,7 @@
 #include "common.hpp"
 #include "slice.hpp"
 #include "data_handler.hpp"
+#include "util/geometrical.hpp"
 
 namespace isis
 {
@@ -45,18 +46,32 @@ class Volume : public _internal::DataContainer<3>
 {
 public:
 	Volume ( const isis::data::ValueArrayReference &src, const size_t dims[] );
-	Volume ( const isis::data::ValueArrayReference &src, const size_t dims[], const ImageSharedPointer parentImage_ );
+	Volume ( const isis::data::ValueArrayReference &src, const size_t dims[], const ImageSharedPointer parentImage );
 
-	Slice extractSlice( fvec perpendicular, const ivec &coords ) const;
+	Slice extractSlice( fvec perpendicular, const ivec &coords, bool force32BitAligned = false ) const;
 
 	const ImageSharedPointer getParent() const { return parentImage_; }
 
-	DataHandler::PermutationType getPermutationSagittal() const;
+	DataHandler::PermutationType getPermutationSagittal(bool aligned32Bit) const;
+
+	inline size_type getSize(bool aligned32Bit) const
+	{
+		if( aligned32Bit ) {
+			return isis::glance::util::get32BitAlignedSize<3>(getSizeAsVector());
+		} else {
+			return getSizeAsVector();
+		}
+	};
+
 private:
-	Slice extractSliceGeneric( const fvec &perpendicular, const ivec &coords ) const;
+	Slice extractSliceGeneric( const fvec &perpendicular, const ivec &coords, bool force32BitAligned ) const;
+
+	Slice extractSliceAxial( const isis::data::ValueArrayBase *src, const size_t &slice, const size_type &size, const size_type &sliceSize, const size_t &bytesPerElem, const size_t &typeFac) const;
+	Slice extractSliceCoronal( const isis::data::ValueArrayBase *src, const size_t &slice, const size_type &size, const size_type &sliceSize, const size_t &bytesPerElem, const size_t &typeFac) const;
 
 	ImageSharedPointer parentImage_;
 	DataHandler::PermutationType permutationSagittal_;
+	DataHandler::PermutationType permutationSagittalAligned32Bit_;
 
 };
 } // end namespace data
