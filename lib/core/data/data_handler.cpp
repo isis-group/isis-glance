@@ -36,15 +36,14 @@ namespace glance
 namespace data
 {
 #ifdef ISIS_GLANCE_USE_LIBOIL
-	
+
 namespace _internal
 {
 
 #define IMPL_OIL_EXTRACT_SAG( TYPE, OIL_SUFFIX ) \
 	template<> void oilExtractSagittal<TYPE>( TYPE *destPtr, const TYPE *srcPtr, const int32_t *permutation, const size_t &length ) {\
 		oil_permute_ ## OIL_SUFFIX ( destPtr, sizeof(TYPE), srcPtr, sizeof(TYPE), permutation, 4, length ); \
-}
-
+	}
 IMPL_OIL_EXTRACT_SAG( int8_t, s8 )
 IMPL_OIL_EXTRACT_SAG( uint8_t, u8 )
 
@@ -67,37 +66,30 @@ Slice DataHandler::extractSagittal ( const Volume &vol, const int32_t &x )
 	const static _internal::OilInitializer initializeOil;
 #endif
 
+#define CASE( TYPE ) case isis::data::ValueArray<TYPE>::staticID: \
+		return _extractSagittal<TYPE>(*vol.operator->(), vol.getSizeAsVector()[1], vol.getSizeAsVector()[2], x, vol.getPermutationSagittal());
+
 	switch( vol->getTypeID() ) {
-	case isis::data::ValueArray<int8_t>::staticID:
-		return _extractSagittal<int8_t>( *vol.operator->(), vol.getSizeAsVector()[1], vol.getSizeAsVector()[2], x, vol.getPermutationSagittal() );
-	case isis::data::ValueArray<uint8_t>::staticID:
-		return _extractSagittal<uint8_t>( *vol.operator->(), vol.getSizeAsVector()[1], vol.getSizeAsVector()[2], x, vol.getPermutationSagittal() );
-	case isis::data::ValueArray<int16_t>::staticID:
-		return _extractSagittal<int16_t>( *vol.operator->(), vol.getSizeAsVector()[1], vol.getSizeAsVector()[2], x, vol.getPermutationSagittal() );
-	case isis::data::ValueArray<uint16_t>::staticID:
-		return _extractSagittal<uint16_t>( *vol.operator->(), vol.getSizeAsVector()[1], vol.getSizeAsVector()[2], x, vol.getPermutationSagittal() );
-	case isis::data::ValueArray<int32_t>::staticID:
-		return _extractSagittal<int32_t>( *vol.operator->(), vol.getSizeAsVector()[1], vol.getSizeAsVector()[2], x, vol.getPermutationSagittal() );
-	case isis::data::ValueArray<uint32_t>::staticID:
-		return _extractSagittal<uint32_t>( *vol.operator->(), vol.getSizeAsVector()[1], vol.getSizeAsVector()[2], x, vol.getPermutationSagittal() );
-	case isis::data::ValueArray<int64_t>::staticID:
-		return _extractSagittal<int64_t>( *vol.operator->(), vol.getSizeAsVector()[1], vol.getSizeAsVector()[2], x, vol.getPermutationSagittal() );
-	case isis::data::ValueArray<uint64_t>::staticID:
-		return _extractSagittal<uint64_t>( *vol.operator->(), vol.getSizeAsVector()[1], vol.getSizeAsVector()[2], x, vol.getPermutationSagittal() );
-	case isis::data::ValueArray<float>::staticID:
-		return _extractSagittal<float>( *vol.operator->(), vol.getSizeAsVector()[1], vol.getSizeAsVector()[2], x, vol.getPermutationSagittal() );
-	case isis::data::ValueArray<double>::staticID:
-		return _extractSagittal<double>( *vol.operator->(), vol.getSizeAsVector()[1], vol.getSizeAsVector()[2], x, vol.getPermutationSagittal() );
-	case isis::data::ValueArray<isis::util::color24>::staticID:
-		return _extractSagittal<isis::util::color24>( *vol.operator->(), vol.getSizeAsVector()[1], vol.getSizeAsVector()[2], x, vol.getPermutationSagittal() );
-	case isis::data::ValueArray<isis::util::color48>::staticID:
-		return _extractSagittal<isis::util::color48>( *vol.operator->(), vol.getSizeAsVector()[1], vol.getSizeAsVector()[2], x, vol.getPermutationSagittal() );
-	case isis::data::ValueArray<std::complex<float> >::staticID:
-		return _extractSagittal<std::complex<float> >( *vol.operator->(), vol.getSizeAsVector()[1], vol.getSizeAsVector()[2], x, vol.getPermutationSagittal() );
-	case isis::data::ValueArray<std::complex<double> >::staticID:
-		return _extractSagittal<std::complex<double> >( *vol.operator->(), vol.getSizeAsVector()[1], vol.getSizeAsVector()[2], x, vol.getPermutationSagittal() );
+		CASE( bool )
+		CASE( int8_t )
+		CASE( uint8_t )
+		CASE( int16_t )
+		CASE( uint16_t )
+		CASE( int32_t )
+		CASE( uint32_t )
+		CASE( int64_t )
+		CASE( uint64_t )
+		CASE( float )
+		CASE( double )
+		CASE( isis::util::color24 )
+		CASE( isis::util::color48 )
+		CASE( std::complex<float> )
+		CASE( std::complex<double> )
+		CASE( isis::util::fvector4 )
+		CASE( isis::util::dvector4 )
+		CASE( isis::util::ivector4 )
 	default:
-		LOG( Runtime, error ) << "Extraction of sagittal slice is not yet implemented for type " << isis::util::getTypeMap(false).at(vol->getTypeID() );
+		LOG( Runtime, error ) << "Extraction of sagittal slice is not yet implemented for type " << isis::util::getTypeMap( false ).at( vol->getTypeID() );
 	}
 
 }

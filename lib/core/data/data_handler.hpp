@@ -91,7 +91,7 @@ public:
 private:
 	template<typename T>
 	static Slice _extractSagittal( const isis::data::ValueArrayBase &src, const size_t &col, const size_t &slice, const size_t &offset, DataHandler::PermutationType permutation ) {
-		const T *srcPtr = static_cast<const T *>( src.getRawAddress( offset * sizeof(T) ).get() );
+		const T *srcPtr = static_cast<const T *>( src.getRawAddress( offset * sizeof( T ) ).get() );
 		const isis::data::ValueArrayReference dest = src.cloneToNew( col * slice );
 		T *destPtr = static_cast<T *>( dest->getRawAddress().get() );
 #ifdef ISIS_GLANCE_USE_LIBOIL
