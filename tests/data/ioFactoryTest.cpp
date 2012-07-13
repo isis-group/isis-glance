@@ -14,7 +14,7 @@ int main( int /*argc*/, char **argv )
 {
 	//  ENABLE_LOG( isis::glance::data::Debug, isis::util::DefaultMsgPrint, isis::verbose_info );
 	//  ENABLE_LOG( isis::glance::util::Debug, isis::util::DefaultMsgPrint, isis::verbose_info );
-	 ENABLE_LOG( isis::glance::data::Runtime, isis::util::DefaultMsgPrint, isis::verbose_info );
+	ENABLE_LOG( isis::glance::data::Runtime, isis::util::DefaultMsgPrint, isis::verbose_info );
 	//  const int dstr = atoi(argv[1]);
 	//  const int sstr1 = atoi(argv[2]);
 	//  const int sstr2 = atoi(argv[3]);
@@ -50,10 +50,12 @@ int main( int /*argc*/, char **argv )
 	coords[2] = image->image_size[2] / 2;
 
 	const size_t iterations = 5000;
-	
+
 	timer.restart();
+
 	for( unsigned int i = 0; i < iterations; i++ )
 		isis::glance::data::Slice slice = vol.extractSlice( perp, coords );
+
 	std::cout << timer.elapsed() << " seconds sagittal" << std::endl;
 
 	timer.restart();
@@ -61,8 +63,10 @@ int main( int /*argc*/, char **argv )
 	perp[0] = 0;
 	perp[1] = 1;
 	perp[2] = 0;
+
 	for( unsigned int i = 0; i < iterations; i++ )
 		isis::glance::data::Slice slice = vol.extractSlice( perp, coords );
+
 	std::cout << timer.elapsed() << " seconds coronal" << std::endl;
 
 	timer.restart();
@@ -70,14 +74,14 @@ int main( int /*argc*/, char **argv )
 	perp[0] = 1;
 	perp[1] = 0;
 	perp[2] = 0;
-// 	for( unsigned int i = 0; i < iterations; i++ )
-		isis::glance::data::Slice slice = vol.extractSlice( perp, coords, true );
+	//  for( unsigned int i = 0; i < iterations; i++ )
+	isis::glance::data::Slice slice = vol.extractSlice( perp, coords, true );
 	std::cout << timer.elapsed() << " seconds axial" << std::endl;
-	
-	 isis::data::Chunk chunk( slice,  slice.getSizeAsVector()[0], slice.getSizeAsVector()[1], 1, 1, true );
-	 isis::data::Image imageOut( chunk );
 
-	 isis::data::IOFactory::write( imageOut, "/tmp/gna.nii" );
+	isis::data::Chunk chunk( slice,  slice.getSizeAsVector()[0], slice.getSizeAsVector()[1], 1, 1, true );
+	isis::data::Image imageOut( chunk );
+
+	isis::data::IOFactory::write( imageOut, "/tmp/gna.nii" );
 
 
 

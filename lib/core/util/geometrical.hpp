@@ -40,7 +40,7 @@ namespace util
 {
 
 template<unsigned short DIM>
-isis::util::FixedVector<size_t,DIM> get32BitAlignedSize( const isis::util::FixedVector<size_t,DIM> &orig_size )
+isis::util::FixedVector<size_t, DIM> get32BitAlignedSize( const isis::util::FixedVector<size_t, DIM> &orig_size )
 {
 	isis::util::FixedVector<size_t, DIM> ret_size;
 

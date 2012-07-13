@@ -52,12 +52,11 @@ public:
 
 	const ImageSharedPointer getParent() const { return parentImage_; }
 
-	DataHandler::PermutationType getPermutationSagittal(bool aligned32Bit) const;
+	DataHandler::PermutationType getPermutationSagittal( bool aligned32Bit ) const;
 
-	inline size_type getSize(bool aligned32Bit) const
-	{
+	inline size_type getSize( bool aligned32Bit ) const {
 		if( aligned32Bit ) {
-			return isis::glance::util::get32BitAlignedSize<3>(getSizeAsVector());
+			return isis::glance::util::get32BitAlignedSize<3>( getSizeAsVector() );
 		} else {
 			return getSizeAsVector();
 		}
@@ -66,8 +65,8 @@ public:
 private:
 	Slice extractSliceGeneric( const fvec &perpendicular, const ivec &coords, bool force32BitAligned ) const;
 
-	Slice extractSliceAxial( const isis::data::ValueArrayBase *src, const size_t &slice, const size_type &size, const size_type &sliceSize, const size_t &bytesPerElem, const size_t &typeFac) const;
-	Slice extractSliceCoronal( const isis::data::ValueArrayBase *src, const size_t &slice, const size_type &size, const size_type &sliceSize, const size_t &bytesPerElem, const size_t &typeFac) const;
+	Slice extractSliceAxial( const isis::data::ValueArrayBase *src, const size_t &slice, const size_type &size, const size_type &sliceSize, const size_t &bytesPerElem, const size_t &typeFac ) const;
+	Slice extractSliceCoronal( const isis::data::ValueArrayBase *src, const size_t &slice, const size_type &size, const size_type &sliceSize, const size_t &bytesPerElem, const size_t &typeFac ) const;
 
 	ImageSharedPointer parentImage_;
 	DataHandler::PermutationType permutationSagittal_;

@@ -51,7 +51,7 @@ Volume::Volume ( const isis::data::ValueArrayReference &src, const size_t dims[]
 	permutationSagittalAligned32Bit_ = DataHandler::getPermutationSagittal( getSizeAsVector(), true );
 }
 
-DataHandler::PermutationType Volume::getPermutationSagittal(bool aligned32Bit) const
+DataHandler::PermutationType Volume::getPermutationSagittal( bool aligned32Bit ) const
 {
 	if( parentImage_ ) {
 		if( aligned32Bit ) {
@@ -70,23 +70,25 @@ DataHandler::PermutationType Volume::getPermutationSagittal(bool aligned32Bit) c
 
 
 
-Slice Volume::extractSlice (  fvec perpendicular, const ivec &coords,  bool force32BitAligned) const
+Slice Volume::extractSlice (  fvec perpendicular, const ivec &coords,  bool force32BitAligned ) const
 {
 	perpendicular.norm();
 	const isis::data::ValueArrayBase *src = this->operator->();
 	const size_t bytesPerElem = src->bytesPerElem();
 	const size_t typeFac = bytesPerElem / sizeof( uint8_t );
-	
+
 	const size_type size = getSizeAsVector();
 	size_type sliceSize;
+
 	if( force32BitAligned ) {
 		sliceSize = isis::glance::util::get32BitAlignedSize<3>( size );
 	} else {
 		sliceSize = size;
-	}	
+	}
+
 	//we can define some special cases to increase performance
 	if( std::abs( perpendicular[2] ) == 1 ) {
-		return extractSliceAxial(src, coords[isis::data::sliceDim], size, sliceSize, bytesPerElem, typeFac );
+		return extractSliceAxial( src, coords[isis::data::sliceDim], size, sliceSize, bytesPerElem, typeFac );
 	} else if ( std::abs( perpendicular[1] ) == 1 ) {
 		return extractSliceCoronal( src, coords[isis::data::columnDim], size, sliceSize, bytesPerElem, typeFac );
 	} else if ( std::abs( perpendicular[0] ) == 1 ) {
@@ -97,11 +99,12 @@ Slice Volume::extractSlice (  fvec perpendicular, const ivec &coords,  bool forc
 	}
 }
 
-Slice Volume::extractSliceAxial ( const isis::data::ValueArrayBase *src, const size_t& slice, const size_type& size, const size_type &sliceSize, const size_t &bytesPerElem, const size_t &typeFac ) const
+Slice Volume::extractSliceAxial ( const isis::data::ValueArrayBase *src, const size_t &slice, const size_type &size, const size_type &sliceSize, const size_t &bytesPerElem, const size_t &typeFac ) const
 {
 	const uint8_t *srcPtr = static_cast<const uint8_t *>( src->getRawAddress().get() );
 	const isis::data::ValueArrayReference dest = src->cloneToNew( sliceSize[0] * sliceSize[1] );
 	uint8_t *destPtr = static_cast<uint8_t *>( dest->getRawAddress().get() );
+
 	//we only can copy a whole slice if size == sliceSize for row and column dim
 	if( size[0] == sliceSize[0] && size[1] == sliceSize[1] ) {
 		memcpy( destPtr,
@@ -111,14 +114,15 @@ Slice Volume::extractSliceAxial ( const isis::data::ValueArrayBase *src, const s
 		//we have to copy each row :-(
 		for( size_t column = 0; column < size[1]; column++ ) {
 			memcpy( destPtr + sliceSize[0] * column * typeFac,
-					srcPtr + ( size[0] * size[1] * slice + size[0] * column) * typeFac,
+					srcPtr + ( size[0] * size[1] * slice + size[0] * column ) * typeFac,
 					sliceSize[0] * bytesPerElem );
 		}
 	}
+
 	return Slice( dest, Slice::size_type( sliceSize[0], sliceSize[1] ) );
 }
 
-Slice Volume::extractSliceCoronal ( const isis::data::ValueArrayBase *src, const size_t& cslice, const _internal::DataContainer< 3 >::size_type& size, const _internal::DataContainer< 3 >::size_type& sliceSize, const size_t& bytesPerElem, const size_t& typeFac ) const
+Slice Volume::extractSliceCoronal ( const isis::data::ValueArrayBase *src, const size_t &cslice, const _internal::DataContainer< 3 >::size_type &size, const _internal::DataContainer< 3 >::size_type &sliceSize, const size_t &bytesPerElem, const size_t &typeFac ) const
 {
 	const uint8_t *srcPtr = static_cast<const uint8_t *>( src->getRawAddress().get() );
 	const isis::data::ValueArrayReference dest = src->cloneToNew( sliceSize[0] * sliceSize[2] );
@@ -129,6 +133,7 @@ Slice Volume::extractSliceCoronal ( const isis::data::ValueArrayBase *src, const
 				srcPtr + ( size[0] * cslice + size[0] * size[1] * slice ) * typeFac,
 				sliceSize[0] * bytesPerElem );
 	}
+
 	return Slice( dest, Slice::size_type( sliceSize[0], sliceSize[2] ) );
 }
 

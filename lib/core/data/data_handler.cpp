@@ -68,11 +68,11 @@ isis::data::ValueArrayReference DataHandler::extractSagittal ( const Volume &vol
 	const static _internal::OilInitializer initializeOil;
 #endif
 
-	const Volume::size_type sizeAligned32Bit = vol.getSize(true);
-	const Volume::size_type size = vol.getSize(false);
+	const Volume::size_type sizeAligned32Bit = vol.getSize( true );
+	const Volume::size_type size = vol.getSize( false );
 	const size_t lengthAligned32Bit = sizeAligned32Bit[1] * sizeAligned32Bit[2];
 	const size_t length = size[1] * size[2];
-	
+
 #define CASE( TYPE ) case isis::data::ValueArray<TYPE>::staticID: \
 		return _extractSagittal<TYPE>(*vol.operator->(), lengthAligned32Bit, length, x, vol.getPermutationSagittal(aligned32Bit));
 
@@ -103,11 +103,13 @@ isis::data::ValueArrayReference DataHandler::extractSagittal ( const Volume &vol
 DataHandler::PermutationType DataHandler::getPermutationSagittal ( const Volume::size_type &size, bool aligned32Bit )
 {
 	Volume::size_type _size;
+
 	if( aligned32Bit ) {
-		_size = isis::glance::util::get32BitAlignedSize<3>(size);
+		_size = isis::glance::util::get32BitAlignedSize<3>( size );
 	} else {
 		_size = size;
 	}
+
 	boost::shared_array<int32_t> retPerm( new int32_t[_size[1]*_size[2]] );
 	size_t index = 0;
 
@@ -116,6 +118,7 @@ DataHandler::PermutationType DataHandler::getPermutationSagittal ( const Volume:
 			retPerm[index++] = y * size[0] + z * size[0] * size[1];
 		}
 	}
+
 	return retPerm;
 }
 
