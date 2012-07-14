@@ -1,7 +1,12 @@
+file(GLOB ISIS_GLANCE_QT4_HDR_FILES "*.hpp")
+set(ISIS_GLANCE_QT4_MOC_HPP widget_component.hpp)
+set(ISIS_GLANCE_QT4_SRC_FILES widget_component.cpp)
+
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib/core)
 
-set(ISIS_GLANCE_QT4_MOC_HPP widget_component.hpp)
-
+############################################################
+# qt4 stuff
+############################################################
 FIND_PACKAGE(Qt4 COMPONENTS QtCore QtGui REQUIRED)
 
 set(QT_USE_QTUITOOLS TRUE)
@@ -9,16 +14,14 @@ set(QT_USE_QTUITOOLS TRUE)
 INCLUDE(${QT_USE_FILE})
 
 QT4_ADD_RESOURCES(ISIS_GLANCE_QT4_RESOURCE_FILES ${RESOURCE_FILES})
-
 qt4_wrap_cpp(ISIS_GLANCE_QT4_MOC_FILES ${ISIS_GLANCE_QT4_MOC_HPP} OPTIONS -DBOOST_TT_HAS_OPERATOR_HPP_INCLUDED)
 # QT4_WRAP_UI(vast_UIS_H ${UI_FILES})
 
-set(ISIS_GLANCE_QT4_SRC_FILES widget_component.cpp)
-
-set(ISIS_GLANCE_QT4_BUILD_PROPERTIES CLEAN_DIRECT_OUTPUT 1)
 ############################################################
 # the qt4 library shared and static build
 ############################################################
+set(ISIS_GLANCE_QT4_BUILD_PROPERTIES CLEAN_DIRECT_OUTPUT 1)
+
 macro( build_qt4 name type)
     add_library( ${name} ${type} ${ISIS_GLANCE_QT4_SRC_FILES} )
 	target_link_libraries( ${name} ${CMAKE_DL_LIBS} ${QT_LIBRARIES})
@@ -43,3 +46,15 @@ else(ISIS_GLANCE_BUILD_STATIC_AND_SHARED)
 		build_qt4( isis_glance_qt4 SHARED)
     endif(ISIS_GLANCE_BUILD_STATIC)
 endif(ISIS_GLANCE_BUILD_STATIC_AND_SHARED)
+
+############################################################
+# Installation
+############################################################
+
+# install libraries
+install (TARGETS ${target_list}
+  LIBRARY DESTINATION lib COMPONENT RuntimeLibraries
+  ARCHIVE DESTINATION lib COMPONENT Development
+)
+
+install(FILES ${ISIS_GLANCE_QT4_HDR_FILES} DESTINATION include/isis-glance/qt4 COMPONENT Development)
