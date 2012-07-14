@@ -37,14 +37,14 @@ namespace glance
 {
 namespace widget
 {
-
+namespace _internal {
 struct NoBaseWidget {};
-
+}
 /**
 * Base class for widgets.
 */
 
-template < class BASE = NoBaseWidget >
+template < class BASE = _internal::NoBaseWidget >
 class WidgetBase :
 	public plugin::PluginInterfaceBase,
 	public BASE,

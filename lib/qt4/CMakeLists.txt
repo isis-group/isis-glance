@@ -27,8 +27,8 @@ macro( build_qt4 name type)
 	target_link_libraries( ${name} ${CMAKE_DL_LIBS} ${QT_LIBRARIES})
     set_target_properties( ${name} PROPERTIES
 		${ISIS_GLANCE_QT4_BUILD_PROPERTIES}
-		SOVERSION ${ISIS_GLANCE_QT4_VERSION_SO}
-		VERSION ${ISIS_GLANCE_QT4_VERSION_API}
+		SOVERSION ${ISIS_GLANCE_VERSION_SO}
+		VERSION ${ISIS_GLANCE_VERSION_API}
 		INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib"
 		OUTPUT_NAME "isis_glance_qt4")
     set(target_list ${target_list} ${name})

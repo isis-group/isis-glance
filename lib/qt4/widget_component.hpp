@@ -28,17 +28,28 @@
 #ifndef _ISIS_GLANCE_WIDGET_COMPONENT_HPP
 #define _ISIS_GLANCE_WIDGET_COMPONENT_HPP
 
+#include <boost/shared_ptr.hpp>
+
 #include <QWidget>
 #include "util/widget_base.hpp"
+
 
 namespace isis {
 namespace glance {
 namespace qt4 {
-	
+
 class WidgetComponent : public QWidget
 {
 	Q_OBJECT
-
+public:
+	typedef isis::glance::widget::WidgetBase<QWidget> WidgetBaseType;
+	WidgetComponent( QWidget *parent, WidgetBaseType *widgetInterface );
+	
+	boost::shared_ptr< WidgetBaseType > get() const { return widgetInterface_; }
+	
+private:
+	boost::shared_ptr< WidgetBaseType > widgetInterface_;
+	 
 };
 	
 } // end namespace qt4
