@@ -37,7 +37,8 @@ namespace glance
 {
 namespace widget
 {
-namespace _internal {
+namespace _internal
+{
 struct NoBaseWidget {};
 }
 /**

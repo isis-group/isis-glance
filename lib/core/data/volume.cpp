@@ -164,8 +164,8 @@ Slice Volume::extractSliceCoronal ( const isis::data::ValueArrayBase *src, const
 
 
 Slice Volume::extractSliceGeneric ( const fvec &perpendicular, const ivec &coords, bool force32BitAligned ) const
-{ 	
-	
+{
+
 }
 
 

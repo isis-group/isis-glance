@@ -34,9 +34,12 @@
 #include "util/widget_base.hpp"
 
 
-namespace isis {
-namespace glance {
-namespace qt4 {
+namespace isis
+{
+namespace glance
+{
+namespace qt4
+{
 
 class WidgetComponent : public QWidget
 {
@@ -44,14 +47,14 @@ class WidgetComponent : public QWidget
 public:
 	typedef isis::glance::widget::WidgetBase<QWidget> WidgetBaseType;
 	WidgetComponent( QWidget *parent, WidgetBaseType *widgetInterface );
-	
+
 	boost::shared_ptr< WidgetBaseType > get() const { return widgetInterface_; }
-	
+
 private:
 	boost::shared_ptr< WidgetBaseType > widgetInterface_;
-	 
+
 };
-	
+
 } // end namespace qt4
 } // end namespace glance
 } // end namespace isis

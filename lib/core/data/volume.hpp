@@ -49,7 +49,7 @@ public:
 	typedef isis::util::fvector3 fvec;
 	typedef isis::util::ivector4 ivec;
 	typedef isis::util::dvector3 dvec;
-	
+
 	Volume ( const isis::data::ValueArrayReference &src, const size_type &size );
 	Volume ( const isis::data::ValueArrayReference &src, const size_type &size, const ImageSharedPointer parentImage );
 

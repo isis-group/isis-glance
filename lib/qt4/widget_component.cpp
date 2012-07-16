@@ -27,17 +27,20 @@
  ******************************************************************/
 #include "widget_component.hpp"
 
-namespace isis {
-namespace glance {
-namespace qt4 {
+namespace isis
+{
+namespace glance
+{
+namespace qt4
+{
 
-WidgetComponent::WidgetComponent(QWidget* parent, WidgetBaseType *widgetInterface ) : 
+WidgetComponent::WidgetComponent( QWidget *parent, WidgetBaseType *widgetInterface ) :
 	QWidget( parent ),
 	widgetInterface_( widgetInterface )
 {
 
 }
-	
+
 
 } // end namespace qt4
 } // end namespace glance
