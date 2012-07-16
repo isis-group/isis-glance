@@ -83,14 +83,14 @@ class Volume;
 class DataHandler
 {
 public:
-	typedef boost::shared_array<int32_t> PermutationType;
+	typedef boost::shared_array<int32_t> permutation_type;
 
 	static isis::data::ValueArrayReference extractSagittal( const Volume &vol, const int32_t &x, bool aligned32Bit );
 
-	static PermutationType getPermutationSagittal( const isis::util::FixedVector<size_t, 3> &size, bool aligned32Bit );
+	static permutation_type getPermutationSagittal( const isis::util::vector3<size_t> &size, bool aligned32Bit );
 private:
 	template<typename T>
-	static isis::data::ValueArrayReference _extractSagittal( const isis::data::ValueArrayBase &src, const size_t &lengthAligned32Bit, const size_t &length, const size_t &offset, DataHandler::PermutationType permutation ) {
+	static isis::data::ValueArrayReference _extractSagittal( const isis::data::ValueArrayBase &src, const size_t &lengthAligned32Bit, const size_t &length, const size_t &offset, DataHandler::permutation_type permutation ) {
 		const T *srcPtr = static_cast<const T *>( src.getRawAddress( offset * sizeof( T ) ).get() );
 		const isis::data::ValueArrayReference dest = src.cloneToNew( lengthAligned32Bit );
 		T *destPtr = static_cast<T *>( dest->getRawAddress().get() );

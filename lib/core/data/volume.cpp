@@ -51,7 +51,7 @@ Volume::Volume ( const isis::data::ValueArrayReference &src, const size_type &si
 	permutationSagittalAligned32Bit_ = DataHandler::getPermutationSagittal( getSizeAsVector(), true );
 }
 
-DataHandler::PermutationType Volume::getPermutationSagittal( bool aligned32Bit ) const
+DataHandler::permutation_type Volume::getPermutationSagittal( bool aligned32Bit ) const
 {
 	if( parentImage_ ) {
 		if( aligned32Bit ) {
@@ -147,7 +147,7 @@ Slice Volume::extractSliceAxial ( const isis::data::ValueArrayBase *src, const s
 	return Slice( dest, Slice::size_type( sliceSize[0], sliceSize[1] ) );
 }
 
-Slice Volume::extractSliceCoronal ( const isis::data::ValueArrayBase *src, const size_t &cslice, const _internal::DataContainer< 3 >::size_type &size, const _internal::DataContainer< 3 >::size_type &sliceSize, const size_t &bytesPerElem, const size_t &typeFac ) const
+Slice Volume::extractSliceCoronal ( const isis::data::ValueArrayBase *src, const size_t &cslice, const size_type &size, const size_type &sliceSize, const size_t &bytesPerElem, const size_t &typeFac ) const
 {
 	const uint8_t *srcPtr = static_cast<const uint8_t *>( src->getRawAddress().get() );
 	const isis::data::ValueArrayReference dest = src->cloneToNew( sliceSize[0] * sliceSize[2] );
@@ -164,7 +164,7 @@ Slice Volume::extractSliceCoronal ( const isis::data::ValueArrayBase *src, const
 
 
 Slice Volume::extractSliceGeneric ( const fvec &perpendicular, const ivec &coords, bool force32BitAligned ) const
-{
+{ 	
 	
 }
 

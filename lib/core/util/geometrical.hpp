@@ -57,9 +57,9 @@ isis::util::FixedVector<size_t, DIM> get32BitAlignedSize( const isis::util::Fixe
 	return ret_size;
 }
 
-isis::util::Matrix4x4<float> getOrientationMatrixFromPropMap( const isis::util::PropertyMap &propmap );
+isis::util::Matrix3x3<float> getOrientationMatrixFromPropMap( const isis::util::PropertyMap &propmap );
 
-isis::util::Matrix4x4<float> getLatchedOrienation( const isis::util::Matrix4x4<float> &orientation_matrix );
+isis::util::Matrix3x3<float> getLatchedOrienation( const isis::util::Matrix3x3<float> &orientation_matrix );
 
 
 } // end namespace util

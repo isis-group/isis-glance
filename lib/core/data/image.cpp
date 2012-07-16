@@ -173,13 +173,11 @@ bool Image::synchronizeVoxelContentFrom ( isis::data::Image image )
 		};
 	}
 
-	const size_t volume[] = { image_size[0], image_size[1], image_size[2] };
-
 	std::vector<isis::data::Chunk> chunks = image.copyChunksToVector( false );
 
 	if( chunks.size() == image_size[isis::data::timeDim] ) {
 		BOOST_FOREACH( std::vector<isis::data::Chunk>::reference chunk, chunks ) {
-			volumes_.push_back( Volume( chunk.asValueArrayBase(), volume ) );
+			volumes_.push_back( Volume( chunk.asValueArrayBase(), Volume::size_type( image_size[0], image_size[1], image_size[2] ), this ) );
 		}
 	} else {
 		LOG( data::Runtime, isis::info ) << "The number of chunks (" << chunks.size()
@@ -199,7 +197,7 @@ bool Image::synchronizeVoxelContentFrom ( isis::data::Image image )
 					tmpChunk.copySlice( 0, 0, chunk, slice, 0 );
 				}
 
-				volumes_.push_back( Volume( chunk.asValueArrayBase(), volume, this ) );
+				volumes_.push_back( Volume( chunk.asValueArrayBase(), Volume::size_type( image_size[0], image_size[1], image_size[2] ), this ) );
 			}
 		} else {
 			LOG( data::Runtime, isis::error ) << "Image " << file_path << " is spliced below sliceDim. "

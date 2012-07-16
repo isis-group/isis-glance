@@ -96,14 +96,15 @@ bool ImageDataProperties::getHasOneType( const isis::data::Image &image ) const
 ImageMetaProperties::ImageMetaProperties ( const isis::data::Image &image )
 {
 	//geometrical stuff
-	image_size = image.getSizeAsVector();
-	image_size_aligned32 = util::get32BitAlignedSize<4>( image_size );
+	//we can put discard the 4th dimension in image_size cause this is defined through the size() of our image
+	image_size = size_type( image.getSizeAsVector()[0], image.getSizeAsVector()[1], image.getSizeAsVector()[2] );
+	image_size_aligned32 = util::get32BitAlignedSize<3>( image_size );
 	orientation_matrix = util::getOrientationMatrixFromPropMap( image );
 	orientation_matrix_latched = util::getLatchedOrienation( orientation_matrix );
-	voxel_size = image.getPropertyAs<isis::util::fvector4>( "voxelSize" );
+	voxel_size = image.getPropertyAs<isis::util::fvector3>( "voxelSize" );
 
 	if( image.hasProperty( "voxelGap" ) ) {
-		voxel_size += image.getPropertyAs<isis::util::fvector4>( "voxelGap" ) ;
+		voxel_size += image.getPropertyAs<isis::util::fvector3>( "voxelGap" ) ;
 	}
 
 	if( image.hasProperty( "file_path" ) ) {
@@ -112,10 +113,7 @@ ImageMetaProperties::ImageMetaProperties ( const isis::data::Image &image )
 		file_path = p.directory_string();
 	}
 
-	Volume::size_type volSize;
-	volSize[0] = image_size[0];
-	volSize[1] = image_size[1];
-	volSize[2] = image_size[2];
+	const Volume::size_type volSize( image_size[0], image_size[1], image_size[2] );
 	permutationSagittal_ = DataHandler::getPermutationSagittal( volSize, false );
 	permutationSagittalAligned32Bit_ = DataHandler::getPermutationSagittal( volSize, true );
 }

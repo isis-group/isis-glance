@@ -45,6 +45,10 @@ namespace data
 class Volume : public _internal::DataContainer<3>
 {
 public:
+	typedef isis::util::vector3<size_t> size_type;
+	typedef isis::util::fvector3 fvec;
+	typedef isis::util::ivector4 ivec;
+	typedef isis::util::dvector3 dvec;
 	
 	Volume ( const isis::data::ValueArrayReference &src, const size_type &size );
 	Volume ( const isis::data::ValueArrayReference &src, const size_type &size, const ImageSharedPointer parentImage );
@@ -54,7 +58,7 @@ public:
 
 	const ImageSharedPointer getParent() const { return parentImage_; }
 
-	DataHandler::PermutationType getPermutationSagittal( bool aligned32Bit ) const;
+	DataHandler::permutation_type getPermutationSagittal( bool aligned32Bit ) const;
 
 	inline size_type getSize( bool aligned32Bit ) const {
 		if( aligned32Bit ) {
@@ -72,8 +76,8 @@ private:
 	Slice extractSliceCoronal( const isis::data::ValueArrayBase *src, const size_t &slice, const size_type &size, const size_type &sliceSize, const size_t &bytesPerElem, const size_t &typeFac ) const;
 
 	ImageSharedPointer parentImage_;
-	DataHandler::PermutationType permutationSagittal_;
-	DataHandler::PermutationType permutationSagittalAligned32Bit_;
+	DataHandler::permutation_type permutationSagittal_;
+	DataHandler::permutation_type permutationSagittalAligned32Bit_;
 
 };
 } // end namespace data

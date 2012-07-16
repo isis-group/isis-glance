@@ -108,7 +108,7 @@ isis::data::ValueArrayReference DataHandler::extractSagittal ( const Volume &vol
 	}
 }
 
-DataHandler::PermutationType DataHandler::getPermutationSagittal ( const Volume::size_type &size, bool aligned32Bit )
+DataHandler::permutation_type DataHandler::getPermutationSagittal ( const isis::util::vector3<size_t> &size, bool aligned32Bit )
 {
 	Volume::size_type _size;
 

@@ -47,7 +47,7 @@ int main( int /*argc*/, char **argv )
 	perp[0] = 1;
 	perp[1] = 0;
 	perp[2] = 0;
-	isis::glance::data::Volume::size_type coords;
+	isis::glance::data::Volume::ivec coords;
 	coords[0] = image->image_size[0] / 2;
 	coords[1] = image->image_size[1] / 2;
 	coords[2] = image->image_size[2] / 2;

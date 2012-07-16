@@ -53,8 +53,8 @@ class ImageMetaProperties : public isis::util::PropertyMap
 {
 	friend class Volume;
 public:
-	typedef isis::util::FixedVector<size_t, 4> SizeType;
-	typedef isis::util::Matrix4x4<float> OrientationMatrixType;
+	typedef isis::util::vector3<size_t> size_type;
+	typedef isis::util::Matrix3x3<float> orientation_matrix_type;
 
 	/**
 	 * Empty constructur for ImageProperties
@@ -81,25 +81,25 @@ public:
 	std::string file_path;
 
 	///The images size
-	SizeType image_size;
+	size_type image_size;
 
 	///The images size aligned to 32bit
-	SizeType image_size_aligned32;
+	size_type image_size_aligned32;
 
 	///The image orientation matrix
-	OrientationMatrixType orientation_matrix;
+	orientation_matrix_type orientation_matrix;
 
 	///The latched orientation_matrix
-	OrientationMatrixType orientation_matrix_latched;
+	orientation_matrix_type orientation_matrix_latched;
 
 	///The sum of voxelSize and voxelGap
-	isis::util::fvector4 voxel_size;
+	isis::util::fvector3 voxel_size;
 
 protected:
 	const bool &isValid() const { return is_valid_; }
 	
-	DataHandler::PermutationType permutationSagittal_;
-	DataHandler::PermutationType permutationSagittalAligned32Bit_;
+	DataHandler::permutation_type permutationSagittal_;
+	DataHandler::permutation_type permutationSagittalAligned32Bit_;
 
 private:
 	bool is_valid_;

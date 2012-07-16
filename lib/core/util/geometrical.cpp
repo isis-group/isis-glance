@@ -34,21 +34,21 @@ namespace glance
 namespace util
 {
 
-isis::util::Matrix4x4< float > getOrientationMatrixFromPropMap ( const isis::util::PropertyMap &propmap )
+isis::util::Matrix3x3< float > getOrientationMatrixFromPropMap ( const isis::util::PropertyMap &propmap )
 {
-	const isis::util::Matrix4x4<float> retMatrix (  propmap.getPropertyAs<isis::util::fvector4>( "rowVec" ),
-			propmap.getPropertyAs<isis::util::fvector4>( "columnVec" ),
-			propmap.getPropertyAs<isis::util::fvector4>( "sliceVec" ) );
+	const isis::util::Matrix3x3<float> retMatrix (  propmap.getPropertyAs<isis::util::fvector3>( "rowVec" ),
+			propmap.getPropertyAs<isis::util::fvector3>( "columnVec" ),
+			propmap.getPropertyAs<isis::util::fvector3>( "sliceVec" ) );
 	return retMatrix;
 }
 
-isis::util::Matrix4x4< float > getLatchedOrienation ( const isis::util::Matrix4x4< float > &orientation_matrix )
+isis::util::Matrix3x3< float > getLatchedOrienation ( const isis::util::Matrix3x3< float > &orientation_matrix )
 {
-	isis::util::Matrix4x4<float> retMatrix;
+	isis::util::Matrix3x3<float> retMatrix;
 	retMatrix.fill( 0 );
-	const isis::util::fvector4 &rowVec = orientation_matrix.getRow( 0 );
-	const isis::util::fvector4 &columnVec = orientation_matrix.getRow( 1 );
-	const isis::util::fvector4 &sliceVec = orientation_matrix.getRow( 2 );
+	const isis::util::fvector3 &rowVec = orientation_matrix.getRow( 0 );
+	const isis::util::fvector3 &columnVec = orientation_matrix.getRow( 1 );
+	const isis::util::fvector3 &sliceVec = orientation_matrix.getRow( 2 );
 
 	size_t rB = rowVec.getBiggestVecElemAbs();
 	size_t cB = columnVec.getBiggestVecElemAbs();
