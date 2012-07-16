@@ -45,8 +45,9 @@ namespace data
 class Volume : public _internal::DataContainer<3>
 {
 public:
-	Volume ( const isis::data::ValueArrayReference &src, const size_t dims[] );
-	Volume ( const isis::data::ValueArrayReference &src, const size_t dims[], const ImageSharedPointer parentImage );
+	
+	Volume ( const isis::data::ValueArrayReference &src, const size_type &size );
+	Volume ( const isis::data::ValueArrayReference &src, const size_type &size, const ImageSharedPointer parentImage );
 
 	Slice extractSlice( fvec perpendicular, const ivec &coords, bool force32BitAligned = false ) const;
 	std::vector< isis::glance::data::Slice > extractAllSlices ( fvec perpendicular, bool force32BitAligned = false ) const;

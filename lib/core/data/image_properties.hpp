@@ -97,8 +97,9 @@ public:
 
 protected:
 	const bool &isValid() const { return is_valid_; }
-	DataHandler::PermutationType permutation_sagittal;
-	DataHandler::PermutationType permutation_sagittal_aligned32Bit;
+	
+	DataHandler::PermutationType permutationSagittal_;
+	DataHandler::PermutationType permutationSagittalAligned32Bit_;
 
 private:
 	bool is_valid_;

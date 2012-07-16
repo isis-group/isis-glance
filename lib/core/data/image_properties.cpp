@@ -116,8 +116,8 @@ ImageMetaProperties::ImageMetaProperties ( const isis::data::Image &image )
 	volSize[0] = image_size[0];
 	volSize[1] = image_size[1];
 	volSize[2] = image_size[2];
-	permutation_sagittal = DataHandler::getPermutationSagittal( volSize, false );
-	permutation_sagittal_aligned32Bit = DataHandler::getPermutationSagittal( volSize, true );
+	permutationSagittal_ = DataHandler::getPermutationSagittal( volSize, false );
+	permutationSagittalAligned32Bit_ = DataHandler::getPermutationSagittal( volSize, true );
 }
 
 

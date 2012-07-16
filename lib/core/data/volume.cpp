@@ -38,14 +38,14 @@ namespace glance
 namespace data
 {
 
-Volume::Volume ( const isis::data::ValueArrayReference &src, const size_t dims[], const ImageSharedPointer parentImage )
-	: DataContainer< 3 > ( src, dims ),
+Volume::Volume ( const isis::data::ValueArrayReference &src, const size_type &size, const ImageSharedPointer parentImage )
+	: DataContainer< 3 > ( src, size ),
 	  parentImage_( parentImage )
 {}
 
 
-Volume::Volume ( const isis::data::ValueArrayReference &src, const size_t dims[] )
-	: DataContainer< 3 > ( src, dims )
+Volume::Volume ( const isis::data::ValueArrayReference &src, const size_type &size )
+	: DataContainer< 3 > ( src, size )
 {
 	permutationSagittal_ = DataHandler::getPermutationSagittal( getSizeAsVector(), false );
 	permutationSagittalAligned32Bit_ = DataHandler::getPermutationSagittal( getSizeAsVector(), true );
@@ -55,9 +55,9 @@ DataHandler::PermutationType Volume::getPermutationSagittal( bool aligned32Bit )
 {
 	if( parentImage_ ) {
 		if( aligned32Bit ) {
-			return parentImage_->permutation_sagittal_aligned32Bit;
+			return parentImage_->permutationSagittalAligned32Bit_;
 		} else {
-			return parentImage_->permutation_sagittal;
+			return parentImage_->permutationSagittal_;
 		}
 	} else {
 		if( aligned32Bit ) {
@@ -165,6 +165,7 @@ Slice Volume::extractSliceCoronal ( const isis::data::ValueArrayBase *src, const
 
 Slice Volume::extractSliceGeneric ( const fvec &perpendicular, const ivec &coords, bool force32BitAligned ) const
 {
+	
 }
 
 

@@ -51,21 +51,21 @@ public:
 	typedef isis::util::FixedVector<double, DIMS> dvec;
 	typedef isis::util::FixedVector<size_t, DIMS> size_type;
 
-	inline DataContainer( const isis::data::ValueArrayReference &src, const size_t dims[DIMS] )
+	inline DataContainer( const isis::data::ValueArrayReference &src, const size_type &size )
 		: isis::data::ValueArrayReference( src ) {
-		isis::data::_internal::NDimensional<DIMS>::init( dims );
+		isis::data::_internal::NDimensional<DIMS>::init( size );
 	}
 
-	inline DataContainer( const isis::data::ValueArrayReference &src, const size_type &dims )
-		: isis::data::ValueArrayReference( src ) {
-		size_t size_[DIMS];
-
-		for( size_t d = 0; d < DIMS; d++ ) {
-			size_[d] = dims[d];
-		}
-
-		isis::data::_internal::NDimensional<DIMS>::init( size_ );
-	}
+// 	inline DataContainer( const isis::data::ValueArrayReference &src, const size_type &size )
+// 		: isis::data::ValueArrayReference( src ) {
+// 		size_t size_[DIMS];
+// 
+// 		for( size_t d = 0; d < DIMS; d++ ) {
+// 			size_[d] = dims[d];
+// 		}
+// 
+// 		isis::data::_internal::NDimensional<DIMS>::init( size_ );
+// 	}
 
 	template<typename TYPE>
 	inline TYPE &voxel( const size_t dims[DIMS] ) {
